@@ -1,0 +1,8 @@
+C:\Projet\Epicea-2\Execution\Sauvegarde\DOSSIER1
+sauvegarde_epicea/DOSSIER1
+unFtp
+passe
+monftp-1.net
+o
+a
+0

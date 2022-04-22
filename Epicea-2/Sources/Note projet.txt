@@ -1,0 +1,29 @@
+Syntaxe et conventions Jacques
+
+Fvariable : Variable privé d'un objet
+Setvariable : fonction écriture de la propriété variable
+Getvariable : fonction lecture de la propriété variable
+variable : propriété
+
+E.variable : propriété de l'entreprise
+Tvariable : type de la variable
+
+AideModelfonc : fonction qui servent à lire la table des modèles (E2_AideModel.pas)
+AideComptefonc : fonction qui servent à lire la table des plans comptable, tiers et répertoire (E2_AideModel.pas)
+AideTvafonc : code tva
+
+
+* La création automatique des écrans est désactivée dans les options du projet,
+ d'ou la gestion dynamique de la création et destruction des écrans.
+
+******************************************************************************
+* Gestion du plan comptable
+	-	Compte générateur : ex : à la crétion du 215, génération automatique du 2815
+   	Ils créent les comptes correspondant
+   -  Compte généré : ils ne sont créés que par le biais des comptes générateurs
+
+   La destruction d'un compte généré se fait automatiquement à la destruction d'un compte
+   générateur
+
+Les comptes générateurs et générés sont incsrits dans la table PPCO
+******************************************************************************

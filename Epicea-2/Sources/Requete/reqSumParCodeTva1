@@ -1,0 +1,7 @@
+select D.Id_Piece,D.Id_Ligne,D.TvaCode,D.TvaType,D.TvaDate,D.TvaMontantDebit,D.TvaMontantCredit,D.En_Attente,D.Part_Declaration,P.reference,P.compte as CompteContrepartie,P."Date" as DatePiece,P.Libelle as LibellePiece,
+E.compte as CompteHT,sum(E.Debitsaisie) as HTDebit, sum(E.creditsaisie) as HTCredit,E.TvaTaux as Taux,E.libelle from Dec_Tva D
+join piece P on (P.id=D.id_piece)
+join Ecriture E on (E.id=D.id_Ligne)
+group by D.Id_Piece,D.Id_Ligne,D.TvaCode,D.TvaType,D.TvaDate,D.TvaMontantDebit,D.TvaMontantCredit,D.En_Attente,D.Part_Declaration,P.reference,P.compte ,P."Date",P.Libelle ,
+E.compte,E.Debitsaisie, E.creditsaisie,E.TvaTaux,E.libelle 
+order by D.TvaCode

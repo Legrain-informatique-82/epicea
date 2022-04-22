@@ -1,0 +1,100 @@
+ 
+                          ZIPSFX.BIN
+                      For Delphi Zip v1.40
+
+This new SFX code was written by markus stephany, mirbir.st@saargate.de
+
+I wrote the new TZipMaster properties, and the code to automatically 
+create the MPU block for you when ConvertSFX is called.
+
+You must set up the TZipMaster SFX properties BEFORE calling ConvertSFX.
+
+The "MPU Block" is a 256 byte control block that will be placed in the 
+EXE file between ZIPSFX.BIN and your zip file.  That block tells the SFX
+code what options to use when extracting the files at run time.
+
+See Demo1 for an example of how to make SFX archives.
+The main thing the user must remember is to create a zip file FIRST.
+Then, the user just clicks on "Convert to EXE".  A separate form comes
+up then that lets him set the SFX properties.
+
+At runtime, the user who runs the self-extracting archive does NOT
+need the DLLs, or the ZIPSFX.BIN file on his computer.  The EXE file
+will run on any standard Win95 or WinNT system.
+
+
+Eric Engler
+
+----------------------------------------------------------------------------
+
+TZipMaster SFX properties and methods:
+  already have:
+     ConvertSFX method - convert zip archive to self-extracting .exe
+     ConvertZIP method - convert self-extracting .exe to .zip archive
+     SFXPath  property
+ 
+  new properties:
+   SFXOptions        a Pascal set
+     SFXAskCmdLine     boolean  dflt=yes (only matters if a cmd line is present)
+     SFXAskFiles       boolean  dflt=yes
+     SFXOverWriteBox   boolean  dflt=yes
+
+   SFXOverWriteMode  enum     dflt=ovrConfirm  (others=ovrAlways, ovrNever)
+   SFXCaption        string   dflt='Self-extracting Archive'
+   SFXDefaultPath    string   dflt=''
+   SFXCommandLine    string   dflt=''
+
+NOTE: My Demo1 example uses different default values in some cases.  The
+OnCreate procedure sets them as desired.
+
+==============================================================================     
+
+The format of the MPU-block:
+
+bytes 0..2 : "MPU" , a signature to decide whether there is such a
+             special header or not
+
+byte	 3 : Bit 0 : = 1 : gives the user the ability to avoid
+                           starting the command line
+
+             Bit 1 : = 1 : gives the user the ability to (de)select
+                           files from the listbox
+
+             Bit 2 : = 0 : hides the overwrite mode-checkboxes
+
+             Bit3-4: = default-overwrite-mode :
+		       0 : confirm overwrite
+		       1 : overwrite
+                       2 : don't overwrite
+
+byte	 4 : the length of the dialog's caption / 0=default caption 
+byte 	 5 : the length of the default path-name / 0=none
+byte     6 : the length of the command to start after extraction / 0=none
+
+bytes 7..m   : the dialog's caption; if any special
+bytes m+1..n : the default-path as string without a terminating
+               zero
+bytes n+1..  : the command-line (format like the path)
+
+
+If there is a pipe ("|")-char in the command line, use the
+part before the pipe as application to start and the part 
+behind the pipe as this app's argument.
+
+If there is "><" in the command line, it gets replaced with the
+extract-path that was actually used at runtime.
+
+Example:
+
+"><setup\setup.exe|><inf\oemsetup.inf" 
+
+will become:
+run "C:\NEW\setup\setup.exe" with parameter "C:\NEW\inf\oemsetup.inf"
+assuming the user chose the install directory as C:\NEW.
+
+
+If there is "><" in the default path name, it gets replaced with the
+Windows temporary directory name, obtained at runtime via a WIN API
+call.
+
+Markus Stephany, mirbir.st@saargate.de, 03/03/98

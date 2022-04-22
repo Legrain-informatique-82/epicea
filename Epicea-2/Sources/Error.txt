@@ -1,0 +1,108 @@
+Erreur : TaConstPosObjet: Impossible d'effectuer cette opération sur un ensemble de données fermé
+Immo_Ouverture
+ListMenu
+Erreur : La table n'existe pas.
+Fichier ou répertoire inexistant.
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva.DB
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva.DBF
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva.txt
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva
+saisieP_3
+ListMenu
+Erreur : La table n'existe pas.
+Fichier ou répertoire inexistant.
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva.DB
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva.DBF
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva.txt
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva
+saisieP_3
+ListMenu
+Erreur : La table n'existe pas.
+Fichier ou répertoire inexistant.
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva.DB
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva.DBF
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva.txt
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva
+saisieP_3
+ListMenu
+Erreur : La table n'existe pas.
+Fichier ou répertoire inexistant.
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva.DB
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva.DBF
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva.txt
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva
+PaBtn
+ListMenu
+Erreur : La table n'existe pas.
+Fichier ou répertoire inexistant.
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva.DB
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva.DBF
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva.txt
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva
+PaBtn
+ListMenu
+Erreur : La table n'existe pas.
+Fichier ou répertoire inexistant.
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva.DB
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva.DBF
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva.txt
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva
+PaBtn
+ListMenu
+Erreur : La table n'existe pas.
+Fichier ou répertoire inexistant.
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva.DB
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva.DBF
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva.txt
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva
+saisieP_3
+ListMenu
+Erreur : La table n'existe pas.
+Fichier ou répertoire inexistant.
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva.DB
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva.DBF
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva.txt
+Fichier: C:\JS\Epicea-2\Dossier\h_Piecetva
+PaBtn
+ListMenu
+Erreur : La table n'existe pas.
+Fichier ou répertoire inexistant.
+Fichier: C:\JS\EPICEA-2\SOURCES\ParamCpt.DB
+PlanCpt_PM
+ListMenu
+Erreur : La table n'existe pas.
+Fichier ou répertoire inexistant.
+Fichier: C:\JS\EPICEA-2\SOURCES\ParamCpt.DB
+PlanCpt_PM
+ListMenu
+Erreur : La table n'existe pas.
+Fichier ou répertoire inexistant.
+Fichier: C:\JS\EPICEA-2\SOURCES\ParamCpt.DB
+PlanCpt_PM
+ListMenu
+Erreur : TaPlanBO: Champ 'Taux' non trouvé
+BilanOuverture
+ListMenu
+Erreur : TaPlanBO: Impossible d'effectuer cette opération sur un ensemble de données fermé
+BilanOuverture
+ListMenu
+Erreur : La table n'existe pas.
+Fichier ou répertoire inexistant.
+Fichier: C:\JS\EPICEA-2\SOURCES\ParamCpt.DB
+PaBtn
+ListMenu
+Erreur : La table n'existe pas.
+Fichier ou répertoire inexistant.
+Fichier: C:\JS\EPICEA-2\SOURCES\ParamCpt.DB
+PaBtn
+ListMenu
+Erreur : La table n'existe pas.
+Fichier ou répertoire inexistant.
+Fichier: C:\JS\EPICEA-2\SOURCES\ParamCpt.DB
+PaBtn
+ListMenu
+Erreur : La table n'existe pas.
+Fichier ou répertoire inexistant.
+Fichier: C:\JS\EPICEA-2\SOURCES\ParamCpt.DB
+PlanCpt_PM
+ListMenu

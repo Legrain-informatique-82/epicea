@@ -1,0 +1,46 @@
+///////////////////
+Dans SaisieP, (sur F5 ou tous autres moyens d'activer la fenêtre des réglements):
+
+avant d'afficher la fenêtre des réglements, si la piece est en modification, il faut supprimer
+les pointages et recalculer les reste si nécessaire.
+
+- si journal d'achat ou de vente :
+   récupérer Piece.IDcontrepartie et Piece.comptePlan(avec ou sans +),
+   calculer le reste de la pièce et mettre le resultat dans une variable
+   Piece.infosPointage. si la pièce est complètement pointée (reste=0 et Pointee=true),
+   alors ne pas afficher la fenêtre de saisie réglement, sinon l'afficher
+
+   
+- si journal de banque :
+     -si on est sur une ligne d'écriture, et que c'est une ligne de tiers :
+        - récupérer l'IDEcriture de l'écriture en cours et le compte de la ligne,
+        - récupérer tous les numéros de tiers saisis dans la fenêtre
+        - afficher une combo box avec tous les tiers saisis et se positionner sur celui 
+         en cours
+        - calculer le reste de la ligne en cours et mettre le resultat dans une variable
+           Ligne.infosPointage.
+        - si la ligne est complètement pointée (reste=0 et Pointee=true),
+          alors, ne pas afficher la fenêtre des pointages,
+          sinon :
+             - récupérer les écritures pointables avec cette ligne (qui ne sont pas entièrement
+             pointées et de même sens)
+             - afficher la fenêtre des pointages avec cette séléction de lignes récupèrées
+
+
+
+///////////////////
+Dans SaisieP, (sur tous moyens d'activer la fenêtre des Pointages):
+
+avant d'afficher la fenêtre des Pointages, si la piece est en modification, il faut supprimer
+les pointages et recalculer les reste si nécessaire.
+Toutes les procedures sont pretes
+il faut brancher
+DMPointage.SupprimePointageSurEcriture;
+avec en parametre la piece qui est en modification
+
+
+
+
+
+
+

@@ -1,0 +1,16 @@
+[OPTIONS]
+Compatibility=1.1 or later
+Compiled file=AideEpicea.chm
+Contents file=Table des matières.hhc
+Default Window=aaa
+Display compile progress=No
+Index file=Index.hhk
+Language=0x40c Français (France)
+Title=Aide Epicéa
+
+[WINDOWS]
+aaa="Aide Epicéa","Table des matières.hhc","Index.hhk",,,,,,,0x2120,,0x3006,,,,,,1,,0
+
+
+[INFOTYPES]
+

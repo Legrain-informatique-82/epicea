@@ -1,0 +1,56 @@
+Prendre les projets 
+Epicea-2 (le mettre dans C:\Projet)
+LibrairieDevDelphi (le mettre dans C:\LibrairieDev\Delphi)
+
+prendre les Bpl dans 
+C:\Projet\InstallationDelphi\Bpl
+
+chemin de bibliotheque
+// ancien $(DELPHI)\Lib;$(DELPHI)\Bin;$(DELPHI)\Imports;$(DELPHI)\Projects\Bpl;$(DELPHI)\Rave5\Lib;C:\LibrairieDev\Delphi\ExRxDBGrid;C:\Program Files\Borland\Delphi7\Source\Rtl\Common;C:\Program Files\Borland\Delphi7\Source\Vcl;C:\LibrairieDev\Delphi\RXLib275\Units;C:\Projet\Epicea-2\Sources;C:\Projet\Epicea-2\Sources\DCU;C:\LibrairieDev\Delphi\ObjetsPers;C:\LibrairieDev\Delphi\LibLGR\Edition;C:\LibrairieDev\Delphi\LibLGR\ListeImprimable;C:\LibrairieDev\Delphi\zipage\vcl;C:\LibrairieDev\Delphi\Samples;C:\LibrairieDev\Delphi\LibEpi;C:\LibrairieDev\Delphi\DLL;C:\Program Files\Borland\Delphi7\Source\Indy
+//*** nouveau compatible avec sauvegarde, restauration et MDCogere *** //
+$(DELPHI)\Lib;$(DELPHI)\Bin;$(DELPHI)\Imports;$(DELPHI)\Projects\Bpl;$(DELPHI)\Rave5\Lib;C:\LibrairieDev\Delphi\ExRxDBGrid;C:\Program Files\Borland\Delphi7\Source\Rtl\Common;C:\Program Files\Borland\Delphi7\Source\Vcl;C:\LibrairieDev\Delphi\RXLib275\Units;C:\Projet\Epicea-2\Sources;C:\Projet\Epicea-2\Sources\DCU;C:\LibrairieDev\Delphi\ObjetsPers;C:\LibrairieDev\Delphi\LibLGR\Edition;C:\LibrairieDev\Delphi\LibLGR\ListeImprimable;C:\LibrairieDev\Delphi\zipage\vcl;C:\LibrairieDev\Delphi\Samples;C:\LibrairieDev\Delphi\LibEpi;C:\LibrairieDev\Delphi\DLL;C:\Program Files\Borland\Delphi7\Source\Indy;C:\RXLib275\Units;C:\LibrairieDev\Delphi\LibEpi\LibImportEPI;C:\Projet\Epicea-2\DCU;C:\LibrairieDev\Delphi\LibLGR\;C:\LibrairieDev\Delphi\LibLGR\ModeleLGR;C:\LibrairieDev\Delphi\LibLGR\Frame
+chemin à parcourir
+$(DELPHI)\source\vcl;$(DELPHI)\Source\Rtl;$(DELPHI)\source\rtl\Corba45;$(DELPHI)\source\rtl\Sys;$(DELPHI)\source\rtl\Win;$(DELPHI)\source\rtl\common;$(DELPHI)\source\Internet;$(DELPHI)\source\clx;$(DELPHI)\source\websnap;$(DELPHI)\Source\WebMidas;$(DELPHI)\Source\Indy;$(DELPHI)\Source\IntraWeb;$(DELPHI)\Source\Samples;$(DELPHI)\Source\Soap;$(DELPHI)\Source\ToolsAPI;$(DELPHI)\Source\Xml
+
+installer les paquets à partir de ces bpl
+
+
+sinon (si pas de Bpl, alors suivre la suite pour la RXLibrairie)
+
+
+
+------------------------------------------------
+-- Installation de la RX Library dans Delphi 7 --
+------------------------------------------------
+1 - Installer la RX Library dans le répertoire voulu.
+2 - Ouvrir Delphi.
+3 - Fichier->Tout Fermer
+4 - Composant->Installer des paquets
+                        dans "paquet de conception" chercher ceux de la RX et les supprimer
+5 - Fichier->Ouvrir (dans l'ordre)
+                 Dans le répertoire \Units de l'installation de la RX
+	   rxctl7.dpk  : Option =>"Option d'utilisation"->conception et execution  OK
+                                        Compiler
+                                        Installer (message de confirmation)
+                     rxdb7.dpk  : Option =>"Option d'utilisation"->conception et execution OK
+                                         Compiler
+                                         Installer (message de confirmation)
+                    rxdbe7.dpk : Option =>"Option d'utilisation"->conception et execution OK
+		    Compiler
+                                         Installer (message de confirmation)
+                   -----------------------------------------------------------------------------
+                   dclrx7.dpk     : Compiler
+                                           Installer (message avec le nom des nouveaux composants)
+                   dclrxdb7.dpk : Compiler
+                                           Installer (message avec le nom des nouveaux composants)
+                   dclrxbd7.dpk : Compiler
+                                           Installer (message avec le nom des nouveaux composants)
+6 - Fichier->Quitter (Ne pas enregistrer les modifications)
+
+
+
+  -------------------------------------------------------------------------------------------------
+  Dernière version de l'installation de Delphi pour fonctionnement d'Epicéa du 22/04/2022
+  voir capture écran 'C:\Projet\InstallationDelphi\chemin_installation_librairie_delphi.png' 
+  
+

@@ -1,0 +1,117 @@
+
+            Encryption/Decryption for ZIP/UNZIP
+
+
+                        USAGE NOTES
+
+ 1) The encryption property must be set to True at the time
+    a file (or files) is added to the archive.  You can NOT
+    assign a password to a ZIP archive (or EXE archive)
+    after the files already exist in the archive.
+
+ 2) If the files already exist in the archive, you can give
+    them a password by re-adding them again.
+
+ 3) Make sure you test archives after giving them a password.
+    If you make the archive into a self-extracting archive, 
+    run it yourself to make sure the password works as you
+    expected it to. NEVER SEND OUT PASSWORDED ARCHIVES WITHOUT
+    DOING YOUR OWN TEST OF THE PASSWORD.  I wouldn't want you
+    to comprimise your data if a mistake was made when you
+    created the archive (or if my code has a bug).
+
+ 4) As I explain below, this is NOT the best type of 
+    security available.  Please use Pretty Good Privacy (PGP),
+    or another very strong type of encryption on your most
+    sensitive data.
+
+=========================================================
+
+I have recently learned that pkzip style encryption is not 
+covered in the restrictive US laws regarding the export of
+encryption software.  This is due to the simple algorithm
+used in pkzip.
+
+Although the pkzip algorithm is much simpler than DES 40
+bit encryption (which is also legal to export), I have
+found it to be effective to meet normal personal
+encryption requirements.
+
+It certainly won't withstand an attack by an experienced 
+cryptographer, but typical "hackers" can not break the
+encryption in a short amount of time (if you use a 
+well-chosen password).  The only widely available "crack"
+program to break pkzip encryption is one that uses a
+large dictionary.  It isn't super quick, but it can break
+simple English word passwords within an hour.
+
+The US Government has the abilty to quickly "crack" an
+encrypted zip file, regardless of how complex the password
+is.  This ability is not widespread, and I've never seen a
+program that good on any general access Web site.  This
+could change at any time, so I strongly recommend that
+you use PGP (Pretty Good Privacy) instead of pkzip 
+encryption on anything truly important.
+
+=========================================================
+
+This release of Delphi Zip uses a public domain version
+of PKZIP's standard encryption algorithm.  There is 100% 
+compatibility (as far as I know).  A down side of this is
+that it will not be more secure than PKZIP's encryption.
+
+
+Limitations of PKZIP's encryption scheme:
+
+- filenames, sizes, dates, etc are NOT encrypted.
+
+- encrypted files can be deleted from an archive
+  without requiring a password.
+  
+- each file in an archive can each have it's own
+  password - although I certainly don't recommend
+  it.  It becomes a real problem for the user.
+  Each file would need to be extracted separately.
+  Just be aware that you may encounter a zip file 
+  like this.
+    To avoid making a zip file that has different
+  passwords, make sure the user adds all the files
+  at one time.
+
+- it has been approved for export by the US 
+  government, and this implies weakness in the 
+  encryption algorithm.  The best hacker cracking 
+  programs I've seen are not as good as the one 
+  used by the US government, so this format is
+  still OK for casual use. 
+     Typical hacker programs can not quickly
+  determine your password if your password is not
+  in their pre-determined dictionary of words.
+  Typical dictionaries now have over a million
+  English words with some numbers.
+     You should use mixed-case, and some "special
+  characters" in your password, and a length over
+  7.  This is good enough, unless the US government
+  gets a hold of your zip file!
+
+=========================================================
+
+Thanks to Mike Wilkey <mtw@allways.net> for his very useful source
+code and helpful comments.  He basically got this functionality
+working by himself.  I just plugged in his result to TZipMaster.
+
+The source for the actual encryption algorithm is the overseas 
+link pointed-to by InfoZip.  I have learned that this is NOT 
+being controlled by the US government, so I am including it with
+this release.
+
+Specifically, I used the crypt.c and crypt.h files from this
+version of the InfoZip code:  ZCRYPT27.ZIP
+
+I added a few lines of code to assist in debugging, but the
+bulk of the code is unchanged.
+
+
+
+Eric W. Engler
+englere@swcp.com

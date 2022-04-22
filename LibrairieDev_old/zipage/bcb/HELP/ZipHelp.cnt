@@ -1,0 +1,55 @@
+:Base ZipHelp.hlp
+:Title ZipBuilder Component Help
+1 TZipBuilder component
+2 General information =TZipBuilder_Object
+2 Properties
+3 Properties=Props
+3 AddCompLevel =TZipBuilder_AddCompLevel_Property
+3 AddOptions =TZipBuilder_AddOptions_Property
+3 Cancel =TZipBuilder_Cancel_Property
+3 Count =TZipBuilder_Count_Property
+3 DLLDirectory =TZipBuilder_DLLDirectory_Property
+3 ErrCode =TZipBuilder_ErrCode_Property
+3 ExtrBaseDir =TZipBuilder_ExtrBaseDir_Property
+3 ExtrOptions =TZipBuilder_ExtrOptions_Property
+3 FSpecArgs =TZipBuilder_FSpecArgs_Property
+3 Handle =TZipBuilder_Handle_Property
+3 Message =TZipBuilder_Message_Property
+3 Password =TZipBuilder_Password_Property
+3 SFXCaption =TZipBuilder_SFXCaption_Property
+3 SFXCommandLine =TZipBuilder_SFXCommandLine_Property
+3 SFXDefaultDir =TZipBuilder_SFXDefaultDir_Property
+3 SFXOptions =TZipBuilder_SFXOptions_Property
+3 SFXOverWriteMode =TZipBuilder_SFXOverWriteMode_Property
+3 SFXPath =TZipBuilder_SFXPath_Property
+3 SuccessCnt =TZipBuilder_SuccessCnt_Property
+3 Trace =TZipBuilder_Trace_Property
+3 UnzBusy =TZipBuilder_UnzBusy_Property
+3 UnzVers =TZipBuilder_UnzVers_Property
+3 Verbose =TZipBuilder_Verbose_Property
+3 ZipBusy =TZipBuilder_ZipBusy_Property
+3 ZipContents =TZipBuilder_ZipContents_Property
+3 ZipFilename =TZipBuilder_ZipFilename_Property
+3 ZipVers =TZipBuilder_ZipVers_Property
+2 Methods
+3 Methods=Methods
+3 ~TZipBuilder =TZipBuilder_~TZipBuilder_Method
+3 Add =TZipBuilder_Add_Method
+3 ConvertSFX =TZipBuilder_ConvertSFX_Method
+3 ConvertZIP =TZipBuilder_ConvertZIP_Method
+3 CopyFile =TZipBuilder_CopyFile_Method
+3 Delete =TZipBuilder_Delete_Method
+3 Extract =TZipBuilder_Extract_Method
+3 GetAddPassword =TZipBuilder_GetAddPassword_Method
+3 GetExtrPassword =TZipBuilder_GetExtrPassword_Method
+3 List =TZipBuilder_List_Method
+3 Load_Unz_Dll =TZipBuilder_Load_Unz_Dll_Method
+3 Load_Zip_Dll =TZipBuilder_Load_Zip_Dll_Method
+3 TZipBuilder =TZipBuilder_TZipBuilder_Method
+3 Unload_Unz_Dll =TZipBuilder_Unload_Unz_Dll_Method
+3 Unload_Zip_Dll =TZipBuilder_Unload_Zip_Dll_Method
+2 Events
+2 Events=Events
+3 OnDirUpdate =TZipBuilder_OnDirUpdate_Event
+3 OnMessage =TZipBuilder_OnMessage_Event
+3 OnProgress =TZipBuilder_OnProgress_Event

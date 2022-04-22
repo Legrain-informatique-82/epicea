@@ -1,0 +1,5 @@
+select ID,ID_Piece,Id_Ligne,"Ecriture.db"."Date",Libelle,Debit,Credit,
+Qt1,Qt2 from Ecriture.db where Compte=(:Cpte) 
+
+select ID,ID_Piece,Id_Ligne,"Ecriture.db"."Date",Libelle,Debit,Credit,
+Qt1,Qt2 from Ecriture.db where Tiers=(:Tier) 

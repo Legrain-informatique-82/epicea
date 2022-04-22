@@ -1,0 +1,137 @@
+
+                          Delphi Zip v1.40 
+
+
+Summary of changes in this version:
+
+  - partial list of bug fixes:
+
+       Fixed the bad count we used to get if you extract an archive
+         that has directory names stored separately.  This was a problem
+         mostly for zip files made by other packages.
+         For example:  My Count property would tell you there are 5 files,
+         but one of them may be a dirname.  When you extract the files, 
+         SuccessCnt would be 4 - the separately stored dirname was not 
+         counted as an extraction.  Now, I count ALL entries as extractions,
+         so the numbers will match.  5 files = 5 extractions.
+
+       Correct filenames are now given in the "skipping encrypted file..."
+         error messages.  Thanks to: Markus Stephany, mirbir.st@saargate.de
+ 
+       The SFX module now extracts more than 1 passworded file in an
+         archive.   Thanks to: Markus Stephany, mirbir.st@saargate.de
+
+       Correct progress events now generated for extraction of 
+         uncompressed files.  Thanks to: Esa Raita, eza@netlife.fi 
+ 
+       The CopyFile method is now much faster, and works on busy networks
+  
+   - Addition of many new Self-Extracting Archive properties
+     (make it easy for you to distribute programs).  Demo1
+     has been enhanced to demonstrate the new properties.
+
+     -- Did you know that the DLLs and the ZIPSFX.BIN file are 
+        NOT required on the user's computer in order to run a 
+        Self-Extracting archive made by this package? Markus has 
+        squeezed a lot of stuff into only 38K bytes!
+
+   - A new Demo program (number 4) to show how to make an 
+     application self-installing.  It has a separate installation
+     menu, and can be un-installed from the Control Panel. Here's
+     some stuff in this demo:
+
+     -- sample code for making Shell Links, which allow an icon
+        to be added to the Start Menu, or the Desktop
+     -- Registry updates for main application, and paths
+     -- Registry updates for filename extension associations
+     -- Registry updates for supporting Control Panel Uninstall
+
+     Sorry, but Demo4 is for Delphi 3 and C++ Builder only.
+     I haven't developed the Delphi 2 code for this.  Note to
+     Delphi 2 users: please upgrade soon! 
+
+   - A new native port of TZipMaster to C++ Builder!  The new
+     BCB code is very good, and includes ports of demos 1 and 4.
+    
+   - New Delphi and C++ Builder Help files - you now get 
+     context-sensitive help from within Delphi 3 and C++ Builder!
+
+   - There's some backup code shared in this release:
+
+      \zip\mybackup - a VCL to show you how to copy a file to
+           a floppy disk; supports disk straddling; by Morgan
+           Martinet of France.
+
+
+   The bottom line: when you have enhancements, please share 
+   them with the rest of us!  E-mail them to me and they will 
+   be reviewed for possible inclusion in a future release.
+
+
+Eric W. Engler
+englere@swcp.com
+
+=================================================================
+Here's the details on the new properties.
+All of this info is in the new Helpfile.
+
+   DLLDirectory property - allows manual specification of the dir
+       used to hold ZIPDLL.DLL and UNZDLL.DLL.  Should NOT end
+       in a slash.  This is an optional property. if used, it overrides
+       the Windows search path for DLLs.  If you specify a dirname
+       here, but the DLLs are not actually in that dir, then the
+       std Windows search path will be consulted.
+       The idea for this came from Thomas Hensle, thensle@t-online.de.
+ 
+   In case SFXPath isn't set, DLLDirectory will also be consulted
+       when trying to locate ZIPSFX.BIN.  Here's the order that will
+       be used to locate ZIPSFX.BIN:
+         1) location given by the SFXPath property 
+         2) the current directory 
+         3) the application directory (location of current .EXE file)
+         4) the Windows System directory (where DLLs go)}
+         5) the Windows directory (where DLLs go)
+         6) location given by the DLLDirectory property 
+
+   These are the advanced options for creating more powerful Self-Extracting
+   archives.  By using these options, you can turn the new .EXE archive into
+   a small self-contained setup program!
+
+   The following three boolean options are set members of SFXOptions:
+
+   SFXAskCmdLine     boolean   (only matters if a cmd line is present)
+        If yes, allows user to de-select the command line checkbox.
+        Once deselected, the command line will not be run.
+        NOTE: The checkbox doesn't appear unless there is a command line
+        specified.
+
+   SFXAskFiles       boolean   (if yes, lets user modify list of files
+        to be extracted)
+
+   SFXHideOverWriteBox   boolean  (if yes, does NOT show the user the
+        dialog box that lets him choose the overwrite action at runtime for
+        files that already exist)
+
+   SFXOverWriteMode  enum     dflt=ovrConfirm  (others: ovrAlways, ovrNever)
+        This is the dflt overwrite option (if SFXHideOverWriteBox is true,
+        then this option will be used during extraction)
+
+   SFXCaption        string   dflt='Self-extracting Archive'
+        Caption of the SFX dialog box at runtime.
+
+   SFXDefaultDir     string   dflt=''
+        Default target dir for extraction.  Can be changed at runtime.
+        If you don't specify this, the user's current directory will
+        be the default.
+
+   SFXCommandLine    string   dflt=''
+        This command line will be executed immediately after extracting the 
+        files.  Typically used to view the readme file, but can do anything.
+        There is a predefined symbol that can be used in the command line
+        to tell you which target directory was actually used.
+        Special symbols: | is the command/arg separater
+                        >< is the actual extraction dir selected by user
+        Example:
+           notepad.exe|><readme.txt
+        Run notepad to show "readme.txt" in the actual extraction dir. 
+

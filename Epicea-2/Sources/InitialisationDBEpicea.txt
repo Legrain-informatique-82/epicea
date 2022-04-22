@@ -1,0 +1,15 @@
+MAin.Create
+
+1) Initialisation de la base Programme
+  - Le répertoire de la base program est situé dans le même répertoire que le programme
+
+2) Affichage de l'écran de protection qui identifie l'user et le choix des dossiers
+ - Par défaut c'est l'user Anonyme, le dossier demo, l'exercice exodemo
+   si aucun dossier n'a été créé ou bien le dernier user, le dernier dossier
+   et le dernier exo.
+
+ - Si l'utilisateur choisit dossier par défaut, c'est le dernier dossier qui est ouvert
+
+ - Si l'utilisateur choisit nouveau dossier
+      - Vérification de ses droits pour la création d'un nouveau dossier
+       : Si Ok, alors création du dossier avec l'écran Nouveaux Dossiers

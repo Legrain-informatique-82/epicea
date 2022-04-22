@@ -1,0 +1,3 @@
+Table Pointage
+
+Lorsque l'on enregistre un pointage, on inscrit la date de l'ecriture au debit dans le champ "Date" et la date de l'Ecriture Crédit dans le champ "Date Tva". Le nom de ces champs ne correspondent plus à leur vrai signification car  ils n'étaient pas prévu au départ dans ce contexte. il faut mettre ces deux dates car la date de l'une sert pour déclarer la tva de l'autre si celle-ci est de type E. et vice versa.

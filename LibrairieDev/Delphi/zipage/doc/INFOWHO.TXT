@@ -1,0 +1,50 @@
+
+                       Who is Info-Zip?
+
+
+  They are a dedicated group of people who have developed a 
+freeware implementation of ZIP and UNZIP.  Their code originated
+on Unix, but now exists on a multitude of platforms!
+
+  They formed shortly after the famous SEA vs. Phil Katz lawsuit
+around 1990.  This was when Thom Henderson of System Enhancement
+Associates (author of the then-popular ARC program) sued Phil Katz
+for making a compatible set of programs (PKARC and PKXARC) that
+were far better than the original.  The majority of programmers
+supported Phil because he didn't steal or borrow any of SEA's code.
+His only sin was using the same file format developed by SEA, and 
+using the 3 letters: ARC.
+
+  Following the lawsuit, which Phil lost, sadly, he renamed his 
+programs (PKARC became PKPAK, PKXARC became PKUNPAK), and developed
+a new and improved compression program called PKZIP. The rest is
+history.  Phil released the file format into the public domain so 
+others could write compatible programs (he didn't want anyone else
+burned over such a ridiculous issue).
+
+  The Info-Zip group of programmers got started when they couldn't 
+find a Unix program to handle the ZIP format.  Their efforts were
+slow to get going, but they became known for their high quality
+freeware C source code.  Today, their code is more compatible with
+Windows 95 and NT than any of the programmer libraries released by
+Phil Katz to date. 
+
+  This is where I come in - Phil's own commercially offered Delphi
+File Compression library was very limited (at least in the Dec 96 
+timeframe when I started by port).  It did not come with source code,
+did not support deflation (the best compression method), and worst
+of all, it didn't even support the standard PKZIP file format!
+
+  Since I knew of Info-Zip, I decided to see if I could port their
+C source code to work as a Win32 DLL. This allows Delphi programmers
+to benefit from the mega-manhours spent on the Info-Zip project.  My
+efforts are NOT an official part of the Info-Zip project, since I
+have not "carried over" all of the platform dependant code.
+
+
+  Info-Zip home page:
+  http://www.cdrom.com/pub/infozip/
+
+
+Eric W. Engler
+March 1997

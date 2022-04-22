@@ -1,0 +1,54 @@
+Je dois récupérer 2 records
+1 pour la pièce
+1 pour les écritures de cette pièce
+
+Celui pour la pièce:
+
+il faut remplir les champs que je t'ai laissé
+
+  TRecordPiece=record
+    IDJournal:integer;     //facultatif à partir du moment où le journal est rempli
+    Date:Tdatetime;        //obligatoire
+    Validation:Tdatetime;  //si date de livraison differente de date pièce
+    Libelle:string;        //facultatif
+    Compte:string;         //obligatoire
+    Journal:string;        //obligatoire
+    TotalPiece:currency;   //obligatoire
+end;
+
+
+Celui pour les écritures:
+
+il faut remplir autant de records qu'il y a de lignes d'écriture et les mettre
+dans une liste comme pour ecriture dans saisiePiece.
+
+  TRecordEcriture=record 
+    TypeLigne:Char;      //obligatoire
+    Compte:string;       //obligatoire
+    Libelle:string;      //facultatif
+    Qt1:extended;        //facultatif
+    Qt2:extended;        //facultatif
+    MontantHt:currency;  //obligatoire
+    MontantTVA:Currency; //facultatif
+    CodeTVA:string;      //facultatif
+    TauxTVA:real;        //facultatif
+    DateTVA:string;      //obligatoire si montant tva rempli
+    TypeTVA:String[1];   //obligatoire si montant tva rempli
+  end;
+
+
+Pour remplir la liste des écritures, on considère que la première ligne, si elle est remplie
+correspond à la ligne de contrepartie, sinon c'est une ligne vide.
+maintenant, si la ligne de contrepartie n'existe pas, je me sers des infos de la pièce pour créer cette ligne de contrepartie, donc il faut qu'il correspond avec les infos de contrepartie.( le prévoir !!)
+ensuite, si les autres lignes ont un montant de tva
+1) si le codetva est rempli, je crée directement la ligne tva
+2) si le codetva n'est pas rempli, je recherche le codetva dans les paramètres du compte
+de la ligne en question, et si je trouve un codetva, je crée la ligne tva
+
+Tu peux prévoir aussi dans le recordPiece
+1 champ pour le compte de réglement 
+
+s'il te manque des infos, n'hesite pas à appeler,
+
+à bientôt
+isa.

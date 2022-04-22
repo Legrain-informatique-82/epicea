@@ -1,0 +1,18 @@
+
+
+
+
+
+
+
+
+{TODO 2 -oisa -cdebugage :
+Prévoir la mise à jour de l'adresse d'un tiers à partir de l'importation d'une 
+facture}
+{DONE 2 -oisa -cAmélioration :
+comme pour les immos, au changement d'exercice, sauvegarder les tables atelier dans l'exercice clôturé
+et quand on revient sur exo clôturé, se brancher sur cette table}
+
+
+{DONE 1 -oisa -cAmélioration : Continuer à débuger l'importation de facture si ligne = 0}
+ 

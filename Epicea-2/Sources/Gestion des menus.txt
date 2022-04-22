@@ -1,0 +1,8 @@
+Prévoir une gestion dynamique des pop-up menus
+
+Créer les items de menus dans le OnPopup du menu en appelant une fonction de création
+avec comme paramètres : le popupmenu
+                        l'évènement
+			le short-cup
+			le nom du menu
+			le libellé

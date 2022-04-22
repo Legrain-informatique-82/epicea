@@ -1,0 +1,80 @@
+
+        Limitations on this version of ZIP/UNZIP for Delphi
+
+  1. No support for Zip file comments.  Ignores any comments that may 
+     already exist on ZIP files, and can't create comments on new 
+     archives.
+
+  2. Limited support for format conversions from other platforms:
+     MAC, Unix, IBM MVS, etc.  No guarantees!
+
+  3. No ability to prompt user upon trying to expand a file from
+     an archive if a file is already present.  The user must decide
+     beforehand whether he wants to overwrite, or skip, the files
+     that already exist.
+
+  4. No support for files that span more than 1 floppy disk.  I
+     generally use SPLIT.EXE to break large archives into smaller
+     pieces, and MS-DOS COPY to reassemble the pieces. 
+       NEW: In version 1.40 I added the "mybackup" VCL.  It may
+     help you split large archives so you can copy them to a floppy.
+
+  5. No "built-in" ability exists to allow the application program
+     to review each file in a wildcard spec before they are used.
+
+  6. The OnProgress event is limited to providing information on 
+     one file at a time. It doesn't give you the size of all files
+     before starting to zip up the first file, so you can't see
+     how far you are into compressing or expanding the whole
+     group of files.  
+
+  7. No support for Delphi v1 or Windows 3.1.  These DLL's require
+     Win32.  Sorry, but it isn't worth the debugging time to do
+     a back-port now.
+
+  8. Although these DLL's work with WinNT, there is no support 
+     for any expanded WinNT functionality not present in Win95
+     (like the security subsystem, for example).
+
+  9. In order to ensure that there are no copyright violations,
+     this project intentionally doesn't support two compression
+     formats:
+         tokenizing -  was never widely used (I've never seen
+                       this method used at all) 
+         reducing   -  was only used with beta versions of
+                       PKZIP before the release of v1.00
+                       (circa 1988/1989, I think).  During 
+                       this time most folks were still using
+                       PKPAK and PKARC.  Reducing was slooooow.
+
+     These formats ARE supported:
+         no compression (storing)
+         shrinking  (quick)
+         imploding  (popular with PKZIP v1.01) 
+         deflating  (best method, PKZIP v1.9+)
+
+     As far as I know, this package fully supports every ZIP
+     file made by PKZIP v2.04g.
+
+10. The "network" pathnames, called UNCs, are not supported.
+    A typical UNC pathname would be:
+           \\server\shared\subdir\fname.ext
+    Typically, you may have \\server\shared logically 
+    mounted as drive Q, for example.  So, you could zip up 
+    the file with this name:
+           Q:\subdir\fname.ext
+
+    NOTE:  The undocumented MS-DOS command "truename" is
+    useful to see which network filesystem is mounted on
+    a given logical drive.  For example, if you have a 
+    network drive of Q:, use this command to find out 
+    the UNC name on the server:
+          TRUENAME Q:\
+
+11. Recursive directory handling follows the Unix rules
+    for wildcards in directory names.  That is, if you specify
+    a filespec of "*.exe", and recursion is on, it will NOT
+    go down into any directory that isn't named with an
+    extension of ".exe"!  Until this can be changed,
+    recursion is not very useful with any filespec other
+    than "*.*".

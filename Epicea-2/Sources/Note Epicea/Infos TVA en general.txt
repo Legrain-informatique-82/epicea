@@ -1,0 +1,11 @@
+Infos générale sur la prise en charge de la TVA
+
+Dans les Dettes et créances
+si on enregistre une dettes ou créance contenant de la tva sur D :
+si la date de livraison de la ligne concernées est antérieure à la date de prise en compte de la tva (DatePremiereDeclaration), le programme ne prend pas en compte cette tva et donc on l'enregistre dans H_Tva pour indiquer qu'elle a déjà été prise en compte (dans H_Tva, on l'enregistre avec "ID_Declaration"=0 et on ne met pas à jour le compte concernée par la tva (ex: "44566")dans la balance d'ouverture. par contre, si la date de livraison est supérieur à cette date, la tva sera prise en compte et donc le compte de tva sera mise à jour dans la balance d'ouverture. 
+si on enregistre une dettes ou créance contenant de la tva sur E :
+la tva sera prise en compte et mise à jour dans la balance d'ouverture.
+
+Normalement, on doit saisir la partie de la pièce qui n'est pas réglée, surtout dans le cas d'une tva sur E
+
+dans les pointages, on peut pointer deux pièces antérieures à la date de première déclaration prise en compte par Epicea (DatePremiereDeclaration), dans ce cas, si l'une d'elle contient de la tva sur E, cette part de tva sera quand même déclarée dans la prochaine déclaration. Cette pratique n'est pas normale car cela voudrait dire que la part de dettes ou la créance pointée n'existe pas en réalité à l'ouverture. Pour ne pas que cette part de tva soit déclarée dans la prochaine déclaration, il faut modifier la pièce contenant la tva en remplacant le paramètre typetva E par typeTva D dans le complément ligne de la ligne concernée.

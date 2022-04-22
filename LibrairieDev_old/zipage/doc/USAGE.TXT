@@ -1,0 +1,695 @@
+
+   NEW: I distributed help files with version 1.40.  See the
+   directory \zip\help for Delphi, and \zip\bcb\help for BCB.
+   The install instructions tell you how to install the help
+   files into the IDE.
+   ----------------------------------------------------------
+
+   TZipMaster VCL by Eric W. Engler.   v1.40      Mar 3, 1998
+
+   The new SFX options in this version are made possible by changes
+   made to the SFX source code by Markus Stephany, mirbir.st@saargate.de.
+   Please send him an e-mail to say "thanks for the hard work"!
+
+   Quick summary of changes in version 1.40:
+
+   bug fixes:
+       Correct filenames are now given in the "skipping encrypted file..."
+         error messages.  Thanks to: Markus Stephany, mirbir.st@saargate.de
+ 
+       The SFX module now extracts more than 1 passworded file in an
+         archive.   Thanks to: Markus Stephany, mirbir.st@saargate.de
+
+       Correct progress events now generated for extraction of 
+         uncompressed files.  Thanks to: Esa Raita, eza@netlife.fi 
+ 
+   DLLDirectory property - allows manual specification of the dir
+       used to hold ZIPDLL.DLL and UNZDLL.DLL.  Should NOT end
+       in a slash.  This is an optional property. if used, it overrides
+       the Windows search path for DLLs.  If you specify a dirname
+       here, but the DLLs are not actually in that dir, then the
+       std Windows search path will be consulted.
+          The idea for this came from Thomas Hensle, thensle@t-online.de.
+ 
+   In case SFXPath isn't set, DLLDirectory will also be consulted
+       when trying to locate ZIPSFX.BIN.  Here's the order that will
+       be used to locate ZIPSFX.BIN:
+         1) location given by the SFXPath property 
+         2) the current directory 
+         3) the application directory (location of current .EXE file)
+         4) the Windows System directory (where DLLs go)}
+         5) the Windows directory (where DLLs go)
+         6) location given by the DLLDirectory property 
+
+   These are the advanced options for creating more powerful Self-Extracting
+   archives.  By using these options, you can turn the new .EXE archive into
+   a small self-contained setup program!
+
+   The following three boolean options are set members of SFXOptions:
+
+   SFXAskCmdLine     boolean   (only matters if a cmd line is present)
+        If yes, allows user to de-select the command line checkbox.
+        Once deselected, the command line will not be run.
+        NOTE: The checkbox doesn't appear unless there is a command line
+        specified.
+
+   SFXAskFiles       boolean   (if yes, lets user modify list of files
+        to be extracted)
+
+   SFXHideOverWriteBox   boolean  (if yes, does NOT show the user the
+        dialog box that lets him choose the overwrite action at runtime for
+        files that already exist)
+
+   SFXOverWriteMode  enum     dflt=ovrConfirm  (others: ovrAlways, ovrNever)
+        This is the dflt overwrite option (if SFXHideOverWriteBox is true, then
+        this option will be used during extraction)
+
+   SFXCaption        string   dflt='Self-extracting Archive'
+        Caption of the SFX dialog box at runtime.
+
+   SFXDefaultDir     string   dflt=''
+        Default target dir for extraction.  Can be changed at runtime.
+        If you don't specify this, the user's current directory will
+        be the default.
+
+   SFXCommandLine    string   dflt=''
+        This command line will be executed immediately after extracting the 
+        files.  Typically used to view the readme file, but can do anything.
+        There is a predefined symbol that can be used in the command line
+        to tell you which target directory was actually used.
+        Special symbols: | is the command/arg separater
+                        >< is the actual extraction dir selected by user
+        Example:
+           notepad.exe|><readme.txt
+        Run notepad to show "readme.txt" in the actual extraction dir. 
+ 
+  ------------------------------------------------------------------------
+
+   TZipMaster is a non-visual VCL wrapper for my freeware ZIP and
+   UNZIP DLLs.  At run time, the DLL's: ZIPDLL.DLL and UNZDLL.DLL must
+   be present on the hard disk - in C:\WINDOWS\SYSTEM or else in your
+   application directory, or a directory in the PATH.
+
+   These DLLs are based on the InfoZip Official Freeware Zip/Unzip
+   source code, but they are NOT equivalent to InfoZip's DLLs.
+   I have modified the InfoZip source code to enhance their
+   ease-of-use, power, and flexibility for use with Delphi and
+   C++ Builder.  Please do NOT contact InfoZip for issues
+   regarding this port.
+
+   To obtain the official InfoZip source code, consult their
+   Web site:
+               http://www.cdrom.com/pub/infozip/
+
+   The six main methods that can be invoked are:
+       Add      - add one or more files to a ZIP archive
+       Delete   - delete one or more files from ZIP archive
+       Extract  - expand one or more files from a ZIP archive
+       List     - transfer "table of contents" of ZIP archive
+                  to a StringList
+
+       CopyFile - copies a file
+
+       GetAddPassword  - prompt user for a password - does verify
+       GetExtrPassword - prompt user for a password - does NOT verify
+
+   NOTE: "Test" is a sub-option of Extract
+
+   All of the methods above will work on regular .ZIP files, and
+   on self-extracting ZIP archives having a file extension of .EXE.
+
+   Various properties exist to control the actions of the methods.
+
+   Filespecs are specified in the FSpecArgs TStringList property, so you
+   can easily combine many different filespecs into one Add, Delete, or
+   Extract operation. For example:
+
+      1. Add entries directly to the FSpecArgs property:
+       ZipMaster1.FSpecArgs.Add('C:\AUTOEXEC.BAT');
+       ZipMaster1.FSpecArgs.Add('C:\DELPHI\BIN\DELPHI.EXE');
+       ZipMaster1.FSpecArgs.Add('C:\WINDOWS\*.INI');
+
+      2. Take the filespecs from a StringList, just assign them all over
+         to ZipMaster1.
+       ZipMaster1.FSpecArgs.Assign(StringList1);
+
+      3. Take the filespecs from a ListBox, just assign them all over
+         to ZipMaster1.
+       ZipMaster1.FSpecArgs.Assign(ListBox1.Items);
+
+   You can specify either the MS-DOS backslash path symbol, or the one
+   normally used by PKZIP (the Unix path separator: /).  They are treated
+   exactly the same.
+
+   All of your FSpecArgs accept MS-DOS wildcards.
+
+   Add, Delete, and Extract are the only methods that use FSpecArgs.
+   The List method doesn't - it just lists all files.
+
+
+   Following is a list of all TZipMaster properties, events and methods:
+
+   Properties
+   ==========
+     Verbose      Boolean     If True, ask for the maximum amount of "possibly
+                              important" information from the DLLs.  The
+                              informational messages are delivered to your
+                              program via the OnMessage event, and the ErrCode
+                              and Message properties. This is primarily used
+                              to determine how much info you want to show your
+                              "end-users" - developers can use the Trace
+                              property to get additional infomation.
+
+     Trace        Boolean     Similar to Verbose, except that this one is
+                              aimed at developers.  It lets you trace the
+                              execution of the C code in the DLLs.  Helps
+                              you locate possible bugs in the DLLs, and
+                              helps you understand why something is happening
+                              a certain way.
+
+     ErrCode      Integer     Holds a copy of the last error code sent to
+                              your program by from DLL. 0=no error.
+                              See the OnMessage event.  Most messages from
+                              the DLLs will have an ErrCode of 0.
+
+     Message      String      Holds a copy of the last message sent to your
+                              program by the DLL.  See the OnMessage event.
+
+     ZipContents  TList       Read-only TList that contains the directory
+                              of the archive specified in the ZipFilename
+                              property. Every entry in the list points to
+                              a ZipDirEntry record.  This is automatically
+                              filled with data whenever an assignment is
+                              made to ZipFilename, and can be manually
+                              filled by calling the List method.
+                                 For your convenience, this VCL hides the
+                              TList memory allocation issues from you.
+                                 Automatic updates to this list occur
+                              whenever this VCL changes the ZIP file.
+                              Event OnDirUpdate is triggered for you
+                              each time this list is updated - that is
+                              your queue to refresh your directory display.
+
+   ---------------------------------------------------------------------
+   Each entry in the ZipContents TList is a ZipDirEntry record:
+
+   ZipDirEntry = packed Record
+     Version                     : WORD;
+     Flag                        : WORD;
+     CompressionMethod           : WORD;
+     DateTime                    : Longint; { Time: Word; Date: Word; }
+     CRC32                       : Longint;
+     CompressedSize              : Longint;
+     UncompressedSize            : Longint;
+     FileNameLength              : WORD;
+     ExtraFieldLength            : WORD;
+     FileName                    : String;
+   end;
+
+   To get compression ratio:
+   (code from Almer Tigelaar, tigelaar@tref.nl)
+   var
+      ratio: Integer;
+   begin
+      with ZipDirEntry1 do
+         ratio:=Round((1-(CompressedSize/UnCompressedSize))*100);
+   ---------------------------------------------------------------------
+
+     Cancel       Boolean     If you set this to True, it will abort any
+                              Add or Extract processing now underway.  There
+                              may be a slight delay before the abort will
+                              take place.  Note that a ZIP file can be
+                              corrupted if an Add operation is aborted.
+
+     ZipBusy      Boolean     If True, a ZIP operation is underway - you
+                              must delay your next Add/Delete operation
+                              until this is False.  You won't need to be
+                              concerned about this in most applications.
+                              This can be used to syncronize Zip operations
+                              in a multi-threaded program.
+
+     UnzBusy      Boolean     If True, an UNZIP operation is underway -
+                              you must delay your next Extract operation
+                              until this is False.  You won't need to be
+                              concerned about this in most applications.
+                              This can be used to syncronize UnZip
+                              operations in a multi-threaded program.
+
+     AddCompLevel Integer     Compression Level.  Range 0 - 9, where 9
+                              is the tightest compression.  2 or 3 is a
+                              good trade-off if you need more speed. Level 0
+                              will just store files without compression.
+                              I recommend leaving this at 9 in most cases.
+
+     AddOptions   Set         This property is used to modify the default
+                              action of the Add method.  This is a SET of
+                              options.  If you want an option to be True,
+                              you need to add it to the set.  This is
+                              consistant with the way Delphi deals with
+                              "options" properties in general.
+
+        AddDirNames           If True, saves the pathname with each fname.
+                              Drive IDs are never stored in ZIP file 
+                              directories. NOTE: the root directory name is
+                              never stored in a pathname; in other words,
+                              the first character of a pathname stored in
+                              the zip file's directory will never be a slash.
+
+        AddForceDOS           If True, force all filenames that go into
+                              the ZIP file to meet the DOS 8x3 restriction.
+                              If false, long filenames are supported.
+                              WARNING: name conflicts can occur if 2 long
+                              filenames reduce to the same 8x3 filename!
+
+        AddZipTime            If True, set ZIP timestamp to that of the newest
+                              file in the archive.
+
+        AddRecurseDirs        If True, subdirectories below EACH given fspec
+                              will be included in the fspec. Defaults to False.
+                              This is potentially dangerous if the user does
+                              this from the root directory (his hard drive
+                              may fill up with a huge zip file)!
+
+        AddHiddenFiles        If True, files with their Hidden or System
+                              attributes set will be included in the Add
+                              operation. 
+
+        AddEncrypt            If True, add the files with standard zip
+                              encryption.  You will be prompted for the
+                              password to use.
+
+        NOTE: You can not have more than one of the following three options
+              set to "True".  If all three are False, then you get a standard
+              "add": all files in the fspecs will be added to the archive
+              regardless of their date/time stamp.  This is also the default.
+
+        AddMove               If True, after adding to archive, delete orig
+                              file.  Potentially dangerous.  Use with caution!
+
+        NOTE: Freshen and Update can only work on pre-existing archives. Update
+        can add new files to the archive, but can't create a new archive.
+
+        AddFreshen            If True, add newer files to archive (only for
+                              files that are already in the archive).
+
+        AddUpdate             If True, add newer files to archive (but, any
+                              file in an fspec that isn't already in the
+                              archive will also be added).
+
+     ExtrBaseDir  String      This base directory applies only to "Extract"
+                              operations.  The UNZIP DLL will "CD" to this
+                              directory before extracting any files. If you
+                              don't specify a value for this property, then the
+                              directory of the ZipFile itself will be the
+                              base directory for extractions.
+
+     ExtrOptions  set         This property is used to modify the default
+                              action of the Extract method.  This is a SET
+                              of options.  If you want an option to be
+                              True, you need to add it to the set.
+
+        ExtrDirNames          If True, extracts and recreates the relative
+                              pathname that may have been stored with each file.
+                              Empty dirs stored in the archive (if any) will
+                              also be recreated.
+
+        ExtrOverWrite         If True, overwrite any pre-existing files during
+                              Extraction.
+
+        ExtrFreshen           If True, extract newer files from archive (only 
+                              for files that already exist).  Won't extract
+                              any file that isn't already present.
+
+        ExtrUpdate            If True, extract newer files from archive (but,
+                              also extract files that don't already exist).
+
+        ExtrTest              If True, only test the archive to see if the
+                              files could be sucessfully extracted.  This is
+                              done by extracting the files, but NOT saving the
+                              extracted data.  Only the CRC code of the files
+                              is used to determine if they are stored correctly.
+                              To use this option, you will also need to define
+                              an Event handler for OnMessage.
+                                 IMPORTANT: In this release, you must test all
+                              files - not just some of them.
+
+     NOTE: there is no decryption property for extraction.
+     If an encrypted file is encountered, the user will be
+     automatically prompted for a password.
+
+     FSpecArgs    TStrings    Stringlist containing all the filespecs used
+                              as arguments for Add, Delete, or Extract
+                              methods. Every entry can contain MS-DOS wildcards.
+                              If you give filenames without pathnames, or if
+                              you use relative pathnames with filenames, then
+                              the base drive/directory is assumed to be that
+                              of the Zipfile.
+
+     ZipFilename  String      Pathname of a ZIP archive file.  If the file
+                              doesn't already exist, you will only be able to
+                              use the Add method.  I recommend using a fully
+                              qualified pathname in this property, unless
+                              your program can always ensure that a known
+                              directory will be the "current" directory.
+
+     Count        Integer     Number of files now in the Zip file.  Updated
+                              automatically, or manually via the List method.
+
+     SuccessCnt   Integer     Number of files that were successfully
+                              operated on (within the current ZIP file).
+                              You can read this after every Add, Delete, and
+                              Extract operation.
+
+     ZipVers      Integer     The version number of the ZIPDLL.DLL.  For
+                              example, 140 = version 1.40.
+
+     UnzVers      Integer     The version number of the UNZDLL.DLL.  For
+                              example, 140 = version 1.40.
+
+     Password     String      The user's encryption/decryption password.
+                              This property is not needed if you want to
+                              let the DLLs prompt the user for a password.
+                              This is only used if you want to prompt the
+                              user yourself.
+                                 WARNING! If you set the password in the
+                              Object Inspector, and you never change the
+                              password property at runtime, then your
+                              users will never be able to use any other
+                              password.  If you leave it blank, the DLLs
+                              will prompt users each time a password is
+                              needed.
+
+     DLLDirectory String      Allows manual specification of the directory
+                              used to hold ZIPDLL.DLL and UNZDLL.DLL.  Should
+                              NOT end in a slash.  This is an optional
+                              property. If used, it overrides the Windows
+                              search path for DLLs.  If you specify a dirname
+                              here, but the DLLs are not actually in that dir,
+                              then the standard Windows search path will be 
+                              consulted, anyway.
+
+     SFXPath      String      Points to the ZIPSFX.BIN file.  Must include
+                              the whole pathname, filename, and extension.
+                              This is only used by the ConvertSFX method.
+                              As a convenience for you, ZipMaster will
+                              look in the Windows dir, and in the Windows
+                              System dir for this file, in case you don't
+                              want to use this property.
+
+     SFXOverWriteMode  enum   This is the default overwrite option for what
+                              the SFX program is supposed to do if it finds 
+                              files that already exist.  If option 
+                              "SFXHideOverWriteBox" is true, then this option 
+                              will be used during extraction.  
+                                 These are the possible values for this
+                              property:
+                                ovrConfirm - ask user when each file is found
+                                ovrAlways - always overwrite existing files
+                                ovrNever - never overwrite - skip those files
+                              The default is "ovrConfirm".
+
+     SFXCaption      String   The caption of the SFX program's dialog box at
+                              runtime. The default is 'Self-extracting Archive'.
+
+     SFXDefaultDir   String   The default target directory for extraction of
+                              files at runtime.  This can be changed at 
+                              runtime through the dialog box. If you don't 
+                              specify a value for this optional property, the 
+                              user's current directory will be the default.
+
+     SFXCommandLine  String   This command line will be executed immediately
+                              after extracting the files.  Typically used to 
+                              show the the readme file, but can do anything.
+                              There is a predefined symbol that can be used 
+                              in the command line to tell you which target
+                              directory was actually used (since the user can
+                              always change your default).
+                              Special symbols: "|" is the command/arg separator,
+                              "><" is the actual extraction dir selected by user
+                              Example:
+                                  notepad.exe|><readme.txt
+                              Run notepad to show "readme.txt" in the actual
+                              extraction directory. 
+                                This is an optional property.
+
+     SFXOptions   Set         This property is used to modify the default
+                              action of the ConvertSFX method.  This is a 
+                              SET of options.  If you want an option to be 
+                              True, you need to add it to the set.  This is
+                              consistant with the way Delphi deals with
+                              "options" properties in general.
+
+        SFXAskCmdLine         If true, allows user (at runtime) to de-select
+                              the SFX program's command line checkbox. Once 
+                              de-selected, the command line will not be run.
+                              NOTE: The checkbox doesn't appear unless there
+                              is a command line specified.
+
+        SFXAskFiles           If true, lets user (at runtime) modify the 
+                              SFX program's list of files to be extracted.
+
+        SFXHideOverWriteBox   If true, does NOT show the user (at runtime)
+                              the SFX program's dialog box that lets him 
+                              choose the overwrite action for files that
+                              already exist.
+
+
+   Events
+   ======
+     OnDirUpdate              Occurs immed. after this VCL refreshes it's
+                              TZipContents TList.  This is your queue to
+                              update the screen with the new contents.
+
+     OnProgress               Occurs during compression and decompression.
+                              Intended for "status bar" or "progress bar"
+                              updates.  Criteria for this event:
+                                - starting to process a new file (gives you
+                                    the filename and total uncompressed
+                                    filesize)
+                                - every 32K bytes while processing
+                                - completed processing on a batch of files
+                              See Demo1 to learn how to use this event.
+
+     OnMessage                Occurs when the DLL sends your program a message.
+                              The Message argument passed by this event will
+                              contain the message. If an error code
+                              accompanies the message, it will be in the
+                              ErrCode argument.
+                                 The Verbose and Trace properties have a
+                              direct influence on how many OnMessage events
+                              you'll get.
+                                 See Also: Message and ErrCode properties.
+
+   Methods
+   =======
+     Add                      Adds all files specified in the FSpecArgs
+                              property into the archive specified by the
+                              ZipFilename property. 
+                                Files that are already compressed will not be
+                              compressed again, but will be stored "as is" in
+                              the archive. This applies to .GIF, .ZIP, .LZH,
+                              etc. files. Note that .JPG files WILL be
+                              compressed, since they can still be squeezed
+                              down in size by a notable margin.
+
+     Extract                  Extracts all files specified in the FSpecArgs
+                              property from the archive specified by the
+                              ZipFilename property. If you don't specify
+                              any FSpecArgs, then all files will be extracted.
+                              Can also test the integrity of files in an
+                              archive.
+                                If you set the ExtrTest option of ExtrOptions,
+                              then ALL files in the arive will be tested.
+                              This will cause them to be extracted, but not
+                              saved to the hard disk.  Their CRC will be
+                              verified, and results will go to the SuccessCnt
+                              property, and the OnMessage event handler.
+
+     Delete                   Deletes all files specified in the FSpecArgs
+                              property from the archive specified by the
+                              ZipFilename property.
+
+     List                     Refreshes the contents of the archive into 
+                              the ZipContents TList property.  This is
+                              a manual "refresh" of the "Table of Contents".
+
+     CopyFile                 This copies any file to any other file.
+                              Useful in many application programs, so 
+                              it was included here as a method.  This returns
+                              0 on success, or else one of these errors:
+                                  -1   error in open of outfile
+                                  -2   read or write error during copy
+                                  -3   error in open of infile
+                                  -4   error setting date/time of outfile
+                                  -9   general failure during copy
+                              Can be used to make a backup copy of the 
+                              ZipFile before an Add operation.
+                              Sample Usage:
+                                with ZipMaster1 do
+                                begin
+                                   ret=CopyFile(ZipFilename, 'C:\TMP$$.ZIP');
+                                   if ret < 0 then
+                                      ShowMessage('Error making backup');
+                                end;
+
+     IMPORTANT note regarding CopyFile: The destination must include
+     a filename (you can't copy fname.txt to C:\).  Also, Wildcards are
+     not allowed in either source or dest.
+
+     ------------------------------------------------------------------------
+     Encrypted Archive Support - new in v1.30
+
+     Thanks to Mike Wilkey <mtw@allways.net> for his very useful source
+     code and helpful comments.  He basically got this functionality
+     working by himself.  I just plugged in his result to TZipMaster.
+     The source for the actual encryption algorithm is the overseas link
+     pointed-to by InfoZip.  I have learned that this is NOT being controlled
+     by the US government, so I am including it with this release.
+
+     GetAddPassword           Prompt user for a password.  The password
+                              will be accepted twice - the second time to
+                              verify it.  If both of them match, it will
+                              be saved in the Password property, or else
+                              the Password property will be cleared.
+                                The use of this method is not required.
+                              If you want to make your own password prompt
+                              dialog box, you can just put the password
+                              into the password property yourself.  Also,
+                              you can take the easiest route by leaving the
+                              password property blank, and letting the 
+                              DLLs prompt the user for the password.
+
+     GetExtrPassword          Prompt user for a password.  The password
+                              will only be accepted once. It will be
+                              saved in the Password property.
+                                The use of this method is not required.
+                              If you want to make your own password prompt 
+                              dialog box, you can just put the password
+                              into the password property yourself.  Also,
+                              you can take the easiest route by leaving the
+                              password property blank, and letting the 
+                              DLLs prompt the user for the password.
+
+
+     IMPORTANT notes about Password:
+
+     - The "GetAddPassword" and "GetExtrPassword" methods are optional.
+       You have 3 different ways of getting a user's password:
+
+        1) Call the "GetAddPassword" and/or the "GetExtrPassword" methods,
+           just before add or extract.
+
+        2) Use your own code to set the "Password" property.  It's your
+           choice how you obtain the password.  
+             - This is useful if the password comes from a file or table.
+             - It's also good for letting you enforce constraints on the
+           password - you can require it to be over 6 chars, require it
+           to have at least one special char, etc.  Of course, you'd only
+           want to enforce constrainst on "Add" operations.  A word of
+           caution: many users don't like password constraints, so give
+           them the option to turn them off.
+
+        3) Don't set one at all, and let the DLLs prompt the user.
+           It's easy, and it works.
+
+     - Passwords can not be longer than 80 characters.  A zero-length
+       password is the same as no password at all.
+
+     - To "zero out" the password, set it's property to an empty string.
+       If it is zero'd out, but the AddEncrypt option is set, then the
+       user will be prompted for a new password by the DLLs. So, if you
+       don't want a password used, make sure you turn off "AddEncrypt",
+       and you zero-out the password.  
+
+     - If you set a password for an Extract, but it is incorrect, then
+       the DLLs will NOT prompt the user for another password.
+
+     - If the user enters a password at an automatic prompt generated
+       by the DLL, then you can NOT get access to that password from
+       your program.  If you want to know what it is, you need to prompt
+       for it yourself.
+
+     - To Force the DLL to AVOID decrypting an encrypted file, you must
+       set the password property to an unlikely password (all periods,
+       for example).  If adding, make sure AddEncrypt is NOT set.
+
+     -------------------------------------------------------------------------
+     Self Extracting Archive Support - New in v1.30
+
+     Thanks to Carl Bunton for the actual SFX code.  This is a very big
+     undertaking, and he did a great job.  He also makes good compression
+     VCLs (called ZipTV) for Delphi.  They are shareware, but his profits
+     go to a children's hospital.  He supports many archive formats, not
+     just ZIP.  Check out his Web site:
+                    http://www.concentric.net/~twojags
+
+     ConvertSFX               Convert zip archive to self-extracting .EXE.
+                              The resulting .EXE is a Win32 program.
+                              Uses the same base name and path already
+                              used by the zipfile - only the file extension
+                              is changed to .EXE. This is accompished by
+                              prepending the SFX code onto the front of
+                              the zip file, and then changing it's extension.
+
+     IMPORTANT! - before using ConvertSFX, you may want to first set the
+       SFXPath property to the full pathname of the SFX code: ZIPSFX.BIN.
+       If you don't set this property, ZipMaster will automatically look for
+       this file in the Windows and Windows System directories.
+
+     ConvertZIP               Convert self-extracting .EXE to .ZIP archive.
+                              Converts a self-extracting .exe file into a
+                              zip archive.  This is accomplished by removing
+                              the SFX code from the beginning, and then
+                              changing it's extension.
+
+     WARNING: The use of ConvertZip can NOT be guaranteed to work with
+        all self-extracting archive formats.  It will work on MS-DOS "pkzip"
+        (product of pkware) self-extracting zip archives, and on those made 
+        by "WinZip" (product of Nikko Mak Computing), but some self-extracting
+        formats are not even based on zip compression.
+           For example, the freeware "ASetup" program uses the .LZH
+        compression format.  In fact, most setup programs use compression
+        formats that aren't zip compatible.
+           If you try to use ConvertZip on an archive that doesn't
+        conform to the zip standard, you will get errors.  If fact, you
+        can't even list the contents of an .EXE archive if it's not a
+        standard zip format.
+
+   --------------------------------------------------------------------
+                       DLL Loading and Unloading
+
+   This table show you which DLL is needed for each method:
+       Add        requires ZIPDLL.DLL
+       Delete     requires ZIPDLL.DLL
+       Extract    requires UNZDLL.DLL
+       List            none (internal code in this VCL)
+       CopyFile        none (internal code in this VCL)
+       GetAddPassword  none (internal code in this VCL)
+       GetExtrPassword none (internal code in this VCL)
+       ConvertSFX      none (internal code to this VCL)
+       ConvertZIP      none (internal code to this VCL)
+   NOTE: "Test" is a sub-option of extract.
+
+   The following 4 methods give you explicit control over loading and
+   unloading of the DLLs.  For simplicity, you can do the loads in
+   your form's OnCreate event handler, and do the unloads in your
+   form's OnDestroy event handler.
+
+      Load_Zip_Dll    --  Loads ZIPDLL.DLL, if not already loaded
+      Load_Unz_Dll    --  Loads UNZDLL.DLL, if not already loaded
+      Unload_Zip_Dll  --  Unloads ZIPDLL.DLL
+      Unload_Unz_Dll  --  Unloads UNZDLL.DLL
+
+   For compatibility with older programs, and because I'm a nice
+   guy, I'll handle the loads and unloads automatically if your
+   program doesn't do it.  This can, however, incur a perfomance
+   penalty because it will reload the needed DLL for each operation.
+
+   Advanced developers will want to carefully consider their load
+   and unload strategy so they minimize the number of loads, and
+   keep the DLLs out of memory when they're not needed. There is a
+   traditional speed vs. memory trade-off.
+  --------------------------------------------------------------------
+
+Eric Engler
+englere@swcp.com

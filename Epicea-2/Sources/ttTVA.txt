@@ -1,0 +1,13 @@
+Traitement de la TVA
+
+
+Pour une période donnée :
+
+Récupération des lignes d'achats pour la période en cours qui ont le paramètre
+TVA D
+Récupération des lignes de ventes pour la période en cours qui ont le paramètre
+TVA D
+Récupération des lignes d'achats qui ont le paramètre E et qui ont été pointé dans
+la période.
+
+

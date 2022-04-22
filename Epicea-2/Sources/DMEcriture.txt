@@ -1,0 +1,1150 @@
+unit DMEcriture;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  DBTables, Db,DMPiece,Gr_Librairie, E2_Librairie,E2_AideCompte, Gr_GestPlanCpt,
+  DBSumLst,Piece,Ecriture_Isa,DMTier,DMPlanCpt,LibDates,GR_Lib_Zone_Saisie,LibZoneSaisie
+  {,DMBalances};
+
+type
+  TErreurEcritureBOTiers=record
+  CodeErreur:integer;
+  Retour:boolean;
+ end;
+
+  TDMEcritures = class(TDataModule)
+    TaEcriture: TTable;
+    DataEcriture: TDataSource;
+    QueryEcriture: TQuery;
+    DataQuery: TDataSource;
+    QueryEcritureMAXOFID: TIntegerField;
+    QueryEcrCompte: TQuery;
+    QueryEcrTiers: TQuery;
+    DataQueryEcr: TDataSource;
+    TaEcriture2: TTable;
+    DataEcriture2: TDataSource;
+    TaEcritureT: TTable;
+    DaEcritureT: TDataSource;
+    TaEcritureTMontantTTC: TCurrencyField;
+    TaEcritureTID: TIntegerField;
+    TaEcritureTID_Piece: TIntegerField;
+    TaEcritureTTypeLigne: TStringField;
+    TaEcritureTID_Ligne: TSmallintField;
+    TaEcritureTDate: TDateField;
+    TaEcritureTCompte: TStringField;
+    TaEcritureTTiers: TStringField;
+    TaEcritureTLibelle: TStringField;
+    TaEcritureTQt1: TFloatField;
+    TaEcritureTQt2: TFloatField;
+    TaEcritureTDebitSaisie: TFloatField;
+    TaEcritureTCreditSaisie: TFloatField;
+    TaEcritureTID_Devise: TIntegerField;
+    TaEcritureTDebit: TFloatField;
+    TaEcritureTCredit: TFloatField;
+    TaEcritureTTvaCode: TStringField;
+    TaEcritureTTvaType: TStringField;
+    TaEcritureTTvaTaux: TFloatField;
+    TaEcritureTTvaDate: TDateField;
+    TaEcritureTRapprochement: TStringField;
+    TaEcritureTValidation: TDateField;
+    TaEcritureTQui: TStringField;
+    TaEcritureTQuand: TDateTimeField;
+    QueryMinEcriture: TQuery;
+    QueryMinEcritureMINOFID: TIntegerField;
+    QueryMaxIDLigne: TQuery;
+    QueryMaxIDLigneMAXOFID_Ligne: TSmallintField;
+    QuSumEcritureBOT: TQuery;
+    QuSumEcritureBOTSomDebit: TFloatField;
+    QuSumEcritureBOTSomCredit: TFloatField;
+    QuSumEcritureBOTSolde: TFloatField;
+    DaSumEcritureBOT: TDataSource;
+    procedure RechercheMaxIdEcriture;
+    procedure CreationEcritures(Reglement:TEcriture_Isa;Piece:Tpiece;LibelleEcriture,TLigne,Compte:string;Qte1,Qte2:real;Ds,Cs,D,C:Currency;Devise,Ligne:integer;DateRec:tdate);//modif
+    procedure DMEcrituresCreate(Sender: TObject);
+    procedure DMEcrituresDestroy(Sender: TObject);
+    procedure TaEcritureAfterPost(DataSet: TDataSet);
+    procedure TaEcriture2BeforeInsert(DataSet: TDataSet);
+    procedure TaEcriture2BeforePost(DataSet: TDataSet);
+    procedure FiltrageSurIDPiece(Ecriture:TTable;IDPiece:integer);//Modif
+    procedure ChoixSensEtMontant(tableCourante:ttable);
+    procedure TaEcritureBeforeDelete(DataSet: TDataSet);
+    procedure TaEcritureAfterDelete(DataSet: TDataSet);
+    procedure TaEcritureBeforePost(DataSet: TDataSet);
+    procedure TaEcritureAfterScroll(DataSet: TDataSet);
+    procedure TaEcritureBeforeScroll(DataSet: TDataSet);
+    function BatchMoveSurTaEcriture(Source:TTable;Mode:tbatchMode):integer;
+    function VerifIDEcriture(ID:integer;Ecriture:TEcriture_Isa;Suppr:boolean):TErreurPiece;//Modif
+    function VerifIDPieceSurTaEcriture(IDPiece:integer;Ecriture:TEcriture_Isa;Suppr:boolean):TErreurPiece;//Modif
+    Function CtrlSaisieEcritureBOTiers(CCourant:Tfield):TErreurEcritureBOTiers;
+    procedure TaEcritureTBeforeCancel(DataSet: TDataSet);
+    procedure RechercheMinIdEcriture;
+    procedure TaEcritureTBeforePost(DataSet: TDataSet);
+    procedure TaEcritureTBeforeInsert(DataSet: TDataSet);
+    procedure TaEcritureTBeforeDelete(DataSet: TDataSet);
+    procedure FiltragesAideCompteBOT;
+    procedure TaEcritureTCalcFields(DataSet: TDataSet);
+    procedure TaEcritureTAfterPost(DataSet: TDataSet);
+    procedure TaEcritureTAfterDelete(DataSet: TDataSet);
+    procedure TaEcritureTBeforeEdit(DataSet: TDataSet);
+  private
+    { Déclarations privées }
+  public
+    { Déclarations publiques }
+     ErreurEcriture:boolean;
+  end;
+var
+  DMEcritures: TDMEcritures;
+  MaxIdEcriture,MinIdEcriture:integer;
+  DebCredEcriture,compteEcriture,QteEcriture:string;
+  montantEcriture:currency;
+    dernierlibelle:string;
+MessDerSub:boolean;
+Function DetailEcritureCompte(cpt:string):boolean;
+Function DetailEcritureTiers(cpt:string):boolean;
+Function PieceEcritureTiers:boolean;
+Function PieceEcritureCompte:boolean;
+
+implementation
+
+uses E2_DetailEcr, E2_TabVisuPiece2, DMBalances,DMPointages,DMTVA;
+{$R *.DFM}
+
+Function PieceEcritureTiers:boolean;
+var
+IDL,IDP,ID:string;
+begin
+if (DMEcritures = nil) then DMEcritures:=TDMEcritures.Create(Application.MainForm);
+if DMEcritures.QueryEcrTiers.RecordCount > 0 then begin
+   if TabVisuPiece2 = Nil then TabVisuPiece2:= TTabVisuPiece2.Create(Application.MainForm);
+   IDP:=DMEcritures.QueryEcrTiers.FieldValues['ID_Piece'];
+   IDL:=DMEcritures.QueryEcrTiers.FieldValues['ID_Ligne'];
+   ID:= IDP + IDL;
+   TabVisuPiece2.Tag:=StrToInt(ID);
+   TabVisuPiece2.show;
+   end
+   else MessageBox(0,'Ligne vide non affectée à une pièce !!','Attention',MB_OK+MB_ICONSTOP)
+
+end;
+
+Function PieceEcritureCompte:boolean;
+var
+IDL,IDP,ID:string;
+begin
+if (DMEcritures = nil) then DMEcritures:=TDMEcritures.Create(Application.MainForm);
+if DMEcritures.QueryEcrCompte.RecordCount > 0 then begin
+   if TabVisuPiece2 = Nil then TabVisuPiece2:= TTabVisuPiece2.Create(Application.MainForm);
+   IDP:=DMEcritures.QueryEcrCompte.FieldValues['ID_Piece'];
+   IDL:=DMEcritures.QueryEcrCompte.FieldValues['ID_Ligne'];
+   ID:= IDP + IDL;
+   TabVisuPiece2.Tag:=StrToInt(ID);
+   TabVisuPiece2.show;
+   end
+   else MessageBox(0,'Ligne vide non affectée à une pièce !!','Attention',MB_OK+MB_ICONSTOP)
+
+end;
+
+Function DetailEcritureCompte(cpt:string):boolean;
+begin
+if (DMEcritures = nil) then DMEcritures:=TDMEcritures.Create(Application.MainForm);
+with DMEcritures do
+     begin
+          QueryEcrCompte.Active:=false;
+          DataQueryEcr.DataSet:=QueryEcrCompte;
+          QueryEcrCompte.Params[0].AsString:=cpt;
+          QueryEcrCompte.Active:=true;
+          if (DetailEcr = nil) then
+             begin
+             DetailEcr:=TDetailEcr.Create(Application.MainForm);
+             DetailEcr.ExRxDBGrid1.Columns.Add.Field:=QueryEcrCompte.FindField('Date');
+             DetailEcr.ExRxDBGrid1.Columns.Add.Field:=QueryEcrCompte.FindField('Libelle');
+             DetailEcr.ExRxDBGrid1.Columns.Add.Field:=QueryEcrCompte.FindField('Debit');
+             DetailEcr.ExRxDBGrid1.Columns.Add.Field:=QueryEcrCompte.FindField('Credit');
+             DetailEcr.ExRxDBGrid1.Columns.Add.Field:=QueryEcrCompte.FindField('Qt1');
+             DetailEcr.ExRxDBGrid1.Columns.Add.Field:=QueryEcrCompte.FindField('Qt2');
+              end;
+          DetailEcr.Caption:='Détail des écritures pour le compte : '+cpt;
+          DetailEcr.Tag:=2;
+          DetailEcr.Show;
+     end;
+
+end;
+
+Function DetailEcritureTiers(cpt:string):boolean;
+begin
+if (DMEcritures = nil) then DMEcritures:=TDMEcritures.Create(Application.MainForm);
+with DMEcritures do
+     begin
+          QueryEcrTiers.Active:=false;
+          DataQueryEcr.DataSet:=QueryEcrTiers;
+          QueryEcrTiers.Params[0].AsString:=cpt;
+          QueryEcrTiers.Active:=true;
+          if (DetailEcr = nil) then
+             begin
+             DetailEcr:=TDetailEcr.Create(Application.MainForm);
+             DetailEcr.ExRxDBGrid1.Columns.Add.Field:=QueryEcrTiers.FindField('Date');
+             DetailEcr.ExRxDBGrid1.Columns.Add.Field:=QueryEcrTiers.FindField('Libelle');
+             DetailEcr.ExRxDBGrid1.Columns.Add.Field:=QueryEcrTiers.FindField('Debit');
+             DetailEcr.ExRxDBGrid1.Columns.Add.Field:=QueryEcrTiers.FindField('Credit');
+             DetailEcr.ExRxDBGrid1.Columns.Add.Field:=QueryEcrTiers.FindField('Qt1');
+             DetailEcr.ExRxDBGrid1.Columns.Add.Field:=QueryEcrTiers.FindField('Qt2');
+              end;
+          DetailEcr.Caption:='Détail des écritures pour le compte de Tiers : '+cpt;
+          DetailEcr.Tag:=1;
+          DetailEcr.Show;
+     end;
+end;
+
+procedure TDMEcritures.FiltrageSurIDPiece(Ecriture:TTable;IDPiece:integer);
+var
+sens:boolean;
+begin
+   Ecriture.Filtered:=false;
+   Ecriture.filter:=('ID_Piece = '''+inttostr(IDPiece)+'''');
+   Ecriture.Filtered:=true;
+   Ecriture.First;
+end;
+
+procedure TDMEcritures.RechercheMaxIdEcriture;
+begin
+     QueryEcriture.close ;
+     QueryEcriture.open ;
+     MaxIdEcriture:= QueryEcritureMAXOFID.Value + 1;
+
+end;
+//
+procedure TDMEcritures.RechercheMinIdEcriture;
+begin
+     QueryMinEcriture.close ;
+     QueryMinEcriture.open ;
+     MinIdEcriture:= QueryMinEcritureMINOFID.Value - 1;
+
+end;
+
+procedure TDMEcritures.CreationEcritures(Reglement:TEcriture_Isa;Piece:Tpiece;LibelleEcriture,TLigne,Compte:string;Qte1,Qte2:real;Ds,Cs,D,C:Currency;Devise,Ligne:integer;DateRec:tdate);
+begin
+   try
+      if ((reglement<>nil)and(Piece<>nil))then
+         begin //si on travail sur une pièce de réglement
+         //création ligne tiers
+            TaEcriture.AppendRecord([Piece.IDContrepartie,Piece.FirstIDPiece,'H',
+            2,Piece.DateSaisie,piece.compte,Piece.Tiers,piece.Libelle,null,null,Ds,Cs,Devise,D,C,
+            null,null,null,null,null,null,e.NomUtilisateur,now]);
+         //création ligne réglement
+            TaEcriture.AppendRecord([Reglement.FirstIDEcriture,Piece.FirstIDPiece,'X',
+            1,Piece.DateSaisie,reglement.CompteEcriture,null,piece.Libelle ,null,null,Cs,Ds,Devise,C,D,
+            null,null,null,null,null,null,e.NomUtilisateur,now]);
+         end//fin si on travail sur une pièce de réglement
+      else
+         begin//si on travail sur une pièce normale
+         RechercheMaxIdEcriture;
+         TaEcriture.AppendRecord([MaxIdEcriture,DMPieces.MaxIdPiece,TLigne,
+         ligne,DateRec,compte,null,LibelleEcriture,Qte1,Qte2,Ds,Cs,Devise,D,C,
+         null,null,null,null,null,null,null,now]);
+         end;//fin si on travail sur une pièce normale
+   except
+      begin
+        showmessage('Erreur d''Ecritures');
+        abort;
+      end;
+   end;
+end;
+
+procedure TDMEcritures.DMEcrituresCreate(Sender: TObject);
+var
+i:integer;
+begin
+try
+     For i:=0 to ComponentCount -1
+         do if Components[i].ClassNameis('TTable') then(Components[i] as TTable).Open ;
+     except
+        begin
+        MessageDlg('Erreur à l'+#39+'ouverture de la table' + Components[i].Name+' dans le module DMEcritures ',mtError,[],0);
+        abort;
+        end;
+     end;
+TaEcritureTTvaType.ValidChars:=['E','e','D','d'];
+end;
+
+procedure TDMEcritures.DMEcrituresDestroy(Sender: TObject);
+var
+I:Integer;
+begin
+    For i:=0 to ComponentCount -1
+         do if Components[i].ClassNameis('TTable') then(Components[i] as TTable).close ;
+end;
+
+procedure TDMEcritures.ChoixSensEtMontant(tableCourante:ttable);
+begin
+DebCredEcriture:='';
+montantEcriture:=0;
+QteEcriture:='';
+   if (tableCourante.FindField('DebitSaisie').AsCurrency<>0) or
+    (currtostr(tableCourante.FindField('DebitSaisie').AsCurrency)<>'')and
+    (tableCourante.FindField('CreditSaisie').AsCurrency=0) or
+    (currtostr(tableCourante.FindField('CreditSaisie').AsCurrency)='') then
+      begin
+      DebCredEcriture:='Debit_Base';
+      QteEcriture:='Qt1_Base';
+      montantEcriture:=tableCourante.FindField('DebitSaisie').AsCurrency;
+      end
+    else
+     if (tableCourante.FindField('DebitSaisie').AsCurrency=0) or
+    (currtostr(tableCourante.FindField('DebitSaisie').AsCurrency)='')and
+    (tableCourante.FindField('CreditSaisie').AsCurrency<>0) or
+    (currtostr(tableCourante.FindField('CreditSaisie').AsCurrency)<>'') then
+       begin
+       DebCredEcriture:='Credit_Base';
+       QteEcriture:='Qt2_Base';
+       montantEcriture:= tableCourante.FindField('CreditSaisie').AsCurrency;
+       end;
+end;
+
+procedure TDMEcritures.TaEcritureAfterPost(DataSet: TDataSet);
+begin
+//compteEcriture:='';
+//    ChoixSensEtMontant;
+//    compteEcriture:= TaEcriture.FindField('Compte').AsString;
+//showmessage('apres Post ' +TaEcriture.findfield('Compte').AsString);
+    try
+    DMBalance.MAJBalance( false,QteEcriture,DebCredEcriture,compteEcriture,compteEcriture,0,0,montantEcriture,montantEcriture,dsInsert);
+    except
+    showmessage('Erreur de mise à jour balance');
+    end;
+end;
+
+procedure TDMEcritures.TaEcriture2BeforeInsert(DataSet: TDataSet);
+begin
+Abort;//empêche une insertion dans la table ecritures
+end;
+
+procedure TDMEcritures.TaEcriture2BeforePost(DataSet: TDataSet);
+begin
+  If trim(TaEcriture2.FindField('Libelle').AsString) = '' Then
+  Begin
+       Messagedlg('Le libellé doit être obligatoirement renseigné !!!',MtWarning,[mbok],0);
+       Abort;
+  End;
+end;
+
+procedure TDMEcritures.TaEcritureBeforeDelete(DataSet: TDataSet);
+begin
+compteEcriture:='';
+     compteEcriture:= TaEcriture.FindField('compte').AsString;
+     ChoixSensEtMontant(taEcriture);
+end;
+
+procedure TDMEcritures.TaEcritureAfterDelete(DataSet: TDataSet);
+begin
+   try
+   DMBalance.MAJBalance(true,QteEcriture,DebCredEcriture,compteEcriture,
+   compteEcriture,0,0,montantEcriture,montantEcriture,dsbrowse);
+   except
+      begin
+      showmessage('Erreur de mise à jour de la balance après suppression');
+      abort;
+      end;
+   end;
+end;
+
+procedure TDMEcritures.TaEcritureBeforePost(DataSet: TDataSet);
+begin
+compteEcriture:='';
+    ChoixSensEtMontant(TaEcriture);
+    compteEcriture:= TaEcriture.FindField('Compte').AsString;
+//showmessage('avant Post ' +TaEcriture.findfield('Compte').AsString);
+end;
+
+procedure TDMEcritures.TaEcritureAfterScroll(DataSet: TDataSet);
+begin
+//showmessage('après Scroll ' +TaEcriture.findfield('Compte').AsString);
+end;
+
+procedure TDMEcritures.TaEcritureBeforeScroll(DataSet: TDataSet);
+begin
+//showmessage('avant Scroll ' +TaEcriture.findfield('Compte').AsString);
+end;
+
+
+function TDMEcritures.BatchMoveSurTaEcriture(Source:TTable;Mode:tbatchMode):integer;
+var
+i:integer;
+Begin
+result:=0;
+  if (source<>nil) and (TaEcriture<>nil) then
+   begin
+   source.Open;
+   TaEcriture.Open;
+        try
+        result:=TaEcriture.BatchMove(source,Mode);
+        source.First;
+        while not (source.EOF) do
+          Begin
+          compteEcriture:='';
+          ChoixSensEtMontant(source);
+          compteEcriture:= source.FindField('Compte').AsString;
+             try
+             DMBalance.MAJBalance(false,QteEcriture,DebCredEcriture,compteEcriture,compteEcriture,0,0,montantEcriture,montantEcriture,dsinsert);
+             except
+             showmessage('Erreur de mise à jour balance');
+             end;
+          source.Next;
+          End;
+        except
+        showmessage('Erreur d''Ecriture dans Table Ecritures');
+        abort;
+        end;//fin du try
+   end;//fin si source <> nil
+End;
+
+
+function TDMEcritures.VerifIDEcriture(ID:integer;Ecriture:TEcriture_Isa;Suppr:boolean):TErreurPiece;
+var
+TableTemp:TTable;
+begin
+TableTemp:=TTable.create(self);
+TableTemp.databaseName:=TaEcriture.DatabaseName;
+TableTemp.TableName:=TaEcriture.TableName;
+TableTemp.open;
+result.Retour:=true;
+result.CodeErreur:=0;
+   try
+     result.Retour:= not (TableTemp.Locate('ID',ID,[]));
+     if not result.Retour then
+       Begin
+       result.Retour:=false;
+       result.CodeErreur:=3002;
+       End
+     else
+       if ((result.Retour)and(not Suppr)) then
+       result.Retour:=Ecriture.NewIDEcriture(TaEcriture,'ID')=ID;
+     if not result.Retour then
+       result.CodeErreur:=3001;
+   except
+   result.CodeErreur:=3002;
+   abort;
+   end;//fin du try
+End;
+
+
+function TDMEcritures.VerifIDPieceSurTaEcriture(IDPiece:integer;Ecriture:TEcriture_Isa;Suppr:boolean):TErreurPiece;
+var
+i:integer;
+Begin
+result.Retour:=true;
+   try
+     Ecriture.TaEcrituretmp.First;
+     while ((not(Ecriture.TaEcrituretmp.EOF))and (result.Retour)) do
+     begin
+     result.Retour:= Ecriture.TaEcrituretmp.findfield('ID_Piece').asinteger =IDPiece;
+     Ecriture.TaEcrituretmp.next;
+     end;
+     if not result.Retour then
+       if Suppr then
+       result.CodeErreur:=4002
+       else
+       result.CodeErreur:=4001;
+   except
+   result.CodeErreur:=4002;
+   abort;
+   end;//fin du try
+End;
+
+Function TDMEcritures.CtrlSaisieEcritureBOTiers(CCourant:Tfield):TErreurEcritureBOTiers;
+var
+RetourEnregistrement:TEnregistrementComplet;
+ClassCpt:Integer;
+begin
+// initialisation des variables de retour de fonction
+CtrlSaisieEcritureBOTiers.CodeErreur:=0;
+CtrlSaisieEcritureBOTiers.Retour:=True;
+  if TaEcritureT.State in [dsinsert,dsEdit] then
+  begin //si état insertion ou modification
+
+    if not VerifNumCptIntegrite(TaEcritureTCompte.AsString,False,False).vide then
+    begin
+       ClassCpt:=VerifNumCptIntegrite(TaEcritureTCompte.AsString,False,False).Classe;
+       RetourEnregistrement:=DmPlanRecupEnregistrementComplet(TaEcritureTCompte.AsString);
+   End
+   else
+   begin
+      ClassCpt:=0;
+   end;
+        case CCourant.Index of
+
+        5: begin // si champ compte pas vide
+            if not empty(CCourant.AsString) then
+             begin
+              FiltragesAideCompteBOT;
+              if AideCompteDansContexte(CCourant.AsString,ccourant,['Rac1'],MessDerSub,true,true,false,true,0)=false then
+               Begin
+                  CtrlSaisieEcritureBOTiers.CodeErreur:=1000;  //Compte vide
+                  CtrlSaisieEcritureBOTiers.Retour:=False;
+               End
+               else
+               Begin
+                if empty(TaEcritureTLibelle.AsString) then
+                            TaEcritureTLibelle.AsString:=DMPlan.LibelleDuNumCpt(CCourant.AsString);
+                if ((not empty(CCourant.AsString)) and (CCourant.AsString[1]='4')) then
+                 begin
+                 TaEcritureTTypeLigne.AsString:='T';
+                 TaEcritureTTvaCode.AsString:=RecupCodeTva(CCourant.AsString);
+                 TaEcritureTTvaType.AsString:='D';
+                 end
+                  else
+                 begin
+                  TaEcritureTTypeLigne.AsString:='H';
+//                 RetourEnregistrement:=DmPlanRecupEnregistrementComplet(TaEcritureTCompte.AsString);
+//                 TaEcritureTTvaCode.AsString:=RetourEnregistrement.TvaCode;
+//                 TaEcritureTTvaType.AsString:=RetourEnregistrement.TvaType;
+                 end;
+                  //               RecupInfoApresVerif(true);
+               end;
+             end;
+           end;//fin champ compte
+        7: begin//si champ n°2(Désignation)
+            If Empty(CCourant.AsString) then {1}
+               begin
+                if not(empty(TaEcritureTCompte.AsString)) then
+                 begin                      {2}
+                  if not(empty(DMPlan.LibelleDuNumCpt(TaEcritureTCompte.AsString))) then
+                  begin
+                     ccourant.AsString:=DMPlan.LibelleDuNumCpt(TaEcritureTCompte.AsString);
+                     DernierLibelle:=DMPlan.LibelleDuNumCpt(TaEcritureTCompte.AsString);
+                  end;
+                 end                        {2}
+                 else
+                 begin                      {2}
+                   ccourant.AsString:='Opération de l''année précédente';
+                 end;                       {2}
+               end                           {1}
+            else//s'il est rempli, on regarde si le libelle ne correspond pas au dernier
+            //compte saisi !!! si oui, on lui affecte le libelle correspond au nouveau compte
+            //saisi
+               begin                         {1}
+                 if ccourant.AsString=DernierLibelle then
+                  if not(empty(DMPlan.LibelleDuNumCpt(TaEcritureTCompte.AsString))) then
+                     begin
+                     ccourant.AsString:=DMPlan.LibelleDuNumCpt(TaEcritureTCompte.AsString);
+                     DernierLibelle:=DMPlan.LibelleDuNumCpt(TaEcritureTCompte.AsString);
+                     end;
+               end;//fin champ n°2 vide      {1}
+            // Les codes d'erreurs suivant ne servent qu'a gérer les déplacement ds la grille de saisie
+            if not(empty(TaEcritureTCompte.AsString)) then
+               Begin
+//                case strtoint(TaEcritureTCompte.AsString[1]) of
+                case ClassCpt of
+                   4:begin
+                        CtrlSaisieEcritureBOTiers.CodeErreur:=7100;
+                        CtrlSaisieEcritureBOTiers.Retour:=False;
+                     end;
+                   6:begin
+                        CtrlSaisieEcritureBOTiers.CodeErreur:=7200;
+                        CtrlSaisieEcritureBOTiers.Retour:=False;
+                     end;
+                   7:begin
+                        CtrlSaisieEcritureBOTiers.CodeErreur:=7300;
+                        CtrlSaisieEcritureBOTiers.Retour:=False;
+                     end;
+                end;{Fin du Case}
+               End
+               else
+               Begin
+                 CtrlSaisieEcritureBOTiers.CodeErreur:=7400;
+                 CtrlSaisieEcritureBOTiers.Retour:=False;
+               End;
+           end;//fin si champ n°2(Désignation)
+
+          // Débit Saisie
+          10:Begin
+               if not VerifFNumeric(CCourant).VideOUZero then
+                begin
+                  if not(empty(TaEcritureTCompte.AsString)) then
+                     Begin
+                      case strtoint(TaEcritureTCompte.AsString[1]) of
+                         4:begin
+                              CtrlSaisieEcritureBOTiers.CodeErreur:=10100;
+                              CtrlSaisieEcritureBOTiers.Retour:=False;
+                              Messagebox(0,Pchar('La saisie de recettes ou de dépenses n''est pas autorisée pour les comptes de TVA !!!'),'Erreur de saisie',0);
+                              CCourant.AsInteger:=0;
+                           end;
+                         6:begin
+//                              CtrlSaisieEcritureBOTiers.CodeErreur:=7200;
+//                              CtrlSaisieEcritureBOTiers.Retour:=False;
+                           end;
+                         7:begin
+//                              CtrlSaisieEcritureBOTiers.CodeErreur:=7300;
+//                              CtrlSaisieEcritureBOTiers.Retour:=False;
+                           end;
+                      end;{Fin du Case}
+
+                     End
+                     else
+                     Begin
+//                       CtrlSaisieEcritureBOTiers.CodeErreur:=7400;
+//                       CtrlSaisieEcritureBOTiers.Retour:=False;
+                     End;
+                if not VerifFNumeric(TaEcritureTCreditSaisie).VideOUZero then
+                   Begin
+                     CtrlSaisieEcritureBOTiers.CodeErreur:=10500;
+                     CtrlSaisieEcritureBOTiers.Retour:=False;
+                     TaEcritureTCreditSaisie.AsCurrency:=0;
+                   End;
+
+                end
+               else
+                begin
+
+                end;
+
+            End;
+
+          // Crédit Saisie
+          11:Begin
+               if not VerifFNumeric(CCourant).VideOUZero then
+                begin
+                  if not(empty(TaEcritureTCompte.AsString)) then
+                     Begin
+                      case strtoint(TaEcritureTCompte.AsString[1]) of
+                         4:begin
+                              CtrlSaisieEcritureBOTiers.CodeErreur:=11100;
+                              CtrlSaisieEcritureBOTiers.Retour:=False;
+                              Messagebox(0,Pchar('La saisie de recettes ou de dépenses n''est pas autorisée pour les comptes de TVA !!!'),'Erreur de saisie',0);
+                              CCourant.AsInteger:=0;
+                           end;
+                         6:begin
+//                              CtrlSaisieEcritureBOTiers.CodeErreur:=7200;
+//                              CtrlSaisieEcritureBOTiers.Retour:=False;
+                           end;
+                         7:begin
+//                              CtrlSaisieEcritureBOTiers.CodeErreur:=7300;
+//                              CtrlSaisieEcritureBOTiers.Retour:=False;
+                           end;
+                      end;{Fin du Case}
+                     End
+                     else
+                     Begin
+//                       CtrlSaisieEcritureBOTiers.CodeErreur:=7400;
+//                       CtrlSaisieEcritureBOTiers.Retour:=False;
+                     End;
+                if not VerifFNumeric(TaEcritureTDebitSaisie).VideOUZero then
+                   Begin
+                     CtrlSaisieEcritureBOTiers.CodeErreur:=11500;
+                     CtrlSaisieEcritureBOTiers.Retour:=False;
+                     TaEcritureTDebitSaisie.AsCurrency:=0;
+                   End;
+                end
+               else
+                begin
+
+                end;
+
+             End;
+           // TVA Montant (TvaTaux);
+          17:Begin
+              if not empty(TaEcritureTCompte.AsString) then
+              begin
+                 ClassCpt:=strToInt(TaEcritureTCompte.AsString[1]);
+                 RetourEnregistrement:=DmPlanRecupEnregistrementComplet(TaEcritureTCompte.AsString);
+             End
+             else
+             begin
+                ClassCpt:=0;
+             end;
+                if not VerifFNumeric(CCourant).VideOUZero then
+                 begin
+                  case ClassCpt of
+                     4:Begin
+                        TaEcritureTTypeLigne.AsString:='T';
+                        TaEcritureTTvaCode.AsString:=RetourEnregistrement.TvaCode;
+                        TaEcritureTTvaType.AsString:='D';
+                        TaEcritureTTvaDate.Required:=true;
+                        CtrlSaisieEcritureBOTiers.CodeErreur:=17100;
+                        CtrlSaisieEcritureBOTiers.Retour:=False;
+                       End;
+
+                     6..7:Begin
+                           TaEcritureTTypeLigne.AsString:='H';
+                           TaEcritureTTvaCode.AsString:=RetourEnregistrement.TvaCode;
+                           TaEcritureTTvaCode.Required:=true;
+                           TaEcritureTTvaType.AsString:=RetourEnregistrement.TvaType;
+                           if RetourEnregistrement.TvaType='E' then
+                              Begin
+                               CtrlSaisieEcritureBOTiers.CodeErreur:=17200;
+                               CtrlSaisieEcritureBOTiers.Retour:=False;
+                              End;
+                           if RetourEnregistrement.TvaType='D' then
+                              Begin
+                               TaEcritureTTvaDate.Required:=true;
+                               CtrlSaisieEcritureBOTiers.CodeErreur:=17300;
+                               CtrlSaisieEcritureBOTiers.Retour:=False;
+                              End;
+                          end;
+                     0:Begin
+                        CtrlSaisieEcritureBOTiers.CodeErreur:=17400;
+                        CtrlSaisieEcritureBOTiers.Retour:=False;
+//                        Messagebox(0,Pchar('Vous ne pouvez pas saisir de TVA si aucun compte n''est défini !!!'),'Erreur de saisie',0);
+                       End;
+
+                  end;{Fin du Case}
+                 end
+                 else
+                 Begin // Si montant TVA Vide
+                  case ClassCpt of
+                     4:Begin
+                        TaEcritureTTypeLigne.AsString:='T';
+                        TaEcritureTTvaCode.AsString:=RetourEnregistrement.TvaCode;
+                        TaEcritureTTvaType.AsString:='D';
+                        TaEcritureTTvaDate.Required:=true;
+                        CtrlSaisieEcritureBOTiers.CodeErreur:=17500;
+                        CtrlSaisieEcritureBOTiers.Retour:=False;
+                       End;
+
+                     6..7:Begin
+                           TaEcritureTTypeLigne.AsString:='H';
+                           TaEcritureTTvaCode.AsString:='';
+                           TaEcritureTTvaType.AsString:='';
+                           TaEcritureTTvaDate.AsString:=null;
+                          end;
+                     0:Begin
+                        CtrlSaisieEcritureBOTiers.CodeErreur:=17600;
+                        CtrlSaisieEcritureBOTiers.Retour:=False;
+//                        Messagebox(0,Pchar('Vous ne pouvez pas saisir de TVA si aucun compte n''est défini !!!'),'Erreur de saisie',0);
+                       End;
+
+                  end;{Fin du Case}
+                 TaEcritureTTvaCode.Required:=false;
+                 TaEcritureTTvaDate.Required:=false;
+                 End;
+
+              End;
+           // TVA Code;
+          15:Begin
+              if not empty(TaEcritureTCompte.AsString) then
+              begin
+                 ClassCpt:=strToInt(TaEcritureTCompte.AsString[1]);
+                 RetourEnregistrement:=DmPlanRecupEnregistrementComplet(TaEcritureTCompte.AsString);
+              End
+              else
+              begin
+                ClassCpt:=0;
+              end;
+//                if not empty(CCourant.AsString) then
+//                 begin
+              case ClassCpt of
+                 4:Begin
+                    if empty(CCourant.AsString) then
+                    TaEcritureTTvaCode.AsString:=RetourEnregistrement.TvaCode;
+                    TaEcritureTTvaType.AsString:='D';
+                    TaEcritureTTvaDate.Required:=true;
+                    CtrlSaisieEcritureBOTiers.CodeErreur:=15100;
+                    CtrlSaisieEcritureBOTiers.Retour:=False;
+                   End;
+
+                 6..7:Begin
+                       if ((empty(CCourant.AsString) and (not VerifFNumeric(TaEcritureTTvaTaux).VideOUZero))) then
+                           TaEcritureTTvaCode.AsString:=RetourEnregistrement.TvaCode;
+                       if empty(TaEcritureTTvaType.AsString) then
+                       TaEcritureTTvaType.AsString:=RetourEnregistrement.TvaType;
+                       if RetourEnregistrement.TvaType='E' then
+                          Begin
+                           CtrlSaisieEcritureBOTiers.CodeErreur:=15200;
+                           CtrlSaisieEcritureBOTiers.Retour:=False;
+                          End;
+                       if RetourEnregistrement.TvaType='D' then
+                          Begin
+                           TaEcritureTTvaDate.Required:=true;
+                           CtrlSaisieEcritureBOTiers.CodeErreur:=15300;
+                           CtrlSaisieEcritureBOTiers.Retour:=False;
+                          End;
+                      end;
+                 0:Begin
+                    CtrlSaisieEcritureBOTiers.CodeErreur:=15400;
+                    CtrlSaisieEcritureBOTiers.Retour:=False;
+//                        Messagebox(0,Pchar('Vous ne pouvez pas saisir de TVA si aucun compte n''est défini !!!'),'Erreur de saisie',0);
+                   End;
+
+              end;{Fin du Case}
+//                 end
+//                 else
+//                 Begin
+//                 TaEcritureTTvaCode.Required:=false;
+//                 TaEcritureTTvaDate.Required:=false;
+//                 End;
+
+             End;
+           // TVA Type;
+          16:Begin
+              if not empty(TaEcritureTCompte.AsString) then
+              begin
+                 ClassCpt:=strToInt(TaEcritureTCompte.AsString[1]);
+                 RetourEnregistrement:=DmPlanRecupEnregistrementComplet(TaEcritureTCompte.AsString);
+              End
+              else
+              begin
+                ClassCpt:=0;
+              end;
+              case ClassCpt of
+                 4:Begin
+                    if empty(CCourant.AsString) then
+                    TaEcritureTTvaCode.AsString:=RetourEnregistrement.TvaCode;
+                    TaEcritureTTvaType.AsString:='D';
+                    TaEcritureTTvaDate.Required:=true;
+                    CtrlSaisieEcritureBOTiers.CodeErreur:=16100;
+                    CtrlSaisieEcritureBOTiers.Retour:=False;
+                   End;
+
+                 6..7:Begin
+                       if ((empty(CCourant.AsString) and (not VerifFNumeric(TaEcritureTTvaTaux).VideOUZero))) then
+                           TaEcritureTTvaCode.AsString:=RetourEnregistrement.TvaCode;
+                       if empty(TaEcritureTTvaType.AsString) then
+                       TaEcritureTTvaType.AsString:=RetourEnregistrement.TvaType;
+                       if RetourEnregistrement.TvaType='E' then
+                          Begin
+                           CtrlSaisieEcritureBOTiers.CodeErreur:=16200;
+                           CtrlSaisieEcritureBOTiers.Retour:=False;
+                          End;
+                       if RetourEnregistrement.TvaType='D' then
+                          Begin
+                           TaEcritureTTvaDate.Required:=true;
+                           CtrlSaisieEcritureBOTiers.CodeErreur:=16300;
+                           CtrlSaisieEcritureBOTiers.Retour:=False;
+                          End;
+                      end;
+                 0:Begin
+                    CtrlSaisieEcritureBOTiers.CodeErreur:=16400;
+                    CtrlSaisieEcritureBOTiers.Retour:=False;
+//                        Messagebox(0,Pchar('Vous ne pouvez pas saisir de TVA si aucun compte n''est défini !!!'),'Erreur de saisie',0);
+                   End;
+              end;{Fin du Case}
+             End;
+           // TVA Date;
+          18:Begin
+              if not empty(TaEcritureTCompte.AsString) then
+              begin
+                 ClassCpt:=strToInt(TaEcritureTCompte.AsString[1]);
+                 RetourEnregistrement:=DmPlanRecupEnregistrementComplet(TaEcritureTCompte.AsString);
+              End
+              else
+              begin
+                ClassCpt:=0;
+              end;
+              case ClassCpt of
+                 4:Begin
+                    if empty(CCourant.AsString) then
+                     begin
+                       CtrlSaisieEcritureBOTiers.CodeErreur:=18100;
+                       CtrlSaisieEcritureBOTiers.Retour:=False;
+                       Messagebox(0,Pchar('Vous devez définir une date de livraison pour la TVA de type "D"'),'Erreur de saisie',0);
+                     end
+                     else if CCourant.AsDateTime < E.DatExoDebut then
+                      begin
+                       CtrlSaisieEcritureBOTiers.CodeErreur:=18200;
+                       CtrlSaisieEcritureBOTiers.Retour:=False;
+                       Messagebox(0,Pchar('Pour être prise en compte dans le calcul TVA, la date de livraison doit se situer après le '+ DateToStr(E.DatExoDebut)),'Erreur de saisie',0);
+                      end;
+
+                   End;
+
+                 6..7:Begin
+                      end;
+                 0:Begin
+                    CtrlSaisieEcritureBOTiers.CodeErreur:=18600;
+                    CtrlSaisieEcritureBOTiers.Retour:=False;
+//                        Messagebox(0,Pchar('Vous ne pouvez pas saisir de TVA si aucun compte n''est défini !!!'),'Erreur de saisie',0);
+                   End;
+              end;{Fin du Case}
+             End;
+
+
+//        4: begin//si champ n°3 (Qté)
+//            If (Empty(CCourant.AsString)) and (ccourant.ReadOnly=false) then
+//             cCourant.AsString:='0';
+//           end;//fin si champ n°3 (Qté)
+//        5: begin//si champ n°4 (Montant HT)
+//             If (Empty(CCourant.AsString)) or (ccourant.AsString='0') then
+//             Begin // si champ n°4 vide ou =0
+//             CtrlSaisieEcritureBOTiers.CodeErreur:=5100;
+//             CtrlSaisieEcritureBOTiers.Retour:=False;
+//             Messagebox(0,Pchar('La saisie du montant HT est obligatoire !!!'),'Erreur de saisie',0);
+//             end;//fin  si champ n°4 vide ou =0
+//           end;//fin si champ n°4 (Montant HT)
+        end;//fin du case.ccourant
+  end; //fin etat insertion ou modif
+
+end;
+
+
+
+
+procedure TDMEcritures.TaEcritureTBeforeCancel(DataSet: TDataSet);
+begin
+//
+end;
+
+procedure TDMEcritures.TaEcritureTBeforePost(DataSet: TDataSet);
+var
+i:integer;
+ControleSaisie:TErreurEcritureBOTiers;
+begin
+if VerifFNumeric(TaEcritureTCreditSaisie).VideOUZero and VerifFNumeric(TaEcritureTDebitSaisie).VideOUZero and VerifFNumeric(TaEcritureTTvaTaux).VideOUZero then
+   begin
+   Messagebox(0,Pchar('Vous devez saisir au moins un montant !!!'),'Erreur de saisie',0);
+   abort;
+   end;
+case Dataset.State of
+  dsEdit:Begin
+            TaEcritureTTiers.AsString:=DMTiers.TaTiersBalTiers.AsString;
+            // Verification des champs saisi pour Ecriture
+            // Champ Compte
+            ControleSaisie:=CtrlSaisieEcritureBOTiers(Dataset.Fields[5]);
+            if not ControleSaisie.Retour then
+               Begin
+                Dataset.Fields[5].FocusControl;
+                abort;
+               End;
+            // Champ Libellé
+            ControleSaisie:=CtrlSaisieEcritureBOTiers(Dataset.Fields[7]);
+            if not ControleSaisie.Retour then
+               Begin
+                case ControleSaisie.CodeErreur of
+                   7100,7200,7300:Dataset.Fields[7].AsString:=DMPlan.LibelleDuNumCpt(Dataset.Fields[5].AsString);
+                   7400:Dataset.Fields[7].AsString:='Opération de l''année précédente';
+                end;
+               End;
+            // Champ Debit Saisie
+            ControleSaisie:=CtrlSaisieEcritureBOTiers(Dataset.Fields[10]);
+            if not ControleSaisie.Retour then
+               Begin
+                case ControleSaisie.CodeErreur of
+                   10100:;// Compte de TVA
+                   10500:;// les champ credit saisie et debit saisie ont tous les 2 une valeur
+                end;
+               End;
+            // Champ Credit Saisie
+            ControleSaisie:=CtrlSaisieEcritureBOTiers(Dataset.Fields[11]);
+            if not ControleSaisie.Retour then
+               Begin
+                case ControleSaisie.CodeErreur of
+                   11100:;// Compte de TVA
+                   11500:;// les champ credit saisie et debit saisie ont tous les 2 une valeur
+                end;
+               End;
+            // Champ TvaCode, TvaType, TvaTaux(Montant Tva), TvaDate (Date de Livraison)
+            for i:=15 to 18 do
+             begin
+              ControleSaisie:=CtrlSaisieEcritureBOTiers(Dataset.Fields[i]);
+            if not ControleSaisie.Retour then
+               Begin
+                case ControleSaisie.CodeErreur of
+                   17400:begin
+                          Messagebox(0,Pchar('Vous ne pouvez pas saisir de TVA si aucun compte n''est défini !!!'),'Erreur de saisie',0);
+                          Dataset.Fields[5].FocusControl;
+                          abort;
+                         end;
+                   17500:begin
+                          Messagebox(0,Pchar('Le montant TVA est obligatoire pour les comptes de TVA !!!'),'Erreur de saisie',0);
+                          Dataset.Fields[16].FocusControl;
+                          abort;
+                         end;
+                   11500:;
+                end;{ fin du case}
+               end;
+             end;
+         End;
+
+  dsInsert:Begin
+           // On s'assure que la pièce à déjà été créée
+           if DMPieces.PieceBOTiersExiste(DMTiers.TaTiersBalTiers.AsString).retour then
+               Begin
+            QueryEcriture.Close;
+            QueryEcriture.Open;
+            TaEcritureTID.AsInteger:=QueryEcritureMAXOFID.AsInteger+1;
+
+            TaEcritureTID_Piece.AsInteger:=DMPieces.PieceBOTiersExiste(DMTiers.TaTiersBalTiers.AsString).ID;
+
+            QueryMaxIDLigne.Close;
+            QueryMaxIDLigne.ParamByName('IDP').AsInteger:=DMPieces.PieceBOTiersExiste(DMTiers.TaTiersBalTiers.AsString).ID;
+            QueryMaxIDLigne.Open;
+
+            TaEcritureTID_Ligne.AsInteger:=QueryMaxIDLigneMAXOFID_Ligne.AsInteger;
+            TaEcritureTTiers.AsString:=DMTiers.TaTiersBalTiers.AsString;
+            TaEcritureTDate.AsDateTime:=E.DatExoFin;
+            TaEcritureTQuand.AsDateTime:=now;
+            TaEcritureTQui.AsString:=E.NomUtilisateur;
+            // Verification des champs saisi pour Ecriture
+            // Champ Compte
+            ControleSaisie:=CtrlSaisieEcritureBOTiers(Dataset.Fields[5]);
+            if not ControleSaisie.Retour then
+               Begin
+                Dataset.Fields[5].FocusControl;
+                abort;
+               End;
+            // Champ Libellé
+            ControleSaisie:=CtrlSaisieEcritureBOTiers(Dataset.Fields[7]);
+            if not ControleSaisie.Retour then
+               Begin
+                case ControleSaisie.CodeErreur of
+                   7100,7200,7300:Dataset.Fields[7].AsString:=DMPlan.LibelleDuNumCpt(Dataset.Fields[5].AsString);
+                   7400:Dataset.Fields[7].AsString:='Opération de l''année précédente';
+                end;
+               End;
+            // Champ Debit Saisie
+            ControleSaisie:=CtrlSaisieEcritureBOTiers(Dataset.Fields[10]);
+            if not ControleSaisie.Retour then
+               Begin
+                case ControleSaisie.CodeErreur of
+                   10100:;// Compte de TVA
+                   10500:;// les champ credit saisie et debit saisie ont tous les 2 une valeur
+                end;
+               End;
+            // Champ Credit Saisie
+            ControleSaisie:=CtrlSaisieEcritureBOTiers(Dataset.Fields[11]);
+            if not ControleSaisie.Retour then
+               Begin
+                case ControleSaisie.CodeErreur of
+                   11100:;// Compte de TVA
+                   11500:;// les champ credit saisie et debit saisie ont tous les 2 une valeur
+                end;
+               End;
+            // Champ TvaCode, TvaType, TvaTaux(Montant Tva), TvaDate (Date de Livraison)
+            for i:=15 to 18 do
+             begin
+              ControleSaisie:=CtrlSaisieEcritureBOTiers(Dataset.Fields[i]);
+            if not ControleSaisie.Retour then
+               Begin
+                case ControleSaisie.CodeErreur of
+                   17400:begin
+                          Messagebox(0,Pchar('Vous ne pouvez pas saisir de TVA si aucun compte n''est défini !!!'),'Erreur de saisie',0);
+                          Dataset.Fields[5].FocusControl;
+                          abort;
+                         end;
+                   17500:begin
+                          Messagebox(0,Pchar('Le montant TVA est obligatoire pour les comptes de TVA !!!'),'Erreur de saisie',0);
+                          Dataset.Fields[16].FocusControl;
+                          abort;
+                         end;
+                   11500:;
+                end;{fin du case}
+               end;
+             end;
+             end
+              else
+             begin
+              showMessage('Erreur à la création de la pièce Bilan Ouverture Tiers');
+              abort;
+             end;
+           End;
+end;
+
+end;
+
+procedure TDMEcritures.TaEcritureTBeforeInsert(DataSet: TDataSet);
+begin
+FiltragesAideCompteBOT;
+if not DMPieces.PieceBOTiersExiste(DMTiers.TaTiersBalTiers.AsString).retour then
+   Begin
+    DMPieces.CreationPiece(DMPieces.IDPieceBOTiers,-1,-1,E.Devise,
+    'Piece_N-1','',DMTiers.TaTiersBalTiers.AsString,E.NomUtilisateur,
+    JourPrecedent(E.DatExoDebut,0).Date_,now,now);
+   End
+   else
+   Begin
+
+   End;
+
+
+end;
+
+procedure TDMEcritures.TaEcritureTBeforeDelete(DataSet: TDataSet);
+begin
+try
+ case TaEcritureT.RecordCount of
+   0:Begin
+
+     End;
+   1:Begin
+      if DMPieces.PieceBOTiersExiste(DMTiers.TaTiersBalTiers.AsString).retour then
+       Begin
+          DMPieces.SuppressionPiece(TaEcritureTID_Piece.AsInteger);
+       End;
+     End;
+ end;
+
+//   if TaEcritureT.RecordCount=1 then
+//   begin
+//    if DMPieces.PieceBOTiersExiste(DMTiers.TaTiersBalTiers.AsString).retour then
+//       Begin
+//         DMPieces.SuppressionPiece(TaEcritureTID_Piece.AsInteger);
+//       End
+//       else
+//       Begin
+//        if TaEcritureT.RecordCount>1 then TaEcritureTAfterPost(Dataset);
+//       End;
+//   end;
+ except
+
+ end;
+end;
+
+procedure TDMEcritures.FiltragesAideCompteBOT;
+var
+ListeCpt:TStringList;
+begin
+ListeCpt:=TStringList.Create;
+ListeCpt:= DMPlan.FiltrageParamCPT(97,E.Regime);
+AideCompteFiltreTaCompte(CreeFiltreOU('Compte',[ListeCpt]),true);
+AideCompte.InitialiseCompte;
+ListeCpt.Free;
+end;
+
+procedure TDMEcritures.TaEcritureTCalcFields(DataSet: TDataSet);
+begin
+if not VerifFNumeric(TaEcritureTDebitSaisie).VideOUZero then TaEcritureTMontantTTC.AsCurrency:=TaEcritureTDebitSaisie.AsCurrency+TaEcritureTTvaTaux.AsCurrency;
+if not VerifFNumeric(TaEcritureTCreditSaisie).VideOUZero then TaEcritureTMontantTTC.AsCurrency:=TaEcritureTCreditSaisie.AsCurrency+TaEcritureTTvaTaux.AsCurrency;
+end;
+
+procedure TDMEcritures.TaEcritureTAfterPost(DataSet: TDataSet);
+begin
+TaEcritureTTvaDate.Required:=False;
+TaEcritureTTvaCode.Required:=False;
+// Mise à jour des totaux dans la table Tiers
+DMTiers.TaTiersBal.Edit;
+if DMPieces.PieceBOTiersExiste(DMTiers.TaTiersBalTiers.AsString).retour then
+    Begin
+     QuSumEcritureBOT.Close;
+     QuSumEcritureBOT.ParamByName('IDPiece').AsInteger:=DMPieces.PieceBOTiersExiste(DMTiers.TaTiersBalTiers.AsString).ID;
+     QuSumEcritureBOT.Open;
+     DMTiers.TaTiersBalCredit_Deb.AsCurrency:=QuSumEcritureBOTSomCredit.AsCurrency;
+     DMTiers.TaTiersBalDebit_Deb.AsCurrency:=QuSumEcritureBOTSomDebit.AsCurrency;
+    end;
+DMTiers.TaTiersBal.Post;
+end;
+
+procedure TDMEcritures.TaEcritureTAfterDelete(DataSet: TDataSet);
+begin
+try
+ case TaEcritureT.RecordCount of
+   0:Begin
+          DMTiers.TaTiersBal.Edit;
+          DMTiers.TaTiersBalCredit_Deb.AsCurrency:=0;
+          DMTiers.TaTiersBalDebit_Deb.AsCurrency:=0;
+          DMTiers.TaTiersBal.Post;
+     End;
+
+ else TaEcritureTAfterPost(Dataset);
+
+ end;
+ except
+
+ end;
+
+end;
+
+procedure TDMEcritures.TaEcritureTBeforeEdit(DataSet: TDataSet);
+begin
+FiltragesAideCompteBOT;
+end;
+
+end.

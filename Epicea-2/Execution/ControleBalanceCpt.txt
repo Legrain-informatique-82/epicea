@@ -1,0 +1,11 @@
+Select Ecr.Compte, sum(Ecr.DebitSaisie) as TotDebit, 
+Sum(Ecr.CreditSaisie) as TotCredit,
+sum(Ecr.Qt1)as TotQt1,
+sum(Ecr.Qt2)as TotQt2
+from Ecriture Ecr
+join Piece Pi on (Pi.ID=Ecr.ID_Piece)
+where
+Pi."Date" >=:DateDeb and Pi."Date" <=:DateFin
+group by Ecr.Compte
+order by compte
+

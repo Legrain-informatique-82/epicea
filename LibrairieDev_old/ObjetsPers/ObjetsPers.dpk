@@ -1,0 +1,58 @@
+package ObjetsPers;
+
+{$R *.res}
+{$R 'ExRxDBGrid.dcr'}
+{$R 'RichPrint.dcr'}
+{$R '..\zipage\vcl\ZipMstr.dcr'}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS OFF}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST ON}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'ObjetsPers'}
+{$IMPLICITBUILD ON}
+
+requires
+  vcl,
+  vcldb,
+  vclx,
+  vclsmp,
+  Rxctl7,
+  Rxdb7,
+  vcljpg,
+  bdertl,
+  teedb,
+  tee,
+  Ibevnt,
+  RxBDE7,
+  GJLSoftWareGR,
+  rtl,
+  dbrtl;
+
+contains
+  GrDBGrid in 'GrDBGrid.pas',
+  GrGrid in 'GrGrid.pas',
+  LibDeclRecord_Obj in 'LibDeclRecord_Obj.pas',
+  Piece in 'Piece.pas',
+  Ecriture_Isa in 'Ecriture_Isa.pas',
+  ObjReglement in 'ObjReglement.pas',
+  RichPrint in 'RichPrint.pas',
+  ZipMstr in '..\zipage\vcl\ZipMstr.pas';
+
+end.

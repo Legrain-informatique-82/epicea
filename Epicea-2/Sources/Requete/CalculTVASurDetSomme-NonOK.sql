@@ -1,0 +1,32 @@
+Select
+    P.Id,E.TypeLigne, sum(E.credit), sum(E.Debit)
+From
+   Piece P
+   Join Ecriture E On (P.Id = E.Id_Piece)
+   Join :program:TvaCode T On(E.TvaCode = T.Tvacode)
+Where
+   E.TypeLigne = 'H' and E.TVAType = 'D'
+   And E.TvaDate <= '10/10/2000' and  E.TvaDate >= '10/10/2000'
+   And T.Classe In ('A','V','I')
+   And Not exists (Select P1.Id from Piece P1
+                                Join Ecriture E1 On (P1.Id = E1.Id_Piece)
+                  Where
+                      E1.TypeLigne = 'H' and E1.TVAType <> 'D' and P1.Id = P.Id)
+
+group by P.Id,E.Credit,E.Debit,E.TypeLigne
+
+union all
+
+Select
+  P3.Id,E3.TypeLigne, Sum(E3.Credit), sum(E3.Debit)
+From
+   Piece P3
+   Join Ecriture E3 On (P3.Id = E3.Id_Piece)
+where
+   E3.TypeLigne = 'T'
+   And Not exists (Select P4.Id from Piece P4
+                                Join Ecriture E4 On (P4.Id = E4.Id_Piece)
+                  Where
+                      E4.TypeLigne = 'H' and E4.TVAType <> 'D' and P3.Id = P4.Id)
+  
+group by P3.Id,E3.Credit,E3.Debit,E3.TypeLigne

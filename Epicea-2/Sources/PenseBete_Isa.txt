@@ -1,0 +1,25 @@
+ISA DU 22-05-01
+////////////////////////////
+
+
+on connaît toujours l'IDEcriture à pointer puisque dans le cas d'un journal d'achat ou
+de vente,l'IDEcriture correspondant à l'ID de contrepartie. Dans le journal de banque,
+l'IDEcriture correspond à la ligne d'écriture sur laquelle on est.
+
+////////////////////////////
+
+SaisieP (Journal=Banque)
+on fait la recherche des pieces à pointer sur le ou les tiers saisis
+dans le corps de la piece
+s'il y a plusieurs tiers de saisis, on affiche tous les tiers dans une combo box
+et on demande d'en séléctionner 1
+????  s'il y a plusieurs lignes pour le même tier, en faire la somme pour récupérer
+le montant à pointer pour ce tier ????? pas sûr
+
+
+
+//////////////////////
+Astuce : sur un message envoyer, si on veut mettre le focus par défaut sur le bouton
+"oui ou non", il faut se servir d'une message box.
+
+

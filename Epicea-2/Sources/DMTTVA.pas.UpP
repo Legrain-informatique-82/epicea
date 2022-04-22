@@ -1,0 +1,921 @@
+unit DMTTVA;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, DBTables,LibZoneSaisie,LibSql,Gr_Librairie_Obj,E2_Librairie_Obj,
+  E2_Decl_Records,LibDates,DMPiece;
+
+type
+  TDMTmTVA = class(TDataModule)
+    QuTotauxHtPiece: TQuery;
+    QuTotauxHtLigneTypeE: TQuery;
+    QuTotauxHtLigneTypeD: TQuery;
+    QuRecupPieceAvecTvaTypeDSurPeriode: TQuery;
+    QuRecupPieceAvecTvaTypeEPointe: TQuery;
+    TaPointageParcours: TTable;
+    QuRecupPieceanterieureFinPeriodeDecl: TQuery;
+    QuPointageTraitement: TQuery;
+    QuTotauxHtPieceID_Piece: TIntegerField;
+    QuTotauxHtPieceTotalHTDebit: TCurrencyField;
+    QuTotauxHtPieceTotalHTCredit: TCurrencyField;
+    QuTotauxHtLigneTypeDId_Piece: TIntegerField;
+    QuTotauxHtLigneTypeDId_Ecriture: TIntegerField;
+    QuTotauxHtLigneTypeDTypeLigne: TStringField;
+    QuTotauxHtLigneTypeDTvaCode: TStringField;
+    QuTotauxHtLigneTypeDTvaDate: TDateField;
+    QuTotauxHtLigneTypeDTotalCreditHTTypeD: TCurrencyField;
+    QuTotauxHtLigneTypeDTotalDebitHTTypeD: TCurrencyField;
+    TaEcritureMontantTiersPointe: TTable;
+    TaDec_Tva: TTable;
+    QuTotauxHtLigneTypeEId_Piece: TIntegerField;
+    QuTotauxHtLigneTypeEId_Ecriture: TIntegerField;
+    QuTotauxHtLigneTypeEDAte: TDateField;
+    QuTotauxHtLigneTypeETypeLigne: TStringField;
+    QuTotauxHtLigneTypeETvaCode: TStringField;
+    QuTotauxHtLigneTypeETotalCreditHTTypeE: TCurrencyField;
+    QuTotauxHtLigneTypeETotalDebitHTTypeE: TCurrencyField;
+    DaDec_Tva: TDataSource;
+    QuTotauxHtLigneParCodeAvecMontantTva: TQuery;
+    QuTotauxHtLigneParCodeAvecMontantTvaId_Piece: TIntegerField;
+    QuTotauxHtLigneParCodeAvecMontantTvaTvaCode: TStringField;
+    QuTotauxHtLigneParCodeAvecMontantTvaTotalCreditHT: TCurrencyField;
+    QuTotauxHtLigneParCodeAvecMontantTvaTotalDebitHT: TCurrencyField;
+    TaEcritureRecupMontantTvaParCode: TTable;
+    TaCodeTva: TTable;
+    QuTotauxHtLigneParCodeAvecMontantTvaCompteTva: TStringField;
+    QuTotauxHtLigneParCodeAvecMontantTvaMontantTvaDebit: TCurrencyField;
+    QuTotauxHtLigneParCodeAvecMontantTvaMontantTvaCredit: TCurrencyField;
+    DaTotauxHtLigneTypeEParCodeAvecMontantTva: TDataSource;
+    QuRecupPieceAvecTvaTypeDSurPeriodeId_Piece: TIntegerField;
+    TaH_TVA: TTable;
+    DaH_TVA: TDataSource;
+    QuH_TvaVerouillageDefinitif: TQuery;
+    QuH_TVARecherche: TQuery;
+    QuMaitre_ParcoursEcritureTypeE: TQuery;
+    DaQuMaitre_ParcoursEcritureTypeE: TDataSource;
+    TaResteDC_Tva: TTable;
+    QuMaitre_ParcoursEcritureTypeEId: TIntegerField;
+    QuMaitre_ParcoursEcritureTypeEId_Piece: TIntegerField;
+    QuMaitre_ParcoursEcritureTypeEtypeligne: TStringField;
+    QuMaitre_ParcoursEcritureTypeEtvaCode: TStringField;
+    QuMaitre_ParcoursEcritureTypeEmontant_tva: TCurrencyField;
+    TaResteDC_TvaSoldeTiers: TCurrencyField;
+    TaResteDC_TvaID_Piece: TIntegerField;
+    TaResteDC_TvaID_Ecriture: TIntegerField;
+    TaResteDC_TvaID: TIntegerField;
+    QuMaitre_ParcoursEcritureTypeEMontantTiers: TCurrencyField;
+    QuMaitre_ParcoursEcritureTypeEMontantPointe_Tiers: TCurrencyField;
+    TaResteDC_TvaDebit: TCurrencyField;
+    TaResteDC_TvaCredit: TCurrencyField;
+    TaResteDC_TvaReste: TCurrencyField;
+    QuMaitre_ParcoursEcritureTypeENouveauPointage: TCurrencyField;
+    QuMaitre_ParcoursEcritureTypeENouveauProrataPointage: TFloatField;
+    QuMaitre_ParcoursEcritureTypeETva_A_DeclareeDebit: TCurrencyField;
+    QuMaitre_ParcoursEcritureTypeEDate: TDateField;
+    QuSumPartDeclaree: TQuery;
+    QuMaitre_ParcoursEcritureTypeEPart_Declaree: TFloatField;
+    QuMaitre_ParcoursEcritureTypeETva_A_DeclareeCredit: TCurrencyField;
+    TaResteDC_TvaSensSolde: TBooleanField;
+    QuMaitre_ParcoursEcritureTypeESensTva: TBooleanField;
+    QuParcoursEcritureTypeD: TQuery;
+    QuParcoursEcritureTypeDID: TIntegerField;
+    QuParcoursEcritureTypeDId_Piece: TIntegerField;
+    QuParcoursEcritureTypeDtypeligne: TStringField;
+    QuParcoursEcritureTypeDtvaCode: TStringField;
+    QuParcoursEcritureTypeDmontant_tva: TCurrencyField;
+    QuParcoursEcritureTypeDDate: TDateField;
+    QuParcoursEcritureTypeDTvaDebit: TCurrencyField;
+    QuParcoursEcritureTypeDTvaCredit: TCurrencyField;
+    QuParcoursEcritureTypeDDebit: TCurrencyField;
+    QuParcoursEcritureTypeDCredit: TCurrencyField;
+    QuMaitre_ParcoursEcritureTypeEProrataEnAttente: TFloatField;
+    QuMaitre_ParcoursEcritureTypeETva_En_Attente_Debit: TCurrencyField;
+    QuMaitre_ParcoursEcritureTypeETva_En_Attente_Credit: TCurrencyField;
+    QuSupprDerniereDeclaration: TQuery;
+    QuSumPointageDansPeriode: TQuery;
+    TaResteDC_TvaMontantPointe: TCurrencyField;
+    TaPiece__TaDec_Tva: TTable;
+    DTaPiece__TaDec_Tva: TDataSource;
+    TaDec_TvaReference: TStringField;
+    TaDec_TvaID: TIntegerField;
+    TaDec_TvaID_Piece: TIntegerField;
+    TaDec_TvaID_Ligne: TIntegerField;
+    TaDec_TvaTvaCode: TStringField;
+    TaDec_TvaTvaType: TStringField;
+    TaDec_TvaTvaDate: TDateTimeField;
+    TaDec_TvaTvaMontantDebit: TCurrencyField;
+    TaDec_TvaTvaMontantCredit: TCurrencyField;
+    TaDec_TvaEn_Attente: TBooleanField;
+    TaDec_TvaPart_Declaration: TFloatField;
+    QuDec_Tva: TQuery;
+    DaQuDec_Tva: TDataSource;
+    TaDec_TvaPart_Declare_Calc: TFloatField;
+    TaEcriture_TaDecTva: TTable;
+    TaDec_TvaHTDebit: TCurrencyField;
+    TaDec_TvaHTCredit: TCurrencyField;
+    TaDec_TvaCompte: TStringField;
+    QuParcoursEcritureTypeD_EnAttente: TQuery;
+    QuParcoursEcritureTypeD_EnAttenteID: TIntegerField;
+    QuParcoursEcritureTypeD_EnAttenteId_Piece: TIntegerField;
+    QuParcoursEcritureTypeD_EnAttentetypeligne: TStringField;
+    QuParcoursEcritureTypeD_EnAttentetvaCode: TStringField;
+    QuParcoursEcritureTypeD_EnAttentemontant_tva: TCurrencyField;
+    QuParcoursEcritureTypeD_EnAttenteDate: TDateField;
+    QuParcoursEcritureTypeD_EnAttenteTvaDebit: TCurrencyField;
+    QuParcoursEcritureTypeD_EnAttenteTvaCredit: TCurrencyField;
+    QuParcoursEcritureTypeD_EnAttenteDebit: TCurrencyField;
+    QuParcoursEcritureTypeD_EnAttenteCredit: TCurrencyField;
+    Procedure ParcoursPointageCoteDebit(DateDeb,DateFin:TDate);
+    Procedure ParcoursPointageCoteCredit(DateDeb,DateFin:TDate);
+    Procedure CalculTvaTypeE(Id_Pointage:Integer);
+    procedure DMTmTVACreate(Sender: TObject);
+    procedure DMTmTVADestroy(Sender: TObject);
+    procedure TaPointageParcoursFilterRecord(DataSet: TDataSet;
+      var Accept: Boolean);
+    procedure QuTotauxHtLigneParCodeAvecMontantTvaCalcFields(
+      DataSet: TDataSet);
+    procedure ParcoursPieceAvecTvaTypeDSurPeriode(DateDeb,DateFin:TDate);
+    Procedure VAliderDeclarationTVA(DateDeb,DateFin:TDate);
+    function Verif_SiDeclarationTvaAJour(var MessageTmp:string):TErreurSaisie;
+    procedure GestionDeclarationAvantOuverture(Supp:boolean;IDEcriture,IDPiece:integer;Periode:Tdatetime);
+    Procedure TraitementCloture1(Sender:TObject);
+    procedure TaResteDC_TvaCalcFields(DataSet: TDataSet);
+    procedure QuMaitre_ParcoursEcritureTypeECalcFields(DataSet: TDataSet);
+    procedure QuParcoursEcritureTypeDCalcFields(DataSet: TDataSet);
+    function Suppression_Derniere_Declaration_Tva_Deverrouillable:boolean;
+    procedure MAJ_DateDeclarationTVA(var debut,fin:tdatetime);
+    procedure TaDec_TvaAfterOpen(DataSet: TDataSet);
+    procedure TaDec_TvaCalcFields(DataSet: TDataSet);
+    procedure QuParcoursEcritureTypeD_EnAttenteCalcFields(
+      DataSet: TDataSet);
+  private
+    { Déclarations privées }
+  public
+    { Déclarations publiques }
+    {Requete}
+
+  end;
+Const
+// Remonte les Somme trié par Code de Tva en distinguant les montant a déclaré de ceux non a déclarée
+// Ordre croissant sur Code TVa
+RqDec_Tva_SommeTvaParCode_1=
+      'select TvaCode,TvaCode.Libelle ,En_Attente ,sum(tvaMontantDebit) as TottvaMontantDebit,sum(tvaMontantCredit) as TottvaMontantCredit'+
+      ' from dec_tva'+
+      ' join TvaCode on (TvaCode.TvaCode = dec_tva.TvaCode)'+
+      ' group by TvaCode,TvaCode.Libelle,En_Attente'+
+      ' Order by TvaCode';
+//        'select TvaCode ,En_Attente ,sum(tvaMontantDebit) as TottvaMontantDebit,sum(tvaMontantCredit) as TottvaMontantCredit from dec_tva'+
+//        ' group by TvaCode,En_Attente'+
+//        ' Order by TvaCode';
+
+// Remonte les Somme trié par Code de Tva en distinguant les montant a déclaré de ceux non a déclarée
+// Ordre décroissant sur Code TVa
+RqDec_Tva_SommeTvaParCode_2=
+        'select TvaCode ,En_Attente ,sum(tvaMontantDebit) as TottvaMontantDebit,sum(tvaMontantCredit) as TottvaMontantCredit from dec_tva'+
+        ' group by TvaCode,En_Attente'+
+        ' Order by TvaCode Desc';
+
+var
+  DMTmTVA: TDMTmTVA;
+  ListeId_PointageDejaTraiter:TStringList;
+  ListeIdLigneDecTvaPourVerrouillage:TStringList;
+
+  Function CalculDeclarationTva(DateDeb,DateFin:TDate):Boolean;
+  Function DeclarationTVATypeD(DateDeb,DateFin:TDate):Boolean;
+  Function DeclarationTVATypeE(DateDeb,DateFin:TDate):Boolean;
+  Function AffichInfoDeclarationTVA(Requete:String):Boolean;
+
+implementation
+
+uses E2_Main,DMParamEnt, E2_VisuListe;
+
+{$R *.DFM}
+
+Function AffichInfoDeclarationTVA(Requete:String):Boolean;
+var
+i:integer;
+Begin
+if VisuListe = nil then VisuListe:=TVisuListe.Create(Application.MainForm);
+if DMTmTVA = nil then DMTmTVA:=TDMTmTVA.Create(application.MainForm);
+//VisuListe.BtnDetail.OnClick:=DMLiasseFisc.BtnDetailsCompteClick;
+//VisuListe.BtnImprimer.OnClick:=DMLiasseFisc.BtnImprimerClick;
+//VisuListe.PaGrille.OnResize:=DMLiasseFisc.PaGrilleResize;
+VisuListe.RxLabTitre.Caption:='Totaux par Code TVA';
+VisuListe.PaTitrePetit.Caption:='Listes par Code TVA';
+
+if DMTmTVA.QuDec_Tva.Active then DMTmTVA.QuDec_Tva.Close;
+DMTmTVA.QuDec_Tva.SQL.Clear;
+DMTmTVA.QuDec_Tva.SQL.Add(Requete);
+VisuListe.GrDBVisu.DefaultDrawing:=False;
+
+GrDbGridInitColonne(VisuListe.GrDBVisu,DMTmTVA.DaQuDec_Tva,DMTmTVA.QuDec_Tva,
+                   ['Code TVA','Libellé','Montant Total Débit','Montant Total Crédit','En Attente'],
+                   ['TvaCode','Libelle','TottvaMontantDebit','TottvaMontantCredit','En_Attente']
+                   ,E.FormatMonnaie,E.EditFormat);
+
+VisuListe.Show;
+End;
+
+
+Function CalculDeclarationTva(DateDeb,DateFin:TDate):Boolean;
+Begin
+if DMTmTVA = nil then DMTmTVA:=TDMTmTVA.Create(application.MainForm);
+DeclarationTVATypeD(DateDeb,DateFin);
+DeclarationTVATypeE(DateDeb,DateFin);
+End;
+
+Function DeclarationTVATypeD(DateDeb,DateFin:TDate):Boolean;
+var
+Tva_Attente:boolean;
+id:integer;
+Begin
+
+if DMTmTVA = nil then DMTmTVA:=TDMTmTVA.Create(application.MainForm);
+
+  DMTmTVA.QuParcoursEcritureTypeD.Close;
+  DMTmTVA.QuParcoursEcritureTypeD.ParamByName('DAteDeb').AsDate:=DateDeb;
+  DMTmTVA.QuParcoursEcritureTypeD.ParamByName('DAteFin').AsDate:=DateFin;
+  DMTmTVA.QuParcoursEcritureTypeD.Open;
+  DMTmTVA.QuParcoursEcritureTypeD.first;
+
+   while not(DMTmTVA.QuParcoursEcritureTypeD.eof) do
+     Begin // Remplissage Ta_Dec
+     Tva_Attente:=false;
+       if not(VerifFNumeric(DMTmTVA.QuParcoursEcritureTypeDmontant_tva).VideOUZero) then
+        begin//s'il y a de la tva à déclarer
+        id:=DMTmTVA.TaDec_Tva.RecordCount+1;
+        DMTmTVA.TaDec_Tva.AppendRecord([id,
+              DMTmTVA.QuParcoursEcritureTypeD.FindField('Id_Piece').AsInteger,
+              DMTmTVA.QuParcoursEcritureTypeD.FindField('Id').AsInteger,
+              DMTmTVA.QuParcoursEcritureTypeD.FindField('TvaCode').AsString,
+              'D',
+              DMTmTVA.QuParcoursEcritureTypeD.FindField('Date').AsDateTime,
+              DMTmTVA.QuParcoursEcritureTypeDTvaDebit.ascurrency,
+              DMTmTVA.QuParcoursEcritureTypeDTvaCredit.ascurrency,
+              Tva_Attente,1]);
+        DMTmTVA.TaDec_Tva.FlushBuffers;
+        end;//fin s'il y a de la tva à déclarer
+        DMTmTVA.QuParcoursEcritureTypeD.Next;
+     End;
+
+  DMTmTVA.QuParcoursEcritureTypeD_EnAttente.Close;
+  DMTmTVA.QuParcoursEcritureTypeD_EnAttente.ParamByName('DAteFin').AsDate:=DateFin;
+  DMTmTVA.QuParcoursEcritureTypeD_EnAttente.Open;
+  DMTmTVA.QuParcoursEcritureTypeD_EnAttente.first;
+
+   while not(DMTmTVA.QuParcoursEcritureTypeD_EnAttente.eof) do
+     Begin // Remplissage Ta_Dec
+     Tva_Attente:=true;
+       if not(VerifFNumeric(DMTmTVA.QuParcoursEcritureTypeD_EnAttentemontant_tva).VideOUZero) then
+        begin//s'il y a de la tva à déclarer
+        id:=DMTmTVA.TaDec_Tva.RecordCount+1;
+        DMTmTVA.TaDec_Tva.AppendRecord([id,
+              DMTmTVA.QuParcoursEcritureTypeD_EnAttente.FindField('Id_Piece').AsInteger,
+              DMTmTVA.QuParcoursEcritureTypeD_EnAttente.FindField('Id').AsInteger,
+              DMTmTVA.QuParcoursEcritureTypeD_EnAttente.FindField('TvaCode').AsString,
+              'D',
+              DMTmTVA.QuParcoursEcritureTypeD_EnAttente.FindField('Date').AsDateTime,
+              DMTmTVA.QuParcoursEcritureTypeD_EnAttenteTvaDebit.ascurrency,
+              DMTmTVA.QuParcoursEcritureTypeD_EnAttenteTvaCredit.ascurrency,
+              Tva_Attente,1]);
+        DMTmTVA.TaDec_Tva.FlushBuffers;
+        end;//fin s'il y a de la tva à déclarer
+        DMTmTVA.QuParcoursEcritureTypeD_EnAttente.Next;
+     End;
+
+
+
+End;
+
+Function DeclarationTVATypeE(DateDeb,DateFin:TDate):Boolean;
+var
+id:integer;
+//Tva_Attente:boolean;
+Begin
+if DMTmTVA = nil then DMTmTVA:=TDMTmTVA.Create(application.MainForm);
+   DMTmTVA.QuSumPointageDansPeriode.ParamByName('FinPeriode').AsDateTime:=DateFin;
+   DMTmTVA.TaResteDC_Tva.close;
+   DMTmTVA.TaResteDC_Tva.open;
+   
+//   DMTmTVA.QuSumPartDeclaree.Close;
+//   DMTmTVA.QuSumPartDeclaree.Open;
+
+   DMTmTVA.QuMaitre_ParcoursEcritureTypeE.Close;
+   //DMTmTVA.QuMaitre_ParcoursEcritureTypeE.ParamByName('DAteFin').AsDate:=DateFin;
+   DMTmTVA.QuMaitre_ParcoursEcritureTypeE.Open;
+   DMTmTVA.QuMaitre_ParcoursEcritureTypeE.first;
+
+   while not(DMTmTVA.QuMaitre_ParcoursEcritureTypeE.eof) do
+     Begin // Remplissage Ta_Dec
+       if not(VerifFNumeric(DMTmTVA.QuMaitre_ParcoursEcritureTypeENouveauPointage).VideOUZero) then
+        begin//s'il y a de la tva à déclarer
+        id:=DMTmTVA.TaDec_Tva.RecordCount+1;
+        DMTmTVA.TaDec_Tva.AppendRecord([id,
+              DMTmTVA.QuMaitre_ParcoursEcritureTypeE.FindField('Id_Piece').AsInteger,
+              DMTmTVA.QuMaitre_ParcoursEcritureTypeE.FindField('Id').AsInteger,
+              DMTmTVA.QuMaitre_ParcoursEcritureTypeE.FindField('TvaCode').AsString,
+              'E',
+              DMTmTVA.QuMaitre_ParcoursEcritureTypeE.FindField('Date').AsDateTime,
+              DMTmTVA.QuMaitre_ParcoursEcritureTypeETva_A_DeclareeDebit.ascurrency,
+              DMTmTVA.QuMaitre_ParcoursEcritureTypeETva_A_DeclareeCredit.ascurrency,
+              false,DMTmTVA.QuMaitre_ParcoursEcritureTypeENouveauProrataPointage.asfloat]);
+        DMTmTVA.TaDec_Tva.FlushBuffers;
+        end;//fin s'il y a de la tva à déclarer
+       if not(VerifFNumeric(DMTmTVA.QuMaitre_ParcoursEcritureTypeEProrataEnAttente).VideOUZero) then
+        begin//s'il y a de la tva en attente
+          id:=DMTmTVA.TaDec_Tva.RecordCount+1;
+          DMTmTVA.TaDec_Tva.AppendRecord([id,
+                DMTmTVA.QuMaitre_ParcoursEcritureTypeE.FindField('Id_Piece').AsInteger,
+                DMTmTVA.QuMaitre_ParcoursEcritureTypeE.FindField('Id').AsInteger,
+                DMTmTVA.QuMaitre_ParcoursEcritureTypeE.FindField('TvaCode').AsString,
+                'E',
+                DMTmTVA.QuMaitre_ParcoursEcritureTypeE.FindField('Date').AsDateTime,
+                DMTmTVA.QuMaitre_ParcoursEcritureTypeETva_En_Attente_Debit.ascurrency,
+                DMTmTVA.QuMaitre_ParcoursEcritureTypeETva_En_Attente_Credit.ascurrency,
+                true,DMTmTVA.QuMaitre_ParcoursEcritureTypeEProrataEnAttente.asfloat]);
+          DMTmTVA.TaDec_Tva.FlushBuffers;
+        end;//fin s'il y a de la tva en attente
+
+        DMTmTVA.QuMaitre_ParcoursEcritureTypeE.Next;
+     End;
+
+End;
+
+
+
+Procedure TDMTmTVA.ParcoursPointageCoteDebit(DateDeb,DateFin:TDate);
+Begin
+if not TaPointageParcours.Active then TaPointageParcours.Open;
+TaPointageParcours.First;
+while not TaPointageParcours.EOF do
+  begin
+   if QuRecupPieceAvecTvaTypeEPointe.Locate('Id',TaPointageParcours.FindField('Id_Debit').AsString,[]) then
+    Begin
+      if QuRecupPieceanterieureFinPeriodeDecl.Locate('Id',TaPointageParcours.FindField('Id_Credit').AsString,[]) then
+       Begin
+       // Calcul Tva pour chaque piece du pointage
+       CalculTvaTypeE(TaPointageParcours.FindField('Id').AsInteger);
+       // Stoker Id Pointage dans la liste des id pointage déjà traiter
+       ListeId_PointageDejaTraiter.Add(TaPointageParcours.FindField('Id').AsString);
+       End; // Fin si Id_Credit antérieur fin période declaration
+
+    End; // Fin si Id_Debit dans période déclaration
+   TaPointageParcours.Next;
+  end; // Fin du While : parcours table Pointage
+End;
+
+Procedure TDMTmTVA.ParcoursPointageCoteCredit(DateDeb,DateFin:TDate);
+Begin
+
+TaPointageParcours.OnFilterRecord:=TaPointageParcoursFilterRecord;
+
+if not TaPointageParcours.Active then TaPointageParcours.Open;
+
+TaPointageParcours.First;
+while not TaPointageParcours.EOF do
+  begin
+   if QuRecupPieceAvecTvaTypeEPointe.Locate('Id',TaPointageParcours.FindField('Id_Credit').AsString,[]) then
+    Begin
+      if QuRecupPieceanterieureFinPeriodeDecl.Locate('Id',TaPointageParcours.FindField('Id_Debit').AsString,[]) then
+       Begin
+       // Calcul Tva pour chaque piece du pointage
+       CalculTvaTypeE(TaPointageParcours.FindField('Id').AsInteger);
+       End; // Fin si Id_Credit antérieur fin période declaration
+
+    End; // Fin si Id_Debit dans période déclaration
+   TaPointageParcours.Next;
+  end; // Fin du While : parcours table Pointage
+TaPointageParcours.OnFilterRecord:=nil;
+//
+End;
+
+
+Procedure TDMTmTVA.CalculTvaTypeE(Id_Pointage:Integer);
+
+var
+ProRataMontantPointeDebit,ProRataMontantPointeCredit:currency;
+ProRataMontantLigneHTSurMontantTotalLigneHTParCodeTvaAuDebit,ProRataMontantLigneHTSurMontantTotalLigneHTParCodeTvaAuCredit:Currency;
+MontantTvaDebitADeclarer,MontantTvaCreditADeclarer:Currency;
+ID,Id_Piece_Debit,Id_Piece_Credit:integer;
+
+Begin
+  QuPointageTraitement.Close;
+  QuPointageTraitement.ParamByName('IDPointage').AsInteger:=Id_Pointage;
+  QuPointageTraitement.Open;
+  // Traitement Pointage coté Debit
+  if TaEcritureMontantTiersPointe.Locate('Id',QuPointageTraitement.findField('Id_Debit').AsString,[]) then
+   Begin
+       ProRataMontantPointeDebit:=0;
+       Id_Piece_Debit:=TaEcritureMontantTiersPointe.findfield('Id_Piece').AsInteger;
+       if not VerifFNumeric(TaEcritureMontantTiersPointe.findField('DebitSaisie')).VideOUZero then
+       ProRataMontantPointeDebit:=QuPointageTraitement.findField('Montant').AsCurrency / TaEcritureMontantTiersPointe.findField('DebitSaisie').AsCurrency;
+   End;
+
+  // Traitement Pointage coté Credit
+  if TaEcritureMontantTiersPointe.Locate('Id',QuPointageTraitement.findField('Id_Credit').AsString,[]) then
+   Begin
+       ProRataMontantPointeCredit:=0;
+       Id_Piece_Credit:=TaEcritureMontantTiersPointe.findfield('Id_Piece').AsInteger;
+       if not VerifFNumeric(TaEcritureMontantTiersPointe.findField('CreditSaisie')).VideOUZero then
+       ProRataMontantPointeCredit:=QuPointageTraitement.findField('Montant').AsCurrency / TaEcritureMontantTiersPointe.findField('CreditSaisie').AsCurrency;
+   End;
+
+  // Traitement piece coté débit
+  QuTotauxHtLigneParCodeAvecMontantTva.Close;
+  QuTotauxHtLigneParCodeAvecMontantTva.ParamByName('IDPiece').AsInteger:=Id_Piece_Debit;
+  QuTotauxHtLigneParCodeAvecMontantTva.open;
+
+  QuTotauxHtLigneTypeE.Close;
+  QuTotauxHtLigneTypeE.ParamByName('IDPiece').AsInteger:=Id_Piece_Debit;
+  QuTotauxHtLigneTypeE.open;
+  QuTotauxHtLigneTypeE.First;
+  if not empty(QuTotauxHtLigneTypeEId_Piece.AsString) then
+  while not QuTotauxHtLigneTypeE.EOF do
+   begin
+      MontantTvaDebitADeclarer:=0;
+      ProRataMontantLigneHTSurMontantTotalLigneHTParCodeTvaAuDebit:=0;
+      if not VerifFNumeric(QuTotauxHtLigneTypeETotalDebitHTTypeE).VideOUZero then
+       Begin
+         if QuTotauxHtLigneParCodeAvecMontantTva.Locate('TvaCode',QuTotauxHtLigneTypeETvaCode.AsString,[]) then
+          begin
+           if not VerifFNumeric(QuTotauxHtLigneParCodeAvecMontantTvaTotalDebitHT).VideOUZero then
+            begin
+             TaEcritureRecupMontantTvaParCode.filter:=CreeFiltreET(['ID_Piece','Compte'],[Inttostr(Id_Piece_Debit),QuTotauxHtLigneParCodeAvecMontantTva.findField('CompteTva').ASString]);
+             ProRataMontantLigneHTSurMontantTotalLigneHTParCodeTvaAuDebit:=QuTotauxHtLigneTypeETotalDebitHTTypeE.AsCurrency / QuTotauxHtLigneParCodeAvecMontantTvaTotalDebitHT.AsCurrency;
+            end;
+          end;
+         MontantTvaDebitADeclarer:=TaEcritureRecupMontantTvaParCode.findField('DebitSaisie').AsCurrency * ProRataMontantPointeDebit * ProRataMontantLigneHTSurMontantTotalLigneHTParCodeTvaAuDebit;
+       End;
+
+      MontantTvaCreditADeclarer:=0;
+      ProRataMontantLigneHTSurMontantTotalLigneHTParCodeTvaAuCredit:=0;
+      if not VerifFNumeric(QuTotauxHtLigneTypeETotalCreditHTTypeE).VideOUZero then
+        Begin
+        if QuTotauxHtLigneParCodeAvecMontantTva.Locate('TvaCode',QuTotauxHtLigneTypeETvaCode.AsString,[]) then
+         begin
+           if not VerifFNumeric(QuTotauxHtLigneParCodeAvecMontantTvaTotalCreditHT).VideOUZero then
+            begin
+             TaEcritureRecupMontantTvaParCode.filter:=CreeFiltreET(['ID_Piece','Compte'],[Inttostr(Id_Piece_Debit),QuTotauxHtLigneParCodeAvecMontantTva.findField('CompteTva').ASString]);
+             ProRataMontantLigneHTSurMontantTotalLigneHTParCodeTvaAuCredit:=QuTotauxHtLigneTypeETotalCreditHTTypeE.AsCurrency / QuTotauxHtLigneParCodeAvecMontantTvaTotalCreditHT.AsCurrency;
+            end;
+         end;
+         MontantTvaCreditADeclarer:=TaEcritureRecupMontantTvaParCode.findField('CreditSaisie').AsCurrency * ProRataMontantPointeDebit * ProRataMontantLigneHTSurMontantTotalLigneHTParCodeTvaAuCredit;
+        End;
+     // Remplissage Ta_Dec
+      ID:=TaDec_Tva.RecordCount+1;
+      TaDec_Tva.AppendRecord([ID,
+            QuTotauxHtLigneTypeE.FindField('Id_Piece').AsInteger,
+            QuTotauxHtLigneTypeE.FindField('Id_Ecriture').AsInteger,
+            QuTotauxHtLigneTypeE.FindField('TvaCode').AsString,
+            'E',
+            QuTotauxHtLigneTypeE.FindField('Date').AsDateTime,
+            MontantTvaDebitADeclarer,
+            MontantTvaCreditADeclarer]);
+      TaDec_Tva.FlushBuffers;
+      QuTotauxHtLigneTypeE.Next;
+ end;
+
+// Traitement piece coté Crédit
+QuTotauxHtLigneParCodeAvecMontantTva.Close;
+QuTotauxHtLigneParCodeAvecMontantTva.ParamByName('IDPiece').AsInteger:=Id_Piece_Credit;
+QuTotauxHtLigneParCodeAvecMontantTva.open;
+
+QuTotauxHtLigneTypeE.Close;
+QuTotauxHtLigneTypeE.ParamByName('IDPiece').AsInteger:=Id_Piece_Credit;
+QuTotauxHtLigneTypeE.open;
+QuTotauxHtLigneTypeE.First;
+if not empty(QuTotauxHtLigneTypeEId_Piece.AsString) then
+while not QuTotauxHtLigneTypeE.EOF do
+ begin
+    MontantTvaDebitADeclarer:=0;
+    ProRataMontantLigneHTSurMontantTotalLigneHTParCodeTvaAuDebit:=0;
+    if not VerifFNumeric(QuTotauxHtLigneTypeETotalDebitHTTypeE).VideOUZero then
+     Begin
+       if QuTotauxHtLigneParCodeAvecMontantTva.Locate('TvaCode',QuTotauxHtLigneTypeETvaCode.AsString,[]) then
+        begin
+         if not VerifFNumeric(QuTotauxHtLigneParCodeAvecMontantTvaTotalDebitHT).VideOUZero then
+          begin
+           TaEcritureRecupMontantTvaParCode.filter:=CreeFiltreET(['ID_Piece','Compte'],[Inttostr(Id_Piece_Credit),QuTotauxHtLigneParCodeAvecMontantTva.findField('CompteTva').ASString]);
+           ProRataMontantLigneHTSurMontantTotalLigneHTParCodeTvaAuDebit:=QuTotauxHtLigneTypeETotalDebitHTTypeE.AsCurrency / QuTotauxHtLigneParCodeAvecMontantTvaTotalDebitHT.AsCurrency;
+          end;
+        end;
+       MontantTvaDebitADeclarer:=TaEcritureRecupMontantTvaParCode.findField('DebitSaisie').AsCurrency * ProRataMontantPointeCredit * ProRataMontantLigneHTSurMontantTotalLigneHTParCodeTvaAuDebit;
+     End;
+
+    MontantTvaCreditADeclarer:=0;
+    ProRataMontantLigneHTSurMontantTotalLigneHTParCodeTvaAuCredit:=0;
+    if not VerifFNumeric(QuTotauxHtLigneTypeETotalCreditHTTypeE).VideOUZero then
+      Begin
+      if QuTotauxHtLigneParCodeAvecMontantTva.Locate('TvaCode',QuTotauxHtLigneTypeETvaCode.AsString,[]) then
+       begin
+         if not VerifFNumeric(QuTotauxHtLigneParCodeAvecMontantTvaTotalCreditHT).VideOUZero then
+          begin
+           TaEcritureRecupMontantTvaParCode.filter:=CreeFiltreET(['ID_Piece','Compte'],[Inttostr(Id_Piece_Credit),QuTotauxHtLigneParCodeAvecMontantTva.findField('CompteTva').ASString]);
+           ProRataMontantLigneHTSurMontantTotalLigneHTParCodeTvaAuCredit:=QuTotauxHtLigneTypeETotalCreditHTTypeE.AsCurrency / QuTotauxHtLigneParCodeAvecMontantTvaTotalCreditHT.AsCurrency;
+          end;
+       end;
+       MontantTvaCreditADeclarer:=TaEcritureRecupMontantTvaParCode.findField('CreditSaisie').AsCurrency * ProRataMontantPointeCredit * ProRataMontantLigneHTSurMontantTotalLigneHTParCodeTvaAuCredit;
+      End;
+
+   // Remplissage Ta_Dec
+    ID:=TaDec_Tva.RecordCount+1;
+    TaDec_Tva.AppendRecord([ID,
+          QuTotauxHtLigneTypeE.FindField('Id_Piece').AsInteger,
+          QuTotauxHtLigneTypeE.FindField('Id_Ecriture').AsInteger,
+          QuTotauxHtLigneTypeE.FindField('TvaCode').AsString,
+          'E',
+          QuTotauxHtLigneTypeE.FindField('Date').AsDateTime,
+          MontantTvaDebitADeclarer,
+          MontantTvaCreditADeclarer]);
+    TaDec_Tva.FlushBuffers;
+    QuTotauxHtLigneTypeE.Next;
+ end;
+End;
+
+procedure TDMTmTVA.ParcoursPieceAvecTvaTypeDSurPeriode(DateDeb,DateFin:TDate);
+var
+ProRataMontantLigneHTSurMontantTotalLigneHTParCodeTvaAuDebit,ProRataMontantLigneHTSurMontantTotalLigneHTParCodeTvaAuCredit:Currency;
+MontantTvaDebitADeclarer,MontantTvaCreditADeclarer:Currency;
+ID:Integer;
+Tva_Attente:boolean;
+Begin
+// PArcours des pieces sur la période
+QuTotauxHtLigneTypeD.ParamByName('DateDeb').AsDate:=DateDeb;
+QuTotauxHtLigneTypeD.ParamByName('DateFin').AsDate:=DateFin;
+QuRecupPieceAvecTvaTypeDSurPeriode.First;
+while not QuRecupPieceAvecTvaTypeDSurPeriode.EOF do
+  begin
+    QuTotauxHtLigneTypeD.Close;
+    QuTotauxHtLigneTypeD.ParamByName('IDPiece').AsInteger:=QuRecupPieceAvecTvaTypeDSurPeriodeId_Piece.AsInteger;
+    QuTotauxHtLigneTypeD.Open;
+
+    if not empty(QuTotauxHtLigneTypeDId_Piece.AsString) then
+    while not QuTotauxHtLigneTypeD.EOF do
+     begin
+       Tva_Attente:=false;
+       ProRataMontantLigneHTSurMontantTotalLigneHTParCodeTvaAuDebit:=0;
+       MontantTvaDebitADeclarer:=0;
+
+       QuTotauxHtLigneParCodeAvecMontantTva.Close;
+       QuTotauxHtLigneParCodeAvecMontantTva.ParamByName('IDPiece').AsInteger:=QuRecupPieceAvecTvaTypeDSurPeriodeId_Piece.AsInteger;
+       QuTotauxHtLigneParCodeAvecMontantTva.Open;
+       // Cote DebitSaisie
+       if not VerifFNumeric(QuTotauxHtLigneParCodeAvecMontantTvaTotalDebitHT).VideOUZero then
+        Begin
+          if QuTotauxHtLigneParCodeAvecMontantTva.Locate('TvaCode',QuTotauxHtLigneTypeDTvaCode.AsString,[]) then
+           begin
+            if not VerifFNumeric(QuTotauxHtLigneParCodeAvecMontantTvaTotalDebitHT).VideOUZero then
+             begin
+              TaEcritureRecupMontantTvaParCode.filter:=CreeFiltreET(['ID_Piece','Compte'],[Inttostr(QuRecupPieceAvecTvaTypeDSurPeriodeId_Piece.AsInteger),QuTotauxHtLigneParCodeAvecMontantTva.findField('CompteTva').ASString]);
+              ProRataMontantLigneHTSurMontantTotalLigneHTParCodeTvaAuDebit:=QuTotauxHtLigneTypeDTotalDebitHTTypeD.AsCurrency / QuTotauxHtLigneParCodeAvecMontantTvaTotalDebitHT.AsCurrency;
+             end;
+           end;
+          MontantTvaDebitADeclarer:=TaEcritureRecupMontantTvaParCode.findField('DebitSaisie').AsCurrency * ProRataMontantLigneHTSurMontantTotalLigneHTParCodeTvaAuDebit;
+        End;
+       // COté CreditSaisie
+
+       ProRataMontantLigneHTSurMontantTotalLigneHTParCodeTvaAuCredit:=0;
+       MontantTvaCreditADeclarer:=0;
+       if not VerifFNumeric(QuTotauxHtLigneParCodeAvecMontantTvaTotalCreditHT).VideOUZero then
+        Begin
+          if QuTotauxHtLigneParCodeAvecMontantTva.Locate('TvaCode',QuTotauxHtLigneTypeETvaCode.AsString,[]) then
+           begin
+            if not VerifFNumeric(QuTotauxHtLigneParCodeAvecMontantTvaTotalCreditHT).VideOUZero then
+             begin
+              TaEcritureRecupMontantTvaParCode.filter:=CreeFiltreET(['ID_Piece','Compte'],[Inttostr(QuRecupPieceAvecTvaTypeDSurPeriodeId_Piece.AsInteger),QuTotauxHtLigneParCodeAvecMontantTva.findField('CompteTva').ASString]);
+              ProRataMontantLigneHTSurMontantTotalLigneHTParCodeTvaAuCredit:=QuTotauxHtLigneTypeDTotalCreditHTTypeD.AsCurrency / QuTotauxHtLigneParCodeAvecMontantTvaTotalCreditHT.AsCurrency;
+             end;
+           end;
+          MontantTvaCreditADeclarer:=TaEcritureRecupMontantTvaParCode.findField('CreditSaisie').AsCurrency * ProRataMontantLigneHTSurMontantTotalLigneHTParCodeTvaAuCredit;
+        End;
+
+      // Remplissage Ta_Dec
+       ID:=TaDec_Tva.RecordCount+1;
+       TaDec_Tva.AppendRecord([ID,
+             QuTotauxHtLigneTypeD.FindField('Id_Piece').AsInteger,
+             QuTotauxHtLigneTypeD.FindField('Id_Ecriture').AsInteger,
+             QuTotauxHtLigneTypeD.FindField('TvaCode').AsString,
+             'D',
+             QuTotauxHtLigneTypeD.FindField('TvaDate').AsDateTime,
+             MontantTvaDebitADeclarer,
+             MontantTvaCreditADeclarer,Tva_Attente]);
+       TaDec_Tva.FlushBuffers;
+       QuTotauxHtLigneTypeD.Next;
+   end;
+   QuRecupPieceAvecTvaTypeDSurPeriode.Next;
+  end;
+
+End;
+
+procedure TDMTmTVA.DMTmTVACreate(Sender: TObject);
+begin
+  ListeId_PointageDejaTraiter:=TStringList.Create;
+  ListeIdLigneDecTvaPourVerrouillage:=TStringList.Create;
+  TaPointageParcours.OnFilterRecord:=nil;
+  OuvrirTouteTable('',TControl(self));
+end;
+
+procedure TDMTmTVA.DMTmTVADestroy(Sender: TObject);
+begin
+FermerTouteTable('',TControl(self));
+  ListeId_PointageDejaTraiter.Free;
+  ListeIdLigneDecTvaPourVerrouillage.Free;
+end;
+
+procedure TDMTmTVA.TaPointageParcoursFilterRecord(DataSet: TDataSet;
+  var Accept: Boolean);
+begin
+if not((csDestroying)in dataset.ComponentState) then
+  accept:=ListeId_PointageDejaTraiter.IndexOf(TaPointageParcours.FindField('Id').AsString) = -1;
+end;
+
+procedure TDMTmTVA.QuTotauxHtLigneParCodeAvecMontantTvaCalcFields(
+  DataSet: TDataSet);
+begin
+  QuTotauxHtLigneParCodeAvecMontantTvaMontantTvaDebit.AsCurrency:=TaEcritureRecupMontantTvaParCode.findField('DebitSaisie').AsCurrency;
+  QuTotauxHtLigneParCodeAvecMontantTvaMontantTvaCredit.AsCurrency:=TaEcritureRecupMontantTvaParCode.findField('CreditSaisie').AsCurrency;
+end;
+
+Procedure TDMTmTVA.VAliderDeclarationTVA(DateDeb,DateFin:TDate);
+var
+Id,ID_Declaration:Integer;
+Montantdeclare:currency;
+Begin
+
+if not TaDec_Tva.Active then TaDec_Tva.Open;
+if not TaH_TVA.Active then TaH_TVA.Open;
+  try
+    TableGereStartTransaction(TaH_TVA);
+    ID_Declaration:=MaxId_Query(TaH_TVA,'ID_Declaration');
+    TaDec_Tva.First;
+    while not TaDec_Tva.EOF do
+      begin//début du while not TaDec_Tva.EOF
+      Montantdeclare:=0;
+//      if not TaDec_Tva.FindField('En_Attente').AsBoolean then
+        begin//si pas tva en attente
+           id:=TaH_TVA.RecordCount+1 ;
+           TaH_TVA.Insert;
+           InitChampAfterInsert([id,
+           TaDec_Tva.FindField('ID_Ligne').AsInteger,
+           TaDec_Tva.FindField('ID_Piece').AsInteger,
+           ID_Declaration,
+           TaDec_Tva.FindField('Part_declaration').asfloat,DAteDeb,DateFin,true,
+           true,TaDec_Tva.FindField('En_Attente').asboolean,
+           TaDec_Tva.FindField('TvaDate').asdatetime],TaH_TVA);
+           TableGerePost(TaH_TVA);
+        end;//fin si pas tva en attente
+       TaDec_Tva.Next;
+      end;//fin du while not TaDec_Tva.EOF
+
+      //créer l'od de déclaration Tva
+      ///////////////////////////////
+
+
+      //verrouille la déclaration précédente
+      FiltrageDataSet(TaH_TVA,'id_declaration='+inttostr(ID_Declaration-1));
+      TaH_TVA.First;
+      while not (TaH_TVA.eof)do
+        Begin
+        TaH_TVA.edit;
+        TaH_TVA.FindField('deverrouillable').AsBoolean:=false;
+        TableGerePost(TaH_TVA);
+        TaH_TVA.Next;
+        End;
+      //MAJ des dates debut et fin déclaration
+      MAJ_DateDeclarationTVA(e.DateDebutDeclarationTVA,e.DateFinDeclarationTVA);
+      DeFiltrageDataSet(TaH_TVA);
+      TableGereCommit(TaH_TVA);
+  except
+    TableGereRollBack(TaH_TVA);
+  end;
+
+End;
+
+
+function TDMTmTVA.Verif_SiDeclarationTvaAJour(var MessageTmp:string):TErreurSaisie;
+var
+PeriodeDecl:integer;
+DebutDeclaration:Tdatetime;
+begin
+//vérifier si la dernière déclaration TVA de l'exercice a été passée
+  result.Retour:=true;
+  result.CodeErreur:=0;
+  PeriodeDecl:=PeriodiciteTVA;
+//  PeriodeDecl:=3;
+  case PeriodeDecl of
+   1:Begin //déclaration mensuelle
+       DebutDeclaration:=MoisPrecedent(e.DatExoFin,1).Date_+1;
+      End;
+   3:Begin //déclaration trimestrielle
+        DebutDeclaration:=MoisPrecedent(e.DatExoFin,3).Date_+1;
+      End;
+   12:Begin //déclaration annuelle
+        DebutDeclaration:=e.DatExoDebut;
+      End;
+  End;//fin du case
+  DMTmTVA.QuH_TVARecherche.ParamByName('DebutExo').AsDateTime:=DebutDeclaration;
+  DMTmTVA.QuH_TVARecherche.ParamByName('FinExo').AsDateTime:=e.DatExoFin;
+  if DMTmTVA.QuH_TVARecherche.active then
+    DMTmTVA.QuH_TVARecherche.close;
+  DMTmTVA.QuH_TVARecherche.Open;
+  DMTmTVA.QuH_TVARecherche.first;
+  if DMTmTVA.QuH_TVARecherche.recordcount=0 then
+    Begin
+       result.Retour:=false;
+       result.CodeErreur:=1001;
+    End;
+
+//  DMTmTVA.QuH_TVARecherche.Last;
+//  case PeriodeDecl of
+//   1:Begin //déclaration mensuelle
+//       if((DateInfos(e.DatExoFin).mois)-(DateInfos(DMTmTVA.QuH_TVARecherche.findfield('Fin_Periode').AsDateTime).mois))>12 then
+//         Begin
+//            result.Retour:=false;
+//            result.CodeErreur:=1001;
+//         End;
+//      End;
+//   3:Begin //déclaration trimestrielle
+//       if((DateInfos(e.DatExoFin).mois)-(DateInfos(DMTmTVA.QuH_TVARecherche.findfield('Fin_Periode').AsDateTime).mois))>4 then
+//         Begin
+//            result.Retour:=false;
+//            result.CodeErreur:=1003;
+//         End;
+//      End;
+//   12:Begin //déclaration annuelle
+//       if((DateInfos(e.DatExoFin).an)-(DateInfos(DMTmTVA.QuH_TVARecherche.findfield('Fin_Periode').AsDateTime).an))>1 then
+//         Begin
+//            result.Retour:=false;
+//            result.CodeErreur:=1012;
+//         End;
+//      End;
+//  End;//fin du case
+
+if result.retour=false then
+  begin
+  MessageTmp:='En considérant les déclarations passées par le programme, il apparaît que vous n''êtes pas à jour dans vos déclarations de TVA, Souhaitez-vous stopper la clôture afin de vérifier vos déclarations ?';
+  end;
+End;
+
+
+
+//sert à stocker des écritures d'ouverture comportant de la TVA qui n'est plus exigible
+procedure TDMTmTVA.GestionDeclarationAvantOuverture(Supp:boolean;IDEcriture,IDPiece:integer;Periode:Tdatetime);
+var
+messages:string;
+Begin
+ try
+ if not supp then
+   begin
+
+   TaH_TVA.AppendRecord([MaxId_Query(TaH_TVA,'ID'),IDEcriture,IDPiece,0,0,Periode,Periode,true,false]);
+   messages:='Problème rencontré lors de l''enregistrement de la Tva non exigible à l''ouverture.'
+   end
+ else
+    Begin
+      //repérer la ligne à supprimer
+      if TaH_TVA.Locate('ID_Ecriture',IDEcriture,[]) then
+        TableGereDelete(TaH_TVA);
+      messages:='Problème rencontré lors de la suppression d''une part de Tva non exigible à l''ouverture.'
+    End;
+ except
+   if not empty(messages)then
+     showmessage(messages);
+   TableGereRollBack(TaH_TVA);  
+   abort;
+ end;
+End;
+
+
+Procedure TDMTmTVA.TraitementCloture1(Sender:TObject);
+Begin
+ Main.TraitementdelaTVA1Click(self);
+End;
+
+procedure TDMTmTVA.TaResteDC_TvaCalcFields(DataSet: TDataSet);
+begin
+  TaResteDC_TvaSoldeTiers.AsCurrency:=abs(TaResteDC_TvaCredit.AsCurrency-TaResteDC_TvaDebit.AsCurrency);
+  if TaResteDC_TvaCredit.AsCurrency>TaResteDC_TvaDebit.AsCurrency then
+  TaResteDC_TvaSensSolde.AsBoolean:=true
+  else
+  TaResteDC_TvaSensSolde.AsBoolean:=false;
+  //recupérer le montantPointé Jusqu'à période
+  QuSumPointageDansPeriode.close;
+  QuSumPointageDansPeriode.ParamByName('ID_Ecriture').AsInteger:=TaResteDC_TvaID_Ecriture.AsInteger;
+  QuSumPointageDansPeriode.open;
+  TaResteDC_TvaMontantPointe.AsCurrency:=QuSumPointageDansPeriode.findfield('MontantPointe').ascurrency;
+  //TaResteDC_TvaMontantPointe.AsCurrency:=TaResteDC_TvaSoldeTiers.AsCurrency-TaResteDC_TvaReste.AsCurrency;
+end;
+
+procedure TDMTmTVA.QuMaitre_ParcoursEcritureTypeECalcFields(DataSet: TDataSet);
+begin
+
+  QuMaitre_ParcoursEcritureTypeENouveauPointage.AsCurrency:=QuMaitre_ParcoursEcritureTypeEMontantPointe_Tiers.AsCurrency-(QuMaitre_ParcoursEcritureTypeEPart_Declaree.AsFloat*QuMaitre_ParcoursEcritureTypeEMontantTiers.AsCurrency);
+  //si nouveau pointage pas déjà déclaré dans la période
+  if QuMaitre_ParcoursEcritureTypeENouveauPointage.AsCurrency > 0 then
+    QuMaitre_ParcoursEcritureTypeENouveauProrataPointage.AsFloat:=(QuMaitre_ParcoursEcritureTypeENouveauPointage.AsCurrency/QuMaitre_ParcoursEcritureTypeEMontantTiers.AsCurrency);
+  //calcul du prorata pour calcul de la tva en attente pour la période
+   QuMaitre_ParcoursEcritureTypeEProrataEnAttente.AsFloat:=1-(QuMaitre_ParcoursEcritureTypeENouveauProrataPointage.AsFloat+QuMaitre_ParcoursEcritureTypeEPart_Declaree.AsFloat);
+  if QuMaitre_ParcoursEcritureTypeESensTva.AsBoolean then
+    begin
+    QuMaitre_ParcoursEcritureTypeETva_A_DeclareeDebit.AsCurrency:=QuMaitre_ParcoursEcritureTypeENouveauProrataPointage.AsFloat*QuMaitre_ParcoursEcritureTypeEmontant_tva.AsCurrency;
+    QuMaitre_ParcoursEcritureTypeETva_En_Attente_Debit.AsCurrency:=QuMaitre_ParcoursEcritureTypeEProrataEnAttente.AsFloat*QuMaitre_ParcoursEcritureTypeEmontant_tva.AsCurrency;
+    end
+  else
+    begin
+    QuMaitre_ParcoursEcritureTypeETva_A_DeclareeCredit.AsCurrency:=QuMaitre_ParcoursEcritureTypeENouveauProrataPointage.AsFloat*QuMaitre_ParcoursEcritureTypeEmontant_tva.AsCurrency;
+    QuMaitre_ParcoursEcritureTypeETva_En_Attente_Credit.AsCurrency:=QuMaitre_ParcoursEcritureTypeEProrataEnAttente.AsFloat*QuMaitre_ParcoursEcritureTypeEmontant_tva.AsCurrency;
+    end;
+end;
+
+procedure TDMTmTVA.QuParcoursEcritureTypeDCalcFields(DataSet: TDataSet);
+begin
+if  QuParcoursEcritureTypeDDebit.AsCurrency<QuParcoursEcritureTypeDDebit.AsCurrency then
+   QuParcoursEcritureTypeDTvaCredit.AsCurrency:=QuParcoursEcritureTypeDmontant_tva.AsCurrency
+ else
+   QuParcoursEcritureTypeDTvaDebit.AsCurrency:=QuParcoursEcritureTypeDmontant_tva.AsCurrency;
+end;
+
+
+
+function TDMTmTVA.Suppression_Derniere_Declaration_Tva_Deverrouillable:boolean;
+var
+ref:string;
+Begin
+result:=true;
+ref:='';
+  try
+    //récupérer la référence de la dernière od de déclaration tva
+    QuSupprDerniereDeclaration.Close;
+    QuSupprDerniereDeclaration.sql.Clear;
+    QuSupprDerniereDeclaration.sql.Add('select * from H_Tva where deverrouillable=true and En_attente=false');
+    QuSupprDerniereDeclaration.open;
+    if QuSupprDerniereDeclaration.recordcount<>0 then
+      ref:=QuSupprDerniereDeclaration.findfield('Reference_OD').asstring;
+    if not empty(ref)then
+      DMPieces.SuppressionOD(ref)
+    else
+      //abort;
+    QuSupprDerniereDeclaration.Close;
+    QuSupprDerniereDeclaration.sql.Clear;
+    QuSupprDerniereDeclaration.sql.Add('delete from H_Tva where deverrouillable=true');
+    QuSupprDerniereDeclaration.ExecSQL;
+
+  except
+    showmessage('Suppression_Derniere_Declaration_Tva_Deverrouillable : Contactez le service maintenance.');
+    result:=false;
+  end;
+End;
+
+procedure TDMTmTVA.MAJ_DateDeclarationTVA(var debut,fin:tdatetime);
+Begin
+Debut:=JourOffset(fin,1).Date_;
+case PeriodiciteTVA of
+   1:Begin //déclaration mensuelle
+       fin:=MoisOffset(fin,1).Date_;
+      End;
+   3:Begin //déclaration trimestrielle
+        fin:=MoisOffset(fin,3).Date_;
+      End;
+   12:Begin //déclaration annuelle
+        fin:=MoisOffset(fin,12).Date_;
+      End;
+end;//fin case
+End;
+
+procedure TDMTmTVA.TaDec_TvaAfterOpen(DataSet: TDataSet);
+begin
+TFloatField(TaDec_Tva.FindField('Part_Declare_calc')).DisplayFormat:='##0.00 "%"';
+FormateMonnaieField(DataSet,E.FormatMonnaie,E.EditFormat);
+end;
+
+procedure TDMTmTVA.TaDec_TvaCalcFields(DataSet: TDataSet);
+begin
+TaDec_TvaPart_Declare_Calc.AsFloat:=TaDec_TvaPart_Declaration.AsFloat * 100;
+//TaDec_TvaHTDebit.AsCurrency:=0;
+//TaDec_TvaHTCredit.AsCurrency:=0;
+
+//if ((TaDec_TvaPart_Declaration.AsFloat > 0) and ()) then
+// begin
+//  // Montant du taux de TVA pour la ligne en cours
+//  TaDec_TvaHTDebit.AsCurrency:=TaDec_TvaTvaMontantDebit.AsCurrency / TaDec_TvaPart_Declaration.AsFloat;
+//  TaDec_TvaHTCredit.AsCurrency:=TaDec_TvaTvaMontantCredit.AsCurrency / TaDec_TvaPart_Declaration.AsFloat;
+//  // Montant HT pour la ligne en cours
+//  TaDec_TvaHTDebit.AsCurrency:=TaDec_TvaTvaMontantDebit.AsCurrency / TaDec_TvaPart_Declaration.AsFloat;
+//  TaDec_TvaHTCredit.AsCurrency:=TaDec_TvaTvaMontantCredit.AsCurrency / TaDec_TvaPart_Declaration.AsFloat;
+// end;
+end;
+
+procedure TDMTmTVA.QuParcoursEcritureTypeD_EnAttenteCalcFields(
+  DataSet: TDataSet);
+begin
+if  QuParcoursEcritureTypeD_EnAttenteDebit.AsCurrency<QuParcoursEcritureTypeD_EnAttenteDebit.AsCurrency then
+   QuParcoursEcritureTypeD_EnAttenteTvaCredit.AsCurrency:=QuParcoursEcritureTypeD_EnAttentemontant_tva.AsCurrency
+ else
+   QuParcoursEcritureTypeD_EnAttenteTvaDebit.AsCurrency:=QuParcoursEcritureTypeD_EnAttentemontant_tva.AsCurrency;
+end;
+
+end.
+
+

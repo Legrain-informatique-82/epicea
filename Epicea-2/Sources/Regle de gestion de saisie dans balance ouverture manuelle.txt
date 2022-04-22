@@ -1,0 +1,16 @@
+Sont interdit de saisie :
+
+Comptes utilisé dans l'ouverture:
+  Ouverture automatiques
+  stocks
+  Emprunts
+  Compte d'entête des charges à payer, charges constatées d'avances, provisions
+
+  Plan cpt :
+  Comptes pointables
+  Comptes possédant un code Tva
+  Comptes immos
+
+
+  A Voir, compte 145, exception à gérer
+

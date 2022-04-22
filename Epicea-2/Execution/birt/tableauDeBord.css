@@ -1,0 +1,71 @@
+.list-header {
+background : #949BC9;
+border-bottom : double;
+border-top : solid;
+border-top-width : thin;
+border-color : Black;
+font-family : Arial;
+font-size :  16;
+color : White;
+}
+.table-group-header {
+background : #F2974A;
+border-bottom : double;
+border-top : solid;
+border-top-width : thin;
+border-color : Black;
+font-family : serif;
+font-size :  medium;
+font-weight : bold;
+color : Black;
+}
+.table-group-header-2 {
+background : #F2974A;
+border-bottom : double;
+border-top : solid;
+border-top-width : thin;
+border-color : Black;
+font-family : serif;
+font-size : small;
+font-weight : bold;
+color : Black;
+}
+.table-group-header-3 {
+background : #F2974A;
+border-bottom : double;
+border-top : solid;
+border-top-width : thin;
+border-color : Black;
+font-family : serif;
+font-size : small;
+font-weight : bold;
+color : Black;
+}  
+.table-header{
+background : #F2974A;
+border-bottom : double;
+border-top : solid;
+border-top-width : thin;
+border-color : Black;
+font-family : serif;
+font-size : small;
+font-weight : bold;
+color : Black;
+}
+.table-detail {
+background : #D8E0F0;
+font-family : serif;
+font-size : small;
+color : Black;
+}
+ .table-footer {
+background : #F2974A;
+border-top : double;
+border-bottom : solid;
+border-bottom-width : thin;
+border-color : Black;
+font-family : serif;
+font-size : small;
+font-weight : bold;
+color : Black;
+}

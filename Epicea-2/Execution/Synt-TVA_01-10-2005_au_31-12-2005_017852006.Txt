@@ -1,0 +1,23 @@
+Type;Code tva/Libellé; H.Taxe; Tva
+OPERATIONS IMPOSABLES;C1 - Acquisition UE;0;0
+OPERATIONS IMPOSABLES;V3 - Ventes à 5.5;1504.41;82.74
+OPERATIONS IMPOSABLES;V4 - Ventes à 19.6;0;0
+OPERATIONS IMPOSABLES;V8 - Ventes sur productions immobilisées;0;0
+OPERATIONS IMPOSABLES;V9 - Ventes d"immobilisations;0;0
+OPERATIONS IMPOSABLES;TVA antérieurement déduite à reverser (44552);0;0
+;TOTAL BRUTE DUE :  ;1504.41;82.74
+TVA DEDUCTIBLE;Biens constituant des immobilisations ;0;0
+TVA DEDUCTIBLE;Autres biens et services ;280.28;55.66
+TVA DEDUCTIBLE;Ommissions ou compléments de déductions ;0;0
+TVA DEDUCTIBLE;Report du Crédit antérieur 4456744583 ;0;0
+;TOTAL TVA DEDUCTIBLE  :  ;280.28;55.66
+OPERATIONS NON IMPOSABLES;Achats en franchise ;0;0
+OPERATIONS NON IMPOSABLES;Exportations hors CEE ;0;0
+OPERATIONS NON IMPOSABLES;Autres opérations non imposables ;-106.9;0
+OPERATIONS NON IMPOSABLES;Livraisons intracommunautaires ;0;0
+CALCUL DE LA TVA DUE OU DU CREDIT;TVA Due ;0;82.74
+CALCUL DE LA TVA DUE OU DU CREDIT;- TVA déductible ;0;55.66
+CALCUL DE LA TVA DUE OU DU CREDIT;- Acomptes versés 44581 ;0;0
+CALCUL DE LA TVA DUE OU DU CREDIT;TVA à payer de la période précédente 44551 ;0;0
+;SOLDE A PAYER :  ;0;27.08
+;OU CREDIT DE TVA :  ;0;0

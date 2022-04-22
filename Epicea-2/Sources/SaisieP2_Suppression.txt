@@ -1,0 +1,69 @@
+procedure TsaisieP_2.GrGrid1SupprLigne(sender: TObject; Arow: Integer;
+      var NewRow: Integer);
+var
+Ligne:TBlocLigne;
+i,IDLigneTemp:integer;
+rang:integer;
+begin
+IDLigneTemp:=0;
+   try
+      try
+          if Pidentifiant(ListIdentifiant.items[Arow])^.IDLigne=0 then
+          Begin
+          listidentifiant.Delete(Arow);//supprime ligne dans listIdentifiant
+          GereDecalageTableTemporaire(Arow,Ecriture_Isa1.TaEcrituretmp,false);
+          End
+          else
+          Begin
+          if  modif.NewRow<>-1 then //s'il y a une ligne à modifier, on se positionne dessus
+          IDLigneTemp:=Pidentifiant(ListIdentifiant.items[modif.NewRow])^.IDLigne;
+          listidentifiant.Delete(Arow);//supprime ligne dans listIdentifiant
+             if Ecriture_Isa1.TaEcrituretmp.Locate('Id_Ligne',Arow,[])then
+             ecriture_Isa1.SupprEcriture;//supprime ligne table temporaire du rang voulu
+          GereDecalageTableTemporaire(Arow,Ecriture_Isa1.TaEcrituretmp,false);
+          if modif.NewRow<>-1 then
+          modif.NewRow:=ListIdentifiantIndexOf(inttostr(IDLigneTemp),'',1);
+             if modif.NewRow=-99999 then
+             modif.NewRow:=-1;
+          End;
+      if Listidentifiant.Count=1 then
+         //rajouter une nouvelle ligne vierge
+        ListIdentifiantAdd_insert([0,0,0,'','','','',0,0,'V',False,False,False,False,False,False,False,'',0,0,'','',False,'','','',0,false],true,false,-1,nil);
+      for i:=1 to ListIdentifiant.Count-1 do
+      Begin
+      Ligne:=LigneBlocPrincipal(i);
+      Pidentifiant(ListIdentifiant.items[i])^.Ligne.Ligne.Appartient:=Ligne.Appartient;
+      Pidentifiant(ListIdentifiant.items[i])^.Ligne.Ligne.Derniere:=Ligne.Derniere;
+      End;
+      except
+      abort;
+      end;//fin du try
+      if ((Modif.ASupprimer)and (Modif.NewRow<>-1)) then
+        gestionSuppression(Modif.NewRow)
+      else
+        if ((not Modif.ASupprimer)and (Modif.NewRow<>-1)) then
+        begin
+        grgrid1.OnRowValidate:=nil;
+        grgrid1.row:=Modif.NewRow;
+        abort;
+        end;
+
+//      if ((not Modif.ASupprimer)and (Modif.NewRow=-1)) then
+//      begin
+//         if Arow>1 then
+//         grgrid1.row:=Arow-1
+//         else
+//         grgrid1.row:=1;
+//      end;
+
+
+   finally
+   if Ecriture_Isa1.TaEcrituretmp.RecordCount=0 then
+   Ecriture_Isa1.FirstIDEcriture:=0;
+   modif.ASupprimer:=false;
+   modif.NewRow:=-1;
+   if grgrid1.row<>ligneCurr then
+   GrGrid1RowEnter(grgrid1,grgrid1.row);
+   grgrid1.OnRowValidate:=GrGrid1RowValidate;
+   end;//fin du try finally
+end;

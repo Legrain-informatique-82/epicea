@@ -1,0 +1,17 @@
+select min(ResteDC."Date") as DateDebDebit
+from ResteDC rd
+where reste<>0 or( 
+((reste=0 and rd.sens='D' and  rd.id_ecriture  in (select id_debit from pointage p 
+                                                       where P."Date" >'12/31/2005')
+                  )) 
+or((reste=0 and rd.sens='C' and  rd.id_ecriture  in(select id_credit from pointage p where 
+                                                      P."TvaDate" >'12/31/2005')
+                  ) ))
+                  
+                  
+                  
+select (ResteDC."Date") as DateDebDebit,rd.id_ecriture
+from ResteDC rd
+where reste<>0 or (reste=0 and rd.sens='D' and 
+ ( rd.id_ecriture  in (select id_debit from pointage p where P."Date" >'12/31/2005')))
+order by ResteDC."Date"                 

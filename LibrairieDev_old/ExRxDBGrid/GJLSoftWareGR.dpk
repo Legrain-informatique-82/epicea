@@ -1,0 +1,51 @@
+package GJLSoftWareGR;
+
+{$R *.res}
+{$R 'AdvStatusBar.dcr'}
+{$R 'ExDBGrid.dcr'}
+{$R 'ExRxDBGrid.dcr'}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'GJLSoftWareGr'}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  vcljpg,
+  vcl,
+  dbrtl,
+  vclx,
+  bdertl,
+  vcldb,
+  VclSmp,
+  RxCtl7,
+  RxDB7;
+
+contains
+  AdvStatusBar in 'AdvStatusBar.pas',
+  ExColSelect in 'ExColSelect.pas',
+  ExDBGrid in 'ExDBGrid.pas',
+  ExDBGridCtls in 'ExDBGridCtls.pas' {ExDBGridCtlsForm},
+  ExRxDBGrid in 'ExRxDBGrid.pas',
+  UnitReport in 'UnitReport.pas';
+
+end.

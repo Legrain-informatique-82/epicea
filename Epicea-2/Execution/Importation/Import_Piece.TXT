@@ -1,0 +1,33 @@
+La date de la pièce n'est pas cohérente dans ce contexte.
+La pièce B21000001 ne peut pas être créée;  489;  1;T;         ;01/12/09;512     ;TOTAL REMISE 8510935   ;2559,5;0;     0,00;     0,00; ;  0,00;0;0;        ;        ;                              ;                              ;                              ;     ;                         ;D;        ;Rejetée
+La date de la pièce n'est pas cohérente dans ce contexte.
+La pièce B21000001 ne peut pas être créée;  489;  2;T;         ;01/12/09;+FIQUETP;514 Chèque FIQUET PATRI;0;536;     0,00;     0,00; ;  0,00;0;0;        ;411     ;FIQUET PATRICK                ;12 RUE DES BALSAMINES         ;                              ;76430;LA REMUEE                ;D;        ;Rejetée
+La date de la pièce n'est pas cohérente dans ce contexte.
+La pièce B21000001 ne peut pas être créée;  489;  3;T;         ;01/12/09;+GALLAYG;513 Chèque GALLAY GERAR;0;80;     0,00;     0,00; ;  0,00;0;0;        ;411     ;GALLAY GERARD                 ;138 RUE SULLY                 ;                              ;69006;LYON                     ;D;        ;Rejetée
+La date de la pièce n'est pas cohérente dans ce contexte.
+La pièce B21000001 ne peut pas être créée;  489;  4;T;         ;01/12/09;+BERTOC ;512 Chèque BERTO CLAUDE;0;316;     0,00;     0,00; ;  0,00;0;0;        ;411     ;BERTO CLAUDE                  ;9 rue du bois                 ;                              ;39600;SAINT CYR MONTMALIN      ;D;        ;Rejetée
+La date de la pièce n'est pas cohérente dans ce contexte.
+La pièce B21000001 ne peut pas être créée;  489;  5;T;         ;01/12/09;+POULAIN;511 Chèque POULAIN ROSE;0;124;     0,00;     0,00; ;  0,00;0;0;        ;411     ;POULAIN ROSELYNE              ;5 RUE DES LAURIERS            ;                              ;56130;ST DOLAY                 ;D;        ;Rejetée
+La date de la pièce n'est pas cohérente dans ce contexte.
+La pièce B21000001 ne peut pas être créée;  489;  6;T;         ;01/12/09;+MAUPASD;510 Chèque MAUPAS DANIE;0;70;     0,00;     0,00; ;  0,00;0;0;        ;411     ;MAUPAS DANIEL                 ;LE BOUCHET                    ;                              ;58370;VILLAPOURCON             ;D;        ;Rejetée
+La date de la pièce n'est pas cohérente dans ce contexte.
+La pièce B21000001 ne peut pas être créée;  489;  7;T;         ;01/12/09;+CRIBIER;509 Chèque CRIBIER ALAI;0;115,5;     0,00;     0,00; ;  0,00;0;0;        ;411     ;CRIBIER ALAIN                 ;153 CHEMIN COMBE BRIGOUD BERLA;                              ;38380;ST CHRISTOPHE SUR GUIERS ;D;        ;Rejetée
+La date de la pièce n'est pas cohérente dans ce contexte.
+La pièce B21000001 ne peut pas être créée;  489;  8;T;         ;01/12/09;+REYY   ;508 Chèque REY YVONNE  ;0;140;     0,00;     0,00; ;  0,00;0;0;        ;411     ;REY YVONNE                    ;LOT VERTES CHAMPAGNES         ;RUE LAGIER BRUNO LUCIEN       ;73170;YENNE                    ;D;        ;Rejetée
+La date de la pièce n'est pas cohérente dans ce contexte.
+La pièce B21000001 ne peut pas être créée;  489;  9;T;         ;01/12/09;+MARTINJ;507 Chèque MARTIN JEAN ;0;90;     0,00;     0,00; ;  0,00;0;0;        ;411     ;MARTIN JEAN PAUL              ;20 RUE DES VOSGES             ;                              ;67230;HUTTENHEIM               ;D;        ;Rejetée
+La date de la pièce n'est pas cohérente dans ce contexte.
+La pièce B21000001 ne peut pas être créée;  489; 10;T;         ;01/12/09;+LE ROYA;506 Chèque LE ROY MICHE;0;148;     0,00;     0,00; ;  0,00;0;0;        ;411     ;LE ROY MICHELE                ;37 39 RUE GUY MOQUET APPT 45  ;                              ;92240;MALAKOFF                 ;D;        ;Rejetée
+La date de la pièce n'est pas cohérente dans ce contexte.
+La pièce B21000001 ne peut pas être créée;  489; 11;T;         ;01/12/09;+DUPUISJ;505 Chèque DUPUIS JACQU;0;86,5;     0,00;     0,00; ;  0,00;0;0;        ;411     ;DUPUIS JACQUES                ;CEIGNES                       ;                              ;01430;MAILLAT                  ;D;        ;Rejetée
+La date de la pièce n'est pas cohérente dans ce contexte.
+La pièce B21000001 ne peut pas être créée;  489; 12;T;         ;01/12/09;+DELAFON;503 Chèque DELAFON ROSE;0;112;     0,00;     0,00; ;  0,00;0;0;        ;411     ;DELAFON ROSELINE              ;LE MIRABEAU B                 ;11 BD DE CHANTEMERLE          ;73100;AIX LES BAINS            ;D;        ;Rejetée
+La date de la pièce n'est pas cohérente dans ce contexte.
+La pièce B21000001 ne peut pas être créée;  489; 13;T;         ;01/12/09;+DELAFON;503 Chèque DELAFON ROSE;0;20;     0,00;     0,00; ;  0,00;0;0;        ;411     ;DELAFON ROSELINE              ;LE MIRABEAU B                 ;11 BD DE CHANTEMERLE          ;73100;AIX LES BAINS            ;D;        ;Rejetée
+La date de la pièce n'est pas cohérente dans ce contexte.
+La pièce B21000001 ne peut pas être créée;  489; 14;T;         ;01/12/09;+AUBINSA;502 Chèque AUBIN SAMUEL;0;234,5;     0,00;     0,00; ;  0,00;0;0;        ;411     ;AUBIN SAMUEL                  ;SECRETAIRE DU CE DE VIAMICHELI;110 AVE VICTOR HUGO           ;92100;BOULOGNE BILLANCOURT     ;D;        ;Rejetée
+La date de la pièce n'est pas cohérente dans ce contexte.
+La pièce B21000001 ne peut pas être créée;  489; 15;T;         ;01/12/09;+VIALAT ;501 Chèque VIALATTE ING;0;234;     0,00;     0,00; ;  0,00;0;0;        ;411     ;VIALATTE INGENIERIE           ;23 RUE DE LA MAISON ROUGE     ;                              ;77185;LOGNES                   ;D;        ;Rejetée
+La date de la pièce n'est pas cohérente dans ce contexte.
+La pièce B21000001 ne peut pas être créée;  489; 16;T;         ;01/12/09;+CASTAIM;500 Chèque CASTAING MIC;0;253;     0,00;     0,00; ;  0,00;0;0;        ;411     ;CASTAING MICHEL               ;13 RUE DU PETIT MOULIN        ;                              ;72340;RUILLE SUR LOIR          ;D;        ;Rejetée
+Import_Piece.TXT

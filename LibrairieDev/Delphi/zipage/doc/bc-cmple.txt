@@ -1,0 +1,143 @@
+
+                Borland C/C++ Compiler
+
+
+If you want to use the Zip DLLs with a non-VCL version
+of the Borland compiler, this is how to do it:
+
+ 1) Create a .lib file for each DLL with IMPLIB.EXE
+    Do NOT use the VC++ version of the .lib files!
+
+ 2) Create a small .DEF file with the names of the 2 imported
+    functions.  If you have a naming conflict due to the lack
+    of "_" in front of the functions, then make aliases in 
+    your .DEF file for them
+
+ 3) Add the .DEF to your project
+
+ 4) Create .h files giving the DLL function definitions
+    (be sure to specify stdcall calling convention; which
+     is part of WINAPI).  Here's the general idea:
+
+
+file = zip.h
+==============================================================
+#include <windows.h>
+
+/* define the data passed back to the callback function */
+typedef struct {
+   HWND handle;
+   long caller;
+   long version;
+   BOOL isoperationzip; // true=zip, false=unzip
+   long actioncode;
+   long error_code;
+   long fsize;
+   char filenameormsg[512]; /* NOTE: NOT a pointer - data is here */
+} callbackstruct;
+
+// Define a type called DLLCALLBACK:
+// We can't use BOOL as return type in the following typedef, so we use "long".
+// typedef __declspec(dllimport) long (CALLBACK *DLLCALLBK) (callbackstruct *);
+typedef long (CALLBACK *DLLCALLBK) (callbackstruct *);
+
+/* The BOOL type in Win32 is the same as Delphi's LongBool */
+typedef struct {
+   HWND handle;        /* handle of calling pgm's active Window */
+   long caller;        /* object instance ("self") of calling Delphi form 
+                     (not used in DLL; returned to Delphi via callback) */
+   long version;       /* version no. that Delphi Applic. expects */
+   DLLCALLBK callback;
+   BOOL fTraceEnabled;
+
+   BOOL fEncryptVerify; /* not supported yet */
+   BOOL fSuffix;     /* not supported yet */
+   BOOL fEncrypt;    /* not supported yet */
+
+   BOOL fSystem;          /* include system and hidden files */
+   BOOL fVolume;          /* Include volume label */
+   BOOL fExtra;           /* Include extra attributes */
+   BOOL fNoDirEntries;    /* Do not add directory entries */
+   BOOL fDate;            /* Exclude files earlier than specified date */
+   BOOL fVerbose;         /* Mention oddities in zip file structure */
+   BOOL fQuiet;           /* Quiet operation */
+
+   int fLevel;            /* Compression level (0 - 9) */
+   BOOL fComprSpecial;    /* try to compress files that are alreay compressed */
+   BOOL fCRLF_LF;          /* Translate end-of-line */
+   BOOL fJunkDir;          /* Junk (remove) directory names */
+   BOOL fRecurse;          /* Recurse into subdirectories */
+   BOOL fGrow;             /* Allow appending to a zip file */
+   BOOL fForce;            /* Make entries using DOS names (k for Katz) */
+   BOOL fMove;             /* Delete files added or updated in zip file */
+   BOOL fDeleteEntries;    /* Delete files from zip file */
+   BOOL fUpdate;           /* Update zip file--overwrite only if newer */
+   BOOL fFreshen;          /* Freshen zip file--overwrite only */
+   BOOL fJunkSFX;          /* Junk SFX prefix */
+   BOOL fLatestTime;       /* Set zip file time to time of latest file in it */
+
+   char Date[8];           /* Date to include after (MMDDYY + 2 null) */
+   int  argc;              /* Count of filespecs to zip or delete */
+   LPSTR lpszZipFN;        /* name of zip file */
+   int seven;              /* stick a 7 in here to validate the struct offsets */
+   char *FNV[];            /* array of filespec strings */
+} ZCL, *LPZCL;
+
+/* exports from DLL (must also be listed in the DEF file) */
+long WINAPI ZipDllExec(ZCL *C);
+long WINAPI GetZipDllVersion(void);
+
+
+
+file = unzip.h
+//==============================================================
+#include <windows.h>
+
+/* define the data passed back to the Delphi callback function */
+typedef struct {
+   HWND handle;
+   long caller;
+   long version;
+   BOOL isoperationzip; // true=zip, false=unzip
+   long actioncode;
+   long error_code;
+   long fsize;
+   char filenameormsg[512]; /* NOTE: NOT a pointer - data is here */
+} callbackstruct;
+
+// We can't use BOOL as return type in the following typedef, so we use "long".
+// typedef __declspec(dllimport) long (CALLBACK *DLLCALLBK) (callbackstruct *);
+typedef long (CALLBACK *DLLCALLBK) (callbackstruct *);
+
+// DLL Command Line (DCL)
+typedef struct {
+   HWND handle;        /* handle of calling pgm's active Window */
+   long caller;        /* object instance ("self") of calling Delphi form
+                     (not used in DLL; returned to Delphi via callback) */
+   long version;       /* version no. that Delphi Applic. expects */
+   DLLCALLBK callback;
+   BOOL fTraceEnabled;
+   /*==================*/
+   /* regular switches */
+   BOOL fPromptToOverwrite; // not supported yet
+   BOOL fDecrypt;           // not supported yet
+   BOOL fTest;              // if true, test zipfile (not supported yet)
+   BOOL fComments;           // show zip comment (not supported yet)
+   BOOL fConvert;           // if true, do ASCII/EBCDIC or EOL translation
+
+   BOOL fQuiet;          // DLL be quiet!
+   BOOL fVerbose;        // verbose flag
+   BOOL fUpdate;         // "update" (extract only newer files & brand new files)
+   BOOL fFreshen;        // "freshen" (extract only newer files that already exist)
+   BOOL fDirectories;    // if true, recreate dir structure
+   BOOL fOverwrite;      // if true, overwrite existing (no asking)
+
+   long argc;          //  Count of filespecs to extract
+   LPSTR lpszZipFN;    // ptr to zip filename
+   int seven;          // stick a 7 in here to validate the struct offsets
+   char *FNV[];        // array of filespec args to extract
+} DCL, _far *LPDCL;
+
+/* Exports from the DLL */
+long WINAPI UnzDllExec(DCL *C);
+long WINAPI GetUnzDllVersion(void);

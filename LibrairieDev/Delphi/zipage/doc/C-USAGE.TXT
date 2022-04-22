@@ -1,0 +1,13 @@
+We have not ported the "usage.txt" file to BCB yet, but 
+most of the info in "usage.txt" also applies directly to 
+BCB.
+
+The BCB Helpfile gives you all of this info, and more,
+in an easy-to-read manner that is specific to C++.
+
+See \zip\bcb\help.
+
+And, for Delphi help:
+See \zip\help.
+
+

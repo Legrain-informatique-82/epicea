@@ -1,0 +1,6 @@
+Les comptes de trésorerie à afficher sont :
+					cptes de la classe 5 sauf le 580
+               les comtpes de coopérative
+               le compte de l'exploitant 108
+
+pour toutes les opérations de trésorerie , génération d'écriture dans le 580

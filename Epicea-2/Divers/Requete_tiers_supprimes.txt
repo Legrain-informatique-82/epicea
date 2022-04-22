@@ -1,0 +1,2 @@
+select E.id,E.id_piece,E.tiers from ecriture E
+where (E.Tiers is not null) and (not exists(select tiers from tiers where tiers=E.tiers))

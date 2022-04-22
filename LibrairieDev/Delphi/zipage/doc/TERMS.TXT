@@ -1,0 +1,24 @@
+
+
+  IDE- Integrated development environment - the Delphi or CBuilder 
+       development interface
+  VCL - Visual Control - a component that contains executable code
+        and data.  They are distributed in a set of files. Once 
+        installed into your IDE, they can be dragged from your 
+        component palette to one of your forms.
+
+  VCLs interface with your code in these 3 ways:
+
+  Properties - settings that tell the VCL how to perform it's 
+        actions.  These can be set at design time in the Property
+        Inspector, or at run time with Pascal/C++ code.
+  Methods - these are functions/procedures that must be called
+        by your Pascal/C++ code to perform actions.
+  Events - these are calls to functions/procedures that you
+        define in your code.  These calls execute automatically
+        depending on certain key actions occuring.  The function/
+        procedure that is called is the "event handler".  For
+        example, an "OnMessage" event will call it's associated
+        function/procedure (set via the Object Inspector) whenever
+        the DLLs want to send the user a message.
+

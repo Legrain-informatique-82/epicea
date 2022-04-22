@@ -1,0 +1,53 @@
+:Base ZipMstr.hlp
+:Title ZipMaster Component Help
+1 TZipMaster component
+2 General information =TZipMaster_Object
+2 Properties
+3 Properties=Props
+3 AddCompLevel =TZipMaster_AddCompLevel_Property
+3 AddOptions =TZipMaster_AddOptions_Property
+3 Cancel =TZipMaster_Cancel_Property
+3 Count =TZipMaster_Count_Property
+3 DLLDirectory =TZipMaster_DLLDirectory_Property
+3 ErrCode =TZipMaster_ErrCode_Property
+3 ExtrBaseDir =TZipMaster_ExtrBaseDir_Property
+3 ExtrOptions =TZipMaster_ExtrOptions_Property
+3 FSpecArgs =TZipMaster_FSpecArgs_Property
+3 Handle =TZipMaster_Handle_Property
+3 Message =TZipMaster_Message_Property
+3 Password =TZipMaster_Password_Property
+3 SFXCaption =TZipMaster_SFXCaption_Property
+3 SFXCommandLine =TZipMaster_SFXCommandLine_Property
+3 SFXDefaultDir =TZipMaster_SFXDefaultDir_Property
+3 SFXOptions =TZipMaster_SFXOptions_Property
+3 SFXOverWriteMode =TZipMaster_SFXOverWriteMode_Property
+3 SFXPath =TZipMaster_SFXPath_Property
+3 SuccessCnt =TZipMaster_SuccessCnt_Property
+3 Trace =TZipMaster_Trace_Property
+3 UnzBusy =TZipMaster_UnzBusy_Property
+3 UnzVers =TZipMaster_UnzVers_Property
+3 Verbose =TZipMaster_Verbose_Property
+3 ZipBusy =TZipMaster_ZipBusy_Property
+3 ZipContents =TZipMaster_ZipContents_Property
+3 ZipFilename =TZipMaster_ZipFilename_Property
+3 ZipVers =TZipMaster_ZipVers_Property
+2 Methods
+3 Methods=Methods
+3 Add =TZipMaster_Add_Method
+3 ConvertSFX =TZipMaster_ConvertSFX_Method
+3 ConvertZIP =TZipMaster_ConvertZIP_Method
+3 CopyFile =TZipMaster_CopyFile_Method
+3 Delete =TZipMaster_Delete_Method
+3 Extract =TZipMaster_Extract_Method
+3 GetAddPassword =TZipMaster_GetAddPassword_Method
+3 GetExtrPassword =TZipMaster_GetExtrPassword_Method
+3 List =TZipMaster_List_Method
+3 Load_Unz_Dll =TZipMaster_Load_Unz_Dll_Method
+3 Load_Zip_Dll =TZipMaster_Load_Zip_Dll_Method
+3 Unload_Unz_Dll =TZipMaster_Unload_Unz_Dll_Method
+3 Unload_Zip_Dll =TZipMaster_Unload_Zip_Dll_Method
+2 Events
+3 Events=Events
+3 OnDirUpdate =TZipMaster_OnDirUpdate_Event
+3 OnMessage =TZipMaster_OnMessage_Event
+3 OnProgress =TZipMaster_OnProgress_Event

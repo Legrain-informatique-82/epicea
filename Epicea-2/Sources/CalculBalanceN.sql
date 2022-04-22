@@ -1,0 +1,1 @@
+select compte,sum(credit) as TotC, sum(debit) as TotD, (sum(credit)-sum(debit)) as Total from ecriture.db group by compte

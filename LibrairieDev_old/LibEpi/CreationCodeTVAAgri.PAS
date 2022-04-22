@@ -1,0 +1,90 @@
+unit CreationCodeTVAAgri;
+
+interface
+
+uses SysUtils,Windows, Classes, Graphics, Forms, Controls,
+     StdCtrls, DBTables, DB, ExtCtrls, Dialogs;
+
+procedure CreateTableCodeTvaAgri(Path : String);
+
+implementation
+
+uses LibSQL;
+
+procedure CreateTableCodeTvaAgri(Path : String);
+var
+  table: TTable;
+  DBAux:TDataBase;
+Begin
+  Try
+      DBAux:=TDataBase.Create(Application);
+      DBAux.DatabaseName:='Tmp';
+      DBAux.Params.Add('PATH=' + Path);
+      DBAux.Params.Add('ENABLE BCD=FALSE');
+      DBAux.Params.Add('DEFAULT DRIVER=PARADOX');
+      DBAux.TransIsolation:=tiDirtyRead;
+      DBAux.DriverName:='Standard';
+      DBAux.open;
+      table := TTable.Create(Application);
+      Try
+        with table do
+          begin
+            DataBaseName := 'Tmp';
+            TableName := 'TvaCode.DB';
+            open;
+            if RecordCount = 0 then
+            begin
+             AppendRecord(['A1','A','Achat biens et services','44566',5.5,20,'LGR','01/01/1980 00:00:00','']);
+             AppendRecord(['I1','I','Achat Immobilisations','44562',20,20,'LGR','01/01/1980 00:00:00','']);
+             AppendRecord(['C1','C','Acquisition UE','',0,0,'LGR','01/01/1980 00:00:00','']);
+             AppendRecord(['E1','E','Exportation','',0,0,'LGR','01/01/1980 00:00:00','']);
+             AppendRecord(['L1','L','Livraison UE','',0,0,'LGR','01/01/1980 00:00:00','']);
+             AppendRecord(['N1','N','Vente non Imposable','',0,0,'LGR','01/01/1980 00:00:00','']);
+             AppendRecord(['F1','F','Franchise de tva','',0,0,'LGR','01/01/1980 00:00:00','']);
+             AppendRecord(['M1','M','Tva Autoliquidée sur les importations','',0,0,'LGR','01/01/1980 00:00:00','']);
+             AppendRecord(['T1','T','SANS TVA (Sinistre, assurance)','',0,0,'LGR','01/01/1980 00:00:00','']);
+
+             AppendRecord(['V3','V','Ventes à 5.5','445713',5.5,5.5,'LGR','01/01/1980 00:00:00','']);
+             AppendRecord(['V4','V','Ventes à 19.6','445714',19.6,19.6,'LGR','01/01/1980 00:00:00','']);
+             AppendRecord(['V5','V','Ventes à 7','445715',7,7,'LGR','01/01/1980 00:00:00','']);
+             AppendRecord(['V8','V','Ventes sur productions immobilisées','445718',19.6,19.6,'LGR','01/01/1980 00:00:00','']);
+             AppendRecord(['V9','V','Ventes d''immobilisations','445719',19.6,19.6,'LGR','01/01/1980 00:00:00','']);
+
+             AppendRecord(['VA','V','Ventes à 10','4457111',10,10,'LGR','01/01/1980 00:00:00','']);
+             AppendRecord(['VB','V','Ventes à 20','4457112',20,20,'LGR','01/01/1980 00:00:00','']);
+             AppendRecord(['VC','V','Ventes sur productions immobilisées à 20','4457113',20,20,'LGR','01/01/1980 00:00:00','']);
+             AppendRecord(['VD','V','Ventes d''immobilisations à 20','4457114',20,20,'LGR','01/01/1980 00:00:00','']);
+            flushBuffers;
+            end
+            else
+            begin
+              if(GrLocate(table,'TvaCode',['F1'])=false)then
+              begin
+                AppendRecord(['F1','F','Franchise de tva','',0,0,'LGR','01/01/1980 00:00:00','']);
+                flushBuffers;
+              end;
+              if(GrLocate(table,'TvaCode',['M1'])=false)then
+              begin
+                AppendRecord(['M1','M','Tva Autoliquidée sur les importations','',0,0,'LGR','01/01/1980 00:00:00','']);
+                flushBuffers;
+              end;
+              if(GrLocate(table,'TvaCode',['T1'])=false)then
+              begin
+                AppendRecord(['T1','T','SANS TVA (Sinistre, assurance)','',0,0,'LGR','01/01/1980 00:00:00','']);
+                flushBuffers;
+              end;
+            end;
+          end
+      except
+        Application.MessageBox('Erreur lors de l''initialisation des Codes TVA Agricole','Attention',MB_OK+MB_ICONSTOP);
+      end;
+  except
+        Application.MessageBox('Erreur lors de l''initialisation des Codes TVA Agricole','Attention',MB_OK+MB_ICONSTOP);
+  end;
+Table.Close;
+Table.Free;
+DBAux.Close;
+DBAux.Free;
+End;
+
+end.

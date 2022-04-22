@@ -1,0 +1,58 @@
+Créer un générateur de code qui créer ou modifie, à partir d'une table
+ - Un type reprenant la structure de la table
+   avec le nom : TInfos<NomTable>
+   Chaque item sera le nom d'un champ
+
+   TInfos<NomTable> =record
+    <Champ1> : <TypeChamp>
+    .......
+    .......
+    ResultInfos:Boolean; -->> Ce champ est destiné à indiquer si la recherche à abouti ou non
+                             Il est à false par défaut avec Init_<NomType>
+    end;
+
+ - Une procedure d'ititialisation du type
+
+   procedure Intitialise_<NomType>(var <VarType>:<NomType>);
+
+ - Une procedure d'affection de <NomType> avec un Dataset
+
+   procedure Remplit_<NomType>(DataSet:TDataSet;Var <VarType>:<NomType>);
+
+ - Une Fonction de recherche par table qui retourne une var de type <NomType>
+
+   Function Infos_<NomType>(DataSet:TDataSet;ChampRech:String;const ValeurRech:array of variant):<NomType>;
+   begin
+    Intitialise_<NomType>(result);
+    result.ResultInfos:=GrLocate(DataSet,ChampRech,ValeurRech);
+    if result.ResultInfos then
+     Remplit_<NomType>(DataSet,result);
+   end;
+
+ GrLocate Existe déjà dans LibSQL
+
+ Function GrLocate(DataSet:TDataSet;Champ:string;const Valeur:array of variant):Boolean;
+ begin
+  result:=DataSet.locate(Champ,Valeur,[]);
+ end;
+
+ - une fonction Initialisation d'un champ avec les valeurs par défaut qui se trouve
+  dans la procedure Intitialise_<NomType>
+
+ Function <NomTable>_Val_After_Insert(DataSet:TDataSet):<NomType>
+ begin
+    Initialise_<NomType>(result);
+    InitChampAfterInsert([Result.<Champ1>
+                          ,Result.<Champ2>
+                          ,Result.<Champ3>
+                          ],DataSet);
+ end;
+
+ function PlanCpt_Val_After_Insert:TInfosJournal;
+Begin
+//
+End;
+
+
+
+

@@ -1,0 +1,9 @@
+[Repartition_Bic]
+Filetype=Delimited
+Field1=Compte,Char,08,00,00
+Field2=Intitule,Char,100,00,08
+Field3=SFD,Char,20,00,108
+Field4=SFC,Char,20,00,128
+CharSet=DBWINUS0
+Delimiter="
+Separator=,

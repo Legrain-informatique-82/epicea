@@ -1,0 +1,11 @@
+A Faire :
+envoyer un mail à phil avec :
+- nouveau numéro de version
+- liste des bugs résolus
+
+Prévoir une version Démo à mettre en ligne 
+sur le site du Grain
+
+401 : dettes 4829.12
+411 : creances 14079.58
+

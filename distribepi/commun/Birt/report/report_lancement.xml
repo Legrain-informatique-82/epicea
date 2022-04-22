@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<tableauDeBord>
+  <pages>
+    <page>
+      <tresorerie>
+        <solde-comptes>
+          <ligne>
+            <comptes>5121</comptes>
+            <libelle>LCL</libelle>
+            <Rapprochement>100.00</Rapprochement>
+            <balance>100.00</balance>
+          </ligne>
+          <ligne>
+            <comptes>5121</comptes>
+            <libelle>LCL</libelle>
+            <Rapprochement>100.00</Rapprochement>
+            <balance>100.00</balance>
+          </ligne>
+        </solde-comptes>
+      </tresorerie>
+    </page>
+  </pages>
+</tableauDeBord>

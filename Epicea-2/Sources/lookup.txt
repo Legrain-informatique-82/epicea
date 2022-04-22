@@ -1,0 +1,413 @@
+object DMAnalytiques: TDMAnalytiques
+
+    object TaEcriture_AnalDatePiece: TDateField
+      FieldKind = fkLookup
+      FieldName = 'DatePiece'
+      LookupDataSet = DMPieces.TaPieceConsultation
+
+    object TA_Compte_Atelier_LkCode_Atelier: TStringField
+      FieldKind = fkLookup
+      FieldName = 'Code_Atelier'
+      LookupDataSet = TA_Atelier_Lk
+
+    object QuMontantEcrParAtelierSumRation: TIntegerField
+      FieldKind = fkLookup
+      FieldName = 'SumRation'
+      LookupDataSet = QuSumRatio
+
+
+    object QuMontantEcrParAtelier_EditionSumRation: TIntegerField
+      FieldKind = fkLookup
+      FieldName = 'SumRation'
+      LookupDataSet = QuSumRatio
+
+//////////////////////////////
+object DMEcritures: TDMEcritures
+
+
+    object TaEcritureBalReference: TStringField
+      FieldKind = fkLookup
+      FieldName = 'Reference'
+      LookupDataSet = DMPieces.TaPieceBal
+
+
+    object TaEcritureBalTReference: TStringField
+      FieldKind = fkLookup
+      FieldName = 'Reference'
+      LookupDataSet = DMPieces.TaPieceBal
+
+
+//////////////////////////////
+object DMTiers: TDMTiers
+
+    object TaTiersBalDebit_Deb_Bal_Tiers: TCurrencyField
+      FieldKind = fkLookup
+      FieldName = 'Debit_Deb_Bal_Tiers'
+      LookupDataSet = DMBalance.TaBalanceT
+
+
+    object TaTiersBalCredit_Deb_Bal_Tiers: TCurrencyField
+      FieldKind = fkLookup
+      FieldName = 'Credit_Deb_Bal_Tiers'
+      LookupDataSet = DMBalance.TaBalanceT
+
+
+    object QuTiers_Compte_PointableType: TStringField
+      FieldKind = fkLookup
+      FieldName = 'Type'
+      LookupDataSet = TaTierslookup
+
+//////////////////////////////
+object DMTmTVA: TDMTmTVA
+
+    object QuMaitre_ParcoursEcritureTypeEMontantTiers: TCurrencyField
+      FieldKind = fkLookup
+      FieldName = 'MontantTiers'
+      LookupDataSet = TaResteDC_Tva
+
+    object QuMaitre_ParcoursEcritureTypeEMontantPointe_Tiers: TCurrencyField
+      FieldKind = fkLookup
+      FieldName = 'MontantPointe_Tiers'
+      LookupDataSet = TaResteDC_Tva
+
+
+    object QuMaitre_ParcoursEcritureTypeEPart_Declaree: TFloatField
+      FieldKind = fkLookup
+      FieldName = 'Part_Declaree'
+      LookupDataSet = QuSumPartDeclaree
+
+
+    object QuMaitre_ParcoursEcritureTypeEMontantDeclaree: TCurrencyField
+      FieldKind = fkLookup
+      FieldName = 'MontantDeclaree'
+      LookupDataSet = QuSumPartDeclaree
+
+
+    object QuMaitre_ParcoursEcritureTypeESensTiers: TBooleanField
+      FieldKind = fkLookup
+      FieldName = 'SensTiers'
+      LookupDataSet = TaResteDC_Tva
+
+
+    object QuMaitre_ParcoursEcritureTypeETvaDate: TDateField
+      FieldKind = fkLookup
+      FieldName = 'TvaDate'
+      LookupDataSet = TaResteDC_Tva
+
+
+    object QuDec_TvaID_Contrepartie: TIntegerField
+      FieldKind = fkLookup
+      FieldName = 'ID_Contrepartie'
+      LookupDataSet = TaEcritureContrepartie
+
+
+    object QuSumParCode_Dec_TvaHt_Declare_Debit_OD: TCurrencyField
+      FieldKind = fkLookup
+      FieldName = 'Ht_Declare_Debit_OD'
+      LookupDataSet = QuSumParCode_Dec_Tva_SurOD
+
+
+    object QuSumParCode_Dec_TvaHt_Declare_Credit_OD: TCurrencyField
+      FieldKind = fkLookup
+      FieldName = 'Ht_Declare_Credit_OD'
+      LookupDataSet = QuSumParCode_Dec_Tva_SurOD
+
+
+    object QuSumParCode_Dec_TvaHT_Declare_OD: TCurrencyField
+      FieldKind = fkLookup
+      FieldName = 'HT_Declare_OD'
+      LookupDataSet = QuSumParCode_Dec_Tva_SurOD
+
+
+    object QuTVAEditionID_Contrepartie: TIntegerField
+      FieldKind = fkLookup
+      FieldName = 'ID_Contrepartie'
+      LookupDataSet = TaEcritureContrepartie
+
+
+//////////////////////////////
+object DMImport: TDMImport
+
+
+    object TaResultImportLibelle: TStringField
+      FieldKind = fkLookup
+      FieldName = 'Libelle'
+      LookupDataSet = DMDiocEtatBal.TaBalanceCalc
+
+
+    object TaResultImportDebit: TCurrencyField
+      FieldKind = fkLookup
+      FieldName = 'SoldeDebitReport'
+      LookupDataSet = DMDiocEtatBal.TaBalanceCalc
+
+
+    object TaResultImportCredit: TCurrencyField
+      FieldKind = fkLookup
+      FieldName = 'SoldeCreditReport'
+      LookupDataSet = DMDiocEtatBal.TaBalanceCalc
+
+
+//////////////////////////////
+object DataModuleImmos: TDataModuleImmos
+
+
+    object QuRecupImmosSurCptValue: TCurrencyField
+      FieldKind = fkLookup
+      FieldName = 'PlusValue'
+      LookupDataSet = tbPMV
+
+
+//////////////////////////////
+object DMImmo_Clo: TDMImmo_Clo
+
+
+
+    object QuVerifImmoAmortissableAvantClot_avecCessionDerogDebit: TCurrencyField
+      FieldKind = fkLookup
+      FieldName = 'DerogDebit'
+      LookupDataSet = QuAmortDerogDebit_SiDerog
+
+    object QuVerifImmoAmortissableAvantClot_avecCessionDerogCredit: TCurrencyField
+      FieldKind = fkLookup
+      FieldName = 'DerogCredit'
+      LookupDataSet = QuAmortDerogCredit_SiDerog
+
+
+    object QuVerifImmoAmortissableAvantClot_avecCessionDerogDebit_Non: TCurrencyField
+      FieldKind = fkLookup
+      FieldName = 'DerogDebit_Non'
+      LookupDataSet = QuAmortDerogDebit_SiNonDerog
+
+
+    object QuVerifImmoAmortissableAvantClot_avecCessionDerogCredit_Non: TCurrencyField
+      FieldKind = fkLookup
+      FieldName = 'DerogCredit_Non'
+      LookupDataSet = QuAmortDerogCredit_SiNonDerog
+
+
+//////////////////////////////
+object DMEmprunts: TDMEmprunts
+
+
+    object QuEmprunt_EditionMouvementFrais: TCurrencyField
+      FieldKind = fkLookup
+      FieldName = 'Frais'
+      LookupDataSet = QuCapitalRembourseApresExo
+
+
+    object QuEmprunt_EditionMouvementCapitalRestantAvantExo: TCurrencyField
+      FieldKind = fkLookup
+      FieldName = 'CapitalRestantAvantExo'
+      LookupDataSet = QuCapitalRestantAvantExo
+
+
+    object QuEmprunt_EditionMouvementRembourseAvantExo: TCurrencyField
+      FieldKind = fkLookup
+      FieldName = 'RembourseAvantExo'
+      LookupDataSet = QuCapitalRembourseAvantExo
+ 
+
+    object QuEmprunt_EditionMouvementCapitalRestantApresExo: TCurrencyField
+      FieldKind = fkLookup
+      FieldName = 'CapitalRestantApresExo'
+      LookupDataSet = QuCapitalRestantApresExo
+
+
+    object QuEmprunt_EditionMouvementRembourseApresExo: TCurrencyField
+      FieldKind = fkLookup
+      FieldName = 'RembourseApresExo'
+      LookupDataSet = QuCapitalRembourseApresExo
+
+
+    object QuEmprunt_EditionMouvementDerniereDateEch: TDateField
+      FieldKind = fkLookup
+      FieldName = 'DerniereDateEch'
+      LookupDataSet = QuCapitalRestantApresExo
+
+
+    object QuEmprunt_EditionCapitalRestantAvantExo: TCurrencyField
+      FieldKind = fkLookup
+      FieldName = 'CapitalRestantAvantExo'
+      LookupDataSet = QuCapitalRestantAvantExo
+
+
+    object QuEmprunt_EditionCapitalRestantAvantExoSansEch: TCurrencyField
+      FieldKind = fkLookup
+      FieldName = 'CapitalRestantAvantExoSansEch'
+      LookupDataSet = QuCapitalRestantAvantExoSansEcheance
+
+
+    object QuEmpruntSansEchDansAnneeCapitalRestantAvantExo: TCurrencyField
+      FieldKind = fkLookup
+      FieldName = 'CapitalRestantAvantExo'
+      LookupDataSet = QuCapitalRestantAvantExo
+
+
+    object QuEmpruntSansEchDansAnneeRembourseAvantExo: TCurrencyField
+      FieldKind = fkLookup
+      FieldName = 'RembourseAvantExo'
+      LookupDataSet = QuCapitalRembourseAvantExo
+
+
+
+//////////////////////////////
+object DMDiocEtatBalT: TDMDiocEtatBalT
+
+
+    object TaBalanceaffichTLibTiers: TStringField
+      DisplayWidth = 29
+      FieldKind = fkLookup
+      FieldName = 'LibTiers'
+      LookupDataSet = TaTiers
+
+
+    object TaBalanceaffichTDebit_Base_QueryBase: TCurrencyField
+      DisplayWidth = 23
+      FieldKind = fkLookup
+      FieldName = 'Debit_Base_QueryBase'
+      LookupDataSet = QuEcritureBase
+
+
+    object TaBalanceaffichTCredit_Base_QueryBase: TCurrencyField
+      DisplayWidth = 23
+      FieldKind = fkLookup
+      FieldName = 'Credit_Base_QueryBase'
+      LookupDataSet = QuEcritureBase
+
+
+    object TaBalanceCalcTComptePlanCpt: TStringField
+      DisplayWidth = 29
+      FieldKind = fkLookup
+      FieldName = 'ComptePlanCpt'
+      LookupDataSet = TaPlanCpt
+
+
+    object TaBalanceCalcTDebit_Base_QueryBase: TCurrencyField
+      DisplayWidth = 23
+      FieldKind = fkLookup
+      FieldName = 'Debit_Base_QueryBase'
+      LookupDataSet = QuEcritureBase
+
+
+    object TaBalanceCalcTCredit_Base_QueryBase: TCurrencyField
+      DisplayWidth = 23
+      FieldKind = fkLookup
+      FieldName = 'Credit_Base_QueryBase'
+      LookupDataSet = QuEcritureBase
+
+
+    object TaBalanceCalcTLibTiers: TStringField
+      DisplayWidth = 29
+      FieldKind = fkLookup
+      FieldName = 'LibTiers'
+      LookupDataSet = TaTiers
+
+
+//////////////////////////////
+object DMDiocEtatBal: TDMDiocEtatBal
+
+
+    object TaBalanceaffichComptePlanCpt: TStringField
+      DisplayWidth = 29
+      FieldKind = fkLookup
+      FieldName = 'ComptePlanCpt'
+      LookupDataSet = TaPlanCpt
+
+
+    object TaBalanceaffichDebit_Base_QueryBase: TCurrencyField
+      DisplayWidth = 23
+      FieldKind = fkLookup
+      FieldName = 'Debit_Base_QueryBase'
+      LookupDataSet = QuEcritureBase
+
+
+    object TaBalanceaffichCredit_Base_QueryBase: TCurrencyField
+      DisplayWidth = 23
+      FieldKind = fkLookup
+      FieldName = 'Credit_Base_QueryBase'
+      LookupDataSet = QuEcritureBase
+
+
+    object QuEcritureReportTotQt1Debit: TFloatField
+      FieldKind = fkLookup
+      FieldName = 'TotQt1Debit'
+      LookupDataSet = QuQteDebit
+
+
+    object QuEcritureReportTotQt1Credit: TFloatField
+      FieldKind = fkLookup
+      FieldName = 'TotQt1Credit'
+      LookupDataSet = QuQteCredit
+
+
+    object QuEcritureReportTotQt2Debit: TFloatField
+      FieldKind = fkLookup
+      FieldName = 'TotQt2Debit'
+      LookupDataSet = QuQteDebit
+
+
+    object QuEcritureReportTotQt2Credit: TFloatField
+      FieldKind = fkLookup
+      FieldName = 'TotQt2Credit'
+      LookupDataSet = QuQteCredit
+
+
+    object QuEcritureBaseTotQt1Debit: TFloatField
+      FieldKind = fkLookup
+      FieldName = 'TotQt1Debit'
+      LookupDataSet = QuQteDebit
+
+
+    object QuEcritureBaseTotQt1Credit: TFloatField
+      FieldKind = fkLookup
+      FieldName = 'TotQt1Credit'
+      LookupDataSet = QuQteCredit
+
+
+    object QuEcritureBaseTotQt2Debit: TFloatField
+      FieldKind = fkLookup
+      FieldName = 'TotQt2Debit'
+      LookupDataSet = QuQteDebit
+
+
+    object QuEcritureBaseTotQt2Credit: TFloatField
+      FieldKind = fkLookup
+      FieldName = 'TotQt2Credit'
+      LookupDataSet = QuQteCredit
+
+
+    object TaBalanceCalcComptePlanCpt: TStringField
+      DisplayWidth = 29
+      FieldKind = fkLookup
+      FieldName = 'ComptePlanCpt'
+      LookupDataSet = TaPlanCpt
+
+
+    object TaBalanceCalcDebit_Base_QueryBase: TCurrencyField
+      DisplayWidth = 23
+      FieldKind = fkLookup
+      FieldName = 'Debit_Base_QueryBase'
+      LookupDataSet = QuEcritureBase
+
+
+    object TaBalanceCalcCredit_Base_QueryBase: TCurrencyField
+      DisplayWidth = 23
+      FieldKind = fkLookup
+      FieldName = 'Credit_Base_QueryBase'
+      LookupDataSet = QuEcritureBase
+
+
+    object TaBalanceCalcQt1_Base_QueryBase: TFloatField
+      FieldKind = fkLookup
+      FieldName = 'Qt1_Base_QueryBase'
+      LookupDataSet = QuEcritureBase
+
+
+    object TaBalanceCalcQt2_Base_QueryBase: TFloatField
+      FieldKind = fkLookup
+      FieldName = 'Qt2_Base_QueryBase'
+      LookupDataSet = QuEcritureBase
+
+
+
+//////////////////////////////

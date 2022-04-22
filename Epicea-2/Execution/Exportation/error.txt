@@ -1,0 +1,180 @@
+LGR_TRACE : 06/11/2018;16.33.44;Dossier : ;;1000;PreparationEnregistrementComplet;La pièce B11500191 n'est pas équilibrée, vous ne pouvez pas la créer
+
+LGR_TRACE : 06/11/2018;16.52.11;Dossier : ;;3000;Verif_Liste_Table_Entiere;Problème sur Tiers
+
+LGR_TRACE : 08/11/2018;15.10.16;Dossier : 92524;;0;RecupEcritureSurRecord;Le total de la pièce récupérée  B11500207 n'est pas égal au total calculé
+
+LGR_TRACE : 08/11/2018;15.10.29;Dossier : 92524;;0;RecupPieceEcriture_SurRecords;Le total de la pièce récupérée  B11500207 n'est pas égal au total calculé
+
+LGR_TRACE : 12/11/2018;12.37.53;Dossier : 00640;;5;RecupEcritureSurRecord;Le compte 101 ne peut pas attendre de la Tva.
+
+LGR_TRACE : 12/11/2018;12.37.57;Dossier : 00640;;5;RecupPieceEcriture_SurRecords;Le compte 101 ne peut pas attendre de la Tva.
+
+LGR_TRACE : 12/11/2018;12.37.57;Dossier : 00640;;0;RecupEcritureSurRecord;Le total de la pièce récupérée  FA1800003 n'est pas égal au total calculé
+
+LGR_TRACE : 12/11/2018;12.38.0;Dossier : 00640;;0;RecupPieceEcriture_SurRecords;Le total de la pièce récupérée  FA1800003 n'est pas égal au total calculé
+
+LGR_TRACE : 12/11/2018;12.38.34;Dossier : 00640;;0;RecupEcritureSurRecord;Le total de la pièce récupérée  FA1800001 n'est pas égal au total calculé
+
+LGR_TRACE : 12/11/2018;12.38.38;Dossier : 00640;;0;RecupPieceEcriture_SurRecords;Le total de la pièce récupérée  FA1800001 n'est pas égal au total calculé
+
+LGR_TRACE : 12/11/2018;12.38.38;Dossier : 00640;;0;RecupEcritureSurRecord;Le total de la pièce récupérée  FA1800003 n'est pas égal au total calculé
+
+LGR_TRACE : 12/11/2018;12.38.40;Dossier : 00640;;0;RecupPieceEcriture_SurRecords;Le total de la pièce récupérée  FA1800003 n'est pas égal au total calculé
+
+LGR_TRACE : 13/11/2018;8.54.27;Dossier : 00640;;5;RecupEcritureSurRecord;Le compte  ne peut pas attendre de la Tva.
+
+LGR_TRACE : 13/11/2018;8.54.37;Dossier : 00640;;5;RecupPieceEcriture_SurRecords;Le compte  ne peut pas attendre de la Tva.
+
+LGR_TRACE : 13/11/2018;10.45.41;Dossier : 00640;;5;RecupEcritureSurRecord;Le compte  ne peut pas attendre de la Tva.
+
+LGR_TRACE : 13/11/2018;10.45.46;Dossier : 00640;;5;RecupPieceEcriture_SurRecords;Le compte  ne peut pas attendre de la Tva.
+
+LGR_TRACE : 13/11/2018;10.55.20;Dossier : 00640;;5;RecupEcritureSurRecord;Le compte  ne peut pas attendre de la Tva.
+
+LGR_TRACE : 13/11/2018;10.55.39;Dossier : 00640;;5;RecupPieceEcriture_SurRecords;Le compte  ne peut pas attendre de la Tva.
+
+LGR_TRACE : 13/11/2018;10.58.12;Dossier : 00640;;5;RecupEcritureSurRecord;Le compte  ne peut pas attendre de la Tva.
+
+LGR_TRACE : 13/11/2018;10.58.17;Dossier : 00640;;5;RecupPieceEcriture_SurRecords;Le compte  ne peut pas attendre de la Tva.
+
+LGR_TRACE : 13/11/2018;11.1.23;Dossier : 00640;;0;RecupPieceEcriture_SurRecords;
+
+LGR_TRACE : 13/11/2018;11.4.29;Dossier : 00640;;0;RecupPieceEcriture_SurRecords;
+
+LGR_TRACE : 18/01/2019;10.25.44;Dossier : 00640;;1001;RecupPieceEcriture_SurRecords;Le compte  n'est pas cohérent dans ce contexte.
+La pièce VE1802694 ne peut pas être créée
+
+LGR_TRACE : 18/01/2019;10.25.47;Dossier : 00640;;1001;RecupPieceEcriture_SurRecords;Le compte  n'est pas cohérent dans ce contexte.
+La pièce VE1802695 ne peut pas être créée
+
+LGR_TRACE : 18/01/2019;10.25.54;Dossier : 00640;;1001;RecupPieceEcriture_SurRecords;Le compte  n'est pas cohérent dans ce contexte.
+La pièce VE1804502 ne peut pas être créée
+
+LGR_TRACE : 18/01/2019;10.25.56;Dossier : 00640;;1001;RecupPieceEcriture_SurRecords;Le compte  n'est pas cohérent dans ce contexte.
+La pièce FT1801061 ne peut pas être créée
+
+LGR_TRACE : 18/01/2019;10.25.58;Dossier : 00640;;1001;RecupPieceEcriture_SurRecords;Le compte  n'est pas cohérent dans ce contexte.
+La pièce FT1802061 ne peut pas être créée
+
+LGR_TRACE : 06/05/2019;9.3.34;Dossier : ETSPE;;21000;coherenceImmosReport;Le contrôle [N° 21000]
+Des erreurs ont été détectées dans les amortissements cumulés de vos immobilisations à l'ouverture de l'exercice 2018.
+Elles rendent incohérents les amortissements de cet exercice.
+Pour corriger ces erreurs :
+
+------------------------------------------------------------------------------------------------------------
+Merci d'appeler le Service de Maintenance : 05 63 30 31 66.
+------------------------------------------------------------------------------------------------------------
+
+
+LGR_TRACE : 06/05/2019;9.13.2;Dossier : ETSPE;;21000;coherenceImmosReport;Le contrôle [N° 21000]
+Des erreurs ont été détectées dans les amortissements cumulés de vos immobilisations à l'ouverture de l'exercice 2018.
+Elles rendent incohérents les amortissements de cet exercice.
+Pour corriger ces erreurs :
+
+------------------------------------------------------------------------------------------------------------
+Merci d'appeler le Service de Maintenance : 05 63 30 31 66.
+------------------------------------------------------------------------------------------------------------
+
+
+LGR_TRACE : 06/01/2020;12.59.1;Dossier : ;;1001;Fichier des pièces;Le fichier des pièces est vide
+
+LGR_TRACE : 06/01/2020;14.43.47;Dossier : ;;1001;Fichier des pièces;Le fichier des pièces est vide
+
+LGR_TRACE : 06/01/2020;15.15.31;Dossier : ;;1001;Fichier des pièces;Le fichier des pièces est vide
+
+LGR_TRACE : 04/01/2021;11.3.19;Dossier : SCEA;;0;CorrectionIdEcriture;Le contrôle [N° 0] du dossier ne s'est pas déroulé correctement !
+
+------------------------------------------------------------------------------------------------------------
+Merci d'appeler le Service de Maintenance : 05 63 30 31 66.
+------------------------------------------------------------------------------------------------------------
+
+
+LGR_TRACE : 04/01/2021;11.3.53;Dossier : SCEA;;0;CorrectionIdEcriture;Le contrôle [N° 0] du dossier ne s'est pas déroulé correctement !
+
+------------------------------------------------------------------------------------------------------------
+Merci d'appeler le Service de Maintenance : 05 63 30 31 66.
+------------------------------------------------------------------------------------------------------------
+
+
+LGR_TRACE : 04/01/2021;11.5.43;Dossier : SCEA;;0;CorrectionIdEcriture;Le contrôle [N° 0] du dossier ne s'est pas déroulé correctement !
+
+------------------------------------------------------------------------------------------------------------
+Merci d'appeler le Service de Maintenance : 05 63 30 31 66.
+------------------------------------------------------------------------------------------------------------
+
+
+LGR_TRACE : 04/01/2021;11.7.2;Dossier : SCEA;;0;CorrectionIdEcriture;Le contrôle [N° 0] du dossier ne s'est pas déroulé correctement !
+
+------------------------------------------------------------------------------------------------------------
+Merci d'appeler le Service de Maintenance : 05 63 30 31 66.
+------------------------------------------------------------------------------------------------------------
+
+
+LGR_TRACE : 04/01/2021;11.8.14;Dossier : SCEA;;0;CorrectionIdEcriture;Le contrôle [N° 0] du dossier ne s'est pas déroulé correctement !
+
+------------------------------------------------------------------------------------------------------------
+Merci d'appeler le Service de Maintenance : 05 63 30 31 66.
+------------------------------------------------------------------------------------------------------------
+
+
+LGR_TRACE : 04/01/2021;11.17.31;Dossier : DEC;;0;CorrectionIdEcriture;Le contrôle [N° 0] du dossier ne s'est pas déroulé correctement !
+
+------------------------------------------------------------------------------------------------------------
+Merci d'appeler le Service de Maintenance : 05 63 30 31 66.
+------------------------------------------------------------------------------------------------------------
+
+
+LGR_TRACE : 04/01/2021;11.18.19;Dossier : DEC;;0;CorrectionIdEcriture;Le contrôle [N° 0] du dossier ne s'est pas déroulé correctement !
+
+------------------------------------------------------------------------------------------------------------
+Merci d'appeler le Service de Maintenance : 05 63 30 31 66.
+------------------------------------------------------------------------------------------------------------
+
+
+LGR_TRACE : 04/10/2021;15.49.12;Dossier : ALBER;;21000;coherenceImmosReport;Le contrôle [N° 21000]
+Des erreurs ont été détectées dans les amortissements cumulés de vos immobilisations à l'ouverture de l'exercice 2021.
+Elles rendent incohérents les amortissements de cet exercice.
+Pour corriger ces erreurs :
+
+------------------------------------------------------------------------------------------------------------
+Merci d'appeler le Service de Maintenance : 05 63 30 31 66.
+------------------------------------------------------------------------------------------------------------
+
+
+LGR_TRACE : 08/10/2021;12.39.29;Dossier : DUTOUR;;4000;CorrectionDesPieces;La pièce : B11700100 n'a aucune écriture.
+
+LGR_TRACE : 08/10/2021;12.39.38;Dossier : DUTOUR;;4000;CorrectionDesPieces;Le contrôle [N° 4000] du dossier ne s'est pas déroulé correctement !
+
+------------------------------------------------------------------------------------------------------------
+Merci d'appeler le Service de Maintenance : 05 63 30 31 66.
+------------------------------------------------------------------------------------------------------------
+
+
+LGR_TRACE : 08/10/2021;12.46.36;Dossier : DUTOUR;;4000;CorrectionDesPieces;La pièce : B11700100 n'a aucune écriture.
+
+LGR_TRACE : 08/10/2021;12.47.3;Dossier : DUTOUR;;4000;CorrectionDesPieces;Le contrôle [N° 4000] du dossier ne s'est pas déroulé correctement !
+
+------------------------------------------------------------------------------------------------------------
+Merci d'appeler le Service de Maintenance : 05 63 30 31 66.
+------------------------------------------------------------------------------------------------------------
+
+
+LGR_TRACE : 08/10/2021;14.37.36;Dossier : DUTOUR;;10000;VerifCoherence_HTVA;
+
+LGR_TRACE : 08/10/2021;14.37.39;Dossier : DUTOUR;;10000;VerifCoherence_HTVA;Le contrôle [N° 10000] du dossier ne s'est pas déroulé correctement !
+
+------------------------------------------------------------------------------------------------------------
+Merci d'appeler le Service de Maintenance : 05 63 30 31 66.
+------------------------------------------------------------------------------------------------------------
+
+
+LGR_TRACE : 28/02/2022;10.23.17;Dossier : DUTOUR;;4000;CorrectionDesPieces;La pièce : B11700100 n'a aucune écriture.
+
+LGR_TRACE : 28/02/2022;10.30.12;Dossier : DUTOUR;;4000;CorrectionDesPieces;Le contrôle [N° 4000] du dossier ne s'est pas déroulé correctement !
+
+------------------------------------------------------------------------------------------------------------
+Merci d'appeler le Service de Maintenance : 05 63 30 31 66.
+------------------------------------------------------------------------------------------------------------
+
+

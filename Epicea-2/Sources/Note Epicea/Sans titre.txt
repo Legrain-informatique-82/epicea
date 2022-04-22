@@ -1,0 +1,8 @@
+Table H_Tva
+
+Cas particuliers :
+En plus d'inscrire l'historique des lignes déclarées, on vient inscrire dans cette table les lignes 
+de hors taxes des dettes et créances contenant de la tva sur débit non exigible (c'est à dire les lignes dont la tva 
+a déjà été déclarée avant l'ouverture, type tva D dont la date de livraison est antérieure à la date d'ouverture)
+ces lignes sont enregistrée sous un (id_declaration = 0) ce qui permet au moment de la déclaration de tva de les différencier et de ne pas les récupérer.
+Ces lignes servent aussi à mémoriser la part de tva d'une ligne qui n'est pas mis à jour dans la balance puis que pas exigible.

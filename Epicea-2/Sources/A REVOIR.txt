@@ -1,0 +1,33 @@
+//////////////////
+Dans SaisieP
+*********
+
+vérif de l'EditCompte, vérifier si le compte est pointable.
+info dans DmPlan paramètre du compte
+
+
+/////////////////
+revoir la vérification des ID et Ref dans enregistrement complet
+
+/////////////////
+Crée une table des pièces supprimer pour récupérer les Références et éventuellement
+restaurer une pièce supprimée. à revoir sur le principe, car si on récupère une référence
+on ne peut plus restaurer la pièce par la suite avec cette même référence !!!!!
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+Dans SaisieReglement
+*********
+revoir création de la liste des pointages dans procedure "PrepaAffichageSurOption"
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+Revoir aideTvaExiste
+Renvoie une infos même si le code n'est pas cohérent
+sur bouton annuler ou fermer avec la croix
+
+
+
+

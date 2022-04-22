@@ -1,0 +1,49 @@
+Changements dans version pour Décembre 2007
+
+- atelier sauvegardée à la clôture
+- Prise en charge de la date d'échéance (dans la relance des tiers, dans les pièces et dans les éditions avec échéance)
+- rajout des résultats (entre comptes 6 et 7 avec affichage positif ou négatif)
+- Amélioration de l'écran de recherche des pièces
+   rajout des totaux
+   possibilité d'imprimer une selection avec les totaux
+   Visualisation des pièces, réglement ou détail des pointages ont été rajouté
+   Réinitialisation de l'écran
+   recherche par compte ou tiers, date ou référence
+   
+- Dans bcps d'écran, rajout de la calculatrice et dans certains, affectation du montant dans la zone selectionnée
+  saisie pièces
+  saisie réglement
+  écran ouverture et clôture, immos, emprunt... (à partir du moment ou ils sont
+       déjà en modification)
+       
+- Amortissements sur 5 ans : calcul et affichage simplifié + rajout d'une édition (par compte avec total global). (calcul plus rapide)   
+
+- Ecran de selection (compte, tiers, atelier ou activité) pour la plupart des editions
+
+- Dans les éditions de l'analytique :
+  Edition par activité ou par atelier avec possibilité de selection d'un ou plusieurs ateliers ou activité
+  rajout des libellés de compte, des libellés d'activité et d'atelier
+   
+- Rajout d'une edition de la balance d'ouverture ainsi que celle des charges et produits de l'année antérieur
+
+- dans Saisie des pièces, reprise du dernier compte saisi dans le corps par la touche *
+- Rajout d'une édition de synthèse des journaux mois par mois avec nombre de pièces et d'écritures par mois + totaux globaux avec aussi nombres de pièces et d'écritures totale
+
+- Possibilité d'importation de pièces nulles si au moins 1 ligne dans le corps n'est pas nulle
+
+- Rajout d'une édition de synthèse des +ou- values fiscales et comptables, triéé par compte
+  ainsi qu'une édition (synthèse) regroupée par comptes à 3 chiffres
+  
+- Edition concernant des tiers, possibilité de selection des tiers par leur compte ou par leur type
+
+- Rajout exportation Grand livre et grand livre des tiers en format texte
+  grand livre analytique
+  
+- modification du libellé d'une pièce à partir de l'écran de visualisation d'une pièce (Valider la modification avant de sortir)    
+
+- Dans Edition du plan comptable, possibilité de selectionner que certain compte. la selection tient compte du filtrage déjà effectué dans l'écran
+- dans Edition du plan auxiliaire, possibilité de selectionner certain tiers
+
+- Prise en compte dans la gestion des emprunts d'un différé en mois au lieu d'un en année.
+
+- Edition des trames

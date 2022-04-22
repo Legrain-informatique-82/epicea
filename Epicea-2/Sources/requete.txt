@@ -1,0 +1,272 @@
+select distinct Libelle from Piece.DB where Libelle <>'';
+
+
+///////////////////
+Requete pour calculer le reste à pointer sur une écriture à partir d'une
+ID Piece:
+
+select Piece.ID,((ecriture.CreditSaisie)-sum(pointage.montant))as reste_Credit,
+((ecriture.DebitSaisie)-sum(pointage.montant))as reste_Debit
+from Piece,ecriture,pointage where piece.ID=ecriture.ID_Piece
+and ((ecriture.ID=pointage.ID_Credit)or(ecriture.ID=pointage.ID_Debit))
+and piece.ID=1 and ecriture.Compte='4010'
+group by Piece.ID;
+
+
+/////////////////
+Requete pour calculer le reste à pointer sur une écriture à partir d'une
+ID Ecriture:
+Si paramètre filtre=true, on calcul le reste sur tous les pointages - celui de
+la pièce appelante
+
+select ecriture.ID,((ecriture.CreditSaisie)-sum(pointage.montant))as reste_Credit,
+((ecriture.DebitSaisie)-sum(pointage.montant))as reste_Debit
+from ecriture,pointage where ((ecriture.ID=pointage.ID_Credit)or
+(ecriture.ID=pointage.ID_Debit))
+and((pointage.ID_Credit<>2)and(pointage.ID_Debit<>2))
+and ecriture.ID=4 and ecriture.Compte='4010'
+group by ecriture.ID;
+
+
+////////////////
+Requete pour récupérer tous les restes des écritures non entièrement pointées
+d'un tiers donné:
+
+select Piece.ID,((ecriture.CreditSaisie)-sum(pointage.montant))as reste_Credit,
+((ecriture.DebitSaisie)-sum(pointage.montant))as reste_Debit
+from Piece,ecriture,pointage where piece.ID=ecriture.ID_Piece
+and ((ecriture.ID=pointage.ID_Credit)or(ecriture.ID=pointage.ID_Debit))
+and ecriture.compte='4010'
+group by Piece.ID
+having ((((ecriture.CreditSaisie)-sum(pointage.montant))<>0)or
+(((ecriture.DebitSaisie)-sum(pointage.montant))<>0));
+
+
+
+//////////////////
+Requete pour filtrer toutes les pièces de réglement du meme sens que
+que le paramètre passé.
+
+******* si la pièce appelante est au débit ********
+Select Distinct Piece.reference,piece.compte,Piece.libelle
+from Piece,Ecriture
+where Piece.journal='4'
+and piece.ID in (select ID_Piece from ecriture where tiers='+TOTO')
+and piece.compte=ecriture.compte and ecriture.DebitSaisie<>0;
+
+
+******* si la pièce appelante est au Crédit ********
+Select Distinct Piece.reference,piece.compte,Piece.libelle
+from Piece,Ecriture
+where Piece.journal='4'
+and piece.ID in (select ID_Piece from ecriture where tiers='+TOTO')
+and piece.compte=ecriture.compte and ecriture.CreditSaisie<>0;
+
+///////////////////
+Requete pour récupérer les pièces qui sont pointés en partie ou
+totalement avec une pièce donnée, dans le même sens que l'écriture
+tiers de la pièce donnée
+
+******* si la pièce appelante est au Crédit ********
+select Piece.Reference,Piece.Libelle,Piece.Compte
+from Piece,ecriture,pointage where piece.ID=ecriture.ID_Piece
+and ecriture.ID=pointage.ID_Credit
+and piece.ID in (2) and ecriture.tiers='+TOTO'
+group by Piece.Reference,Piece.Libelle,Piece.Compte;
+
+
+
+******* si la pièce appelante est au Débit ********
+select Piece.Reference,Piece.Libelle,Piece.Compte
+from Piece,ecriture,pointage where piece.ID=ecriture.ID_Piece
+and ecriture.ID=pointage.ID_Debit
+and piece.ID in (2) and ecriture.tiers='+TOTO'
+group by Piece.Reference,Piece.Libelle,Piece.Compte;
+
+
+/////////////////////////////////////////////////
+requete pour récupérer les ID Ecriture des lignes pointées
+avec une pièce et dont les pieces comportent des lignes avec de la tva
+du type " E "
+
+select ecriture.ID 
+from ecriture,pointage
+where ecriture.ID=pointage.ID_Credit
+and pointage.ID_Debit =23
+and pointage.ID_Credit in (select distinct Ecriture.ID from
+Ecriture Where ecriture.tiers is null and ecriture.compte='4010'
+and ecriture.ID_Piece in (select ecriture.ID_Piece from ecriture
+where ecriture.TvaType='E'))
+
+
+
+
+//////////////////////////////
+requete pour récupérer les pointages d'une piece
+
+select Pointage.id from piece,Ecriture,pointage
+where ((piece.ID=ecriture.ID_Piece) and (piece.reference='AC0000001')
+and((ecriture.id=pointage.ID_Debit) or (ecriture.id=Pointage.ID_Credit)))
+
+
+///////////////////////////////
+******************************
+Requete pour récupérer les lignes d'un tiers donné qui ne sont pas ou partiellement pointées
+******************************************
+***************************
+
+Select
+    E.Id,P."Date",P.Reference,E.DebitSaisie,E.CreditSaisie
+From
+   Piece P,ResteDC R, Pointage Po2
+   Join Ecriture E On (P.Id = E.Id_Piece)
+Where
+   E.Compte='4010'
+
+   And
+Exists (Select R1.Id_Ecriture from ResteDC R1
+                    Where R1.Tiers='4010' and R1.Id_Ecriture=E.Id)
+and substring(P.Reference from 1 for 2) ='B1'
+
+union
+
+Select
+    E1.Id,P1."Date",P1.Reference,E1.DebitSaisie,E1.CreditSaisie
+From
+   Piece P1,ResteDC R11,Pointage Po3
+   Join Ecriture E1 On (P1.Id = E1.Id_Piece)
+Where
+   E1.Compte='4010'
+
+And not Exists (Select Po1.Id_Debit from Pointage Po1 where
+                                               (Po1.Id_Debit = E1.Id ))
+And not Exists (Select Po1.Id_Credit from Pointage Po1 where
+                                               (Po1.Id_Credit = E1.Id ))
+
+and substring(P.Reference from 1 for 2) ='B1'
+
+///////////////////////////////////////////////////////
+Requete pour récupérer les lignes à pointer qui sont entièrement pointées
+
+Select
+    P.Journal,E.Id,P."Date",P.Reference,P.Libelle,E.DebitSaisie,E.CreditSaisie
+From
+   Piece P
+   Join Ecriture E On (P.Id = E.Id_Piece)
+Where
+   E.Tiers='+4026'
+   And not Exists (Select R1.Id_Ecriture from
+                            ResteDC R1
+                            join Pointage Po1 on (R1.Id_Ecriture = Po1.Id_Debit or R1.Id_Ecriture = Po1.Id_Credit)
+                            Where R1.Tiers='+4026' and R1.Id_Ecriture=E.Id)
+
+   and
+  (E.Tiers='+4026'
+   and
+  ( Exists(select Po2.Id_Debit from Pointage Po2 where Po2.Id_Debit=E.Id)
+   or  Exists(select Po3.Id_Credit from Pointage Po3 where Po3.Id_Credit=E.Id)))
+
+
+
+///////////////////////////////////////////////////////
+Requete pour récupérer les lignes à pointer qui ne sont pas pointées ou pas entièrement
+
+Select
+    P.Journal,E.Id,P."Date",P.Reference,P.Libelle,E.DebitSaisie,E.CreditSaisie
+From
+   Piece P
+   Join Ecriture E On (P.Id = E.Id_Piece)
+Where
+   E.Tiers='+4026'
+   And  Exists (Select R1.Id_Ecriture from 
+                            ResteDC R1
+                            join Pointage Po1 on (R1.Id_Ecriture = Po1.Id_Debit or R1.Id_Ecriture = Po1.Id_Credit) 
+                            Where R1.Tiers='+4026' and R1.Id_Ecriture=E.Id)
+  
+   or
+  (E.Tiers='+4026' 
+   and 
+  (not Exists(select Po2.Id_Debit from Pointage Po2 where Po2.Id_Debit=E.Id)                
+   and not Exists(select Po3.Id_Credit from Pointage Po3 where Po3.Id_Credit=E.Id)))
+
+
+//////////////////////////////////////////////////////////////////////
+Requete pour récupérer les pièces d'un journal donné qui ne sont pas pointées ou partiellement
+
+select P.Journal,P."Date",P.Reference,P.Libelle,E.* from
+ Ecriture E
+ join Piece P on (E.Id_Piece=P.Id and P.Journal in (select ID from :Dossier:model where id_Journal=4))
+ where
+ E.Tiers='+4026'
+ and
+ P.Reference in
+(Select
+    P.Reference
+From
+   Piece P
+   Join Ecriture E On (P.Id = E.Id_Piece)
+Where
+   E.Tiers='+4026'
+   and E.DebitSaisie<>0
+   And  Exists (Select R1.Id_Ecriture from 
+                            ResteDC R1
+                            join Pointage Po1 on (R1.Id_Ecriture = Po1.Id_Debit or R1.Id_Ecriture = Po1.Id_Credit) 
+                            Where R1.Tiers='+4026' and R1.Id_Ecriture=E.Id )  
+   or
+  (E.Tiers='+4026'  
+   and E.DebitSaisie<>0
+   and 
+  (not Exists(select Po2.Id_Debit from Pointage Po2 where Po2.Id_Debit=E.Id)                
+   and not Exists(select Po3.Id_Credit from Pointage Po3 where Po3.Id_Credit=E.Id))))
+
+
+
+////////////////////////////
+Requete pour récupérer tous les pointages de tous les tiers confondus
+
+Select
+    P.Journal,E.Id,P."Date",P.Reference,P.Libelle,E.DebitSaisie,E.CreditSaisie
+From
+   Piece P
+   Join Ecriture E On (P.Id = E.Id_Piece)
+Where
+( E.tiers is not null or E.compte like('401%')or E.compte like('411%'))
+   And  Exists (Select R1.Id_Ecriture from 
+                            ResteDC R1
+                            join Pointage Po1 on (R1.Id_Ecriture = Po1.Id_Debit or R1.Id_Ecriture = Po1.Id_Credit) 
+                            Where R1.tiers is not null and R1.Id_Ecriture=E.Id )  
+   or  
+  (( E.tiers is not null or E.compte like('401%')or E.compte like('411%') )
+   and
+  (not Exists(select Po2.Id_Debit from Pointage Po2 where Po2.Id_Debit=E.Id)                
+   and not Exists(select Po3.Id_Credit from Pointage Po3 where Po3.Id_Credit=E.Id)))
+
+////////////////////////////
+Requete pour récupérer tous les pointages de tous les tiers confondus en selectionnant
+que ceux des journaux de ventes et d'achats
+
+select P.Journal,P."Date",P.Reference,P.Libelle,E.* from
+ Ecriture E
+ join Piece P on (E.Id_Piece=P.Id and P.Journal in (select ID from :Demo:model where id_Journal in (1,2)))
+ where
+ ( E.tiers is not null or E.compte like('401%')or E.compte like('411%') )
+ and P.Reference in
+(Select
+    P.Reference
+From
+   Piece P
+   Join Ecriture E On (P.Id = E.Id_Piece)
+Where
+(( E.tiers is not null or E.compte like('401%')or E.compte like('411%') ) )
+and Exists (Select R1.Id_Ecriture from 
+                            ResteDC R1
+                            join Pointage Po1 on (R1.Id_Ecriture = Po1.Id_Debit or R1.Id_Ecriture = Po1.Id_Credit) 
+                            Where R1.Tiers is not null and R1.Id_Ecriture=E.Id )  
+   or
+  (( E.tiers is not null or E.compte like('401%')or E.compte like('411%') )
+   and 
+  (not Exists(select Po2.Id_Debit from Pointage Po2 where Po2.Id_Debit=E.Id)                
+   and not Exists(select Po3.Id_Credit from Pointage Po3 where Po3.Id_Credit=E.Id))))
+
+
+

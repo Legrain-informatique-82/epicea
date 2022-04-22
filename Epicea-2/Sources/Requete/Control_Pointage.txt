@@ -1,0 +1,33 @@
+select e.id,sum (Montant)as MontantPointeDebit
+,(select false from ecriture e3 where e3.id_piece=e.id_piece and exists
+(select id_ecriture from h_tva where id_ecriture=e3.id and 
+ID_Declaration<>0 and En_Attente=false and deverrouillable = false))
+from pointage P
+join ecriture e on (e.id =P.id_credit)
+join piece pi on (pi.id=e.id_piece)
+where (id_credit='60000009' )
+and exists(select id from ecriture e2 where e2.tvatype='E' and e2.id_piece=pi.id)
+and (Pointage."TvaDate" between '01/15/2006' and '12/31/2006')
+and id_debit='60000007'
+group by e.id
+having sum(montant)<>0
+union 
+select e.id,sum (Montant)as MontantPointeDebit
+,(select false from ecriture e3 where e3.id_piece=e.id_piece and exists
+(select id_ecriture from h_tva where id_ecriture=e3.id and 
+ID_Declaration<>0 and En_Attente=false and deverrouillable = false)) 
+from pointage P
+join ecriture e on (e.id =P.id_debit)
+join piece pi on (pi.id=e.id_piece)
+where (id_debit='60000007' )
+and exists(select id from ecriture e2 where e2.tvatype='E' and e2.id_piece=pi.id)
+and (Pointage."Date" between '01/15/2006' and '12/31/2006')
+and id_credit='60000009'
+group by e.id
+having sum(montant)<>0
+
+
+//pour vérifier si écriture de la pièce existe dans déclaration tva
+select true from ecriture e3 where e3.id='60000005' and exists
+(select id_ecriture from h_tva where id_ecriture=e3.id and 
+ID_Declaration<>0 and En_Attente=false and deverrouillable = true )

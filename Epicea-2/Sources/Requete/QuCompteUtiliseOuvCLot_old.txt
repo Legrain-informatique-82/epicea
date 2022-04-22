@@ -1,0 +1,19 @@
+select distinct P.compte from 
+ ::Demo::PlanCpt P
+where 
+P.Compte in (select distinct Compte from ChargeAPayer)
+or P.Compte in (select distinct Compte2 from ChargeAPayer)
+or P.Compte in (select compte from ChargesRepartir)
+or P.Compte in (select Compte from DepensesEntreprises)
+or P.Compte in (select Compte2 from DepensesEntreprises)
+or P.Compte in (select compte_emp from Emprunts group by Compte_emp)
+or P.Compte in (select Compte from PCA)
+or P.Compte in (select Compte2 from PCA)
+or P.Compte in (select Compte from Stock)
+or P.Compte in (select Ecr.compte from  ::Demo::ecriture Ecr
+where 
+substring(Ecr.compte from 1 for 1) <> '6'
+and
+substring(Ecr.compte from 1 for 1) <> '7'
+and 
+Ecr."Date" <:DateDebExo)

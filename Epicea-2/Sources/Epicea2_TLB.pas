@@ -1,0 +1,80 @@
+unit Epicea2_TLB;
+
+// ************************************************************************ //
+// AVERTISSEMENT                                                                 
+// -------                                                                    
+// Les types déclarés dans ce fichier ont été générés à partir de données lues 
+// depuis la bibliothèque de types. Si cette dernière (via une autre bibliothèque de types 
+// s'y référant) est explicitement ou indirectement ré-importée, ou la commande "Rafraîchir"  
+// de l'éditeur de bibliothèque de types est activée lors de la modification de la bibliothèque 
+// de types, le contenu de ce fichier sera régénéré et toutes les modifications      
+// manuellement apportées seront perdues.                                     
+// ************************************************************************ //
+
+// PASTLWTR : 1.2
+// Fichier généré le 25/03/2022 14:37:54 depuis la bibliothèque de types ci-dessous.
+
+// ************************************************************************  //
+// Bibl. types : C:\Projet\Epicea-2\Sources\Epicea2.tlb (1)
+// LIBID: {420BB0C8-F16D-11D6-8AF1-00C0268E293C}
+// LCID: 0
+// Fichier d'aide : 
+// Chaîne d'aide : Epicea2 (bibliothèque)
+// DepndLst: 
+//   (1) v1.0 stdole, (C:\Windows\system32\stdole32.tlb)
+// ************************************************************************ //
+{$TYPEDADDRESS OFF} // L'unité doit être compilée sans pointeur à type contrôlé. 
+{$WARN SYMBOL_PLATFORM OFF}
+{$WRITEABLECONST ON}
+{$VARPROPSETTER ON}
+interface
+
+uses Windows, ActiveX, Classes, Graphics, StdVCL, Variants;
+  
+
+// *********************************************************************//
+// GUIDS déclarés dans la bibliothèque de types. Préfixes utilisés :    
+//   Bibliothèques de types : LIBID_xxxx                                      
+//   CoClasses              : CLASS_xxxx                                      
+//   DISPInterfaces         : DIID_xxxx                                       
+//   Non-DISP interfaces    : IID_xxxx                                        
+// *********************************************************************//
+const
+  // Versions majeure et mineure de la bibliothèque de types
+  Epicea2MajorVersion = 1;
+  Epicea2MinorVersion = 0;
+
+  LIBID_Epicea2: TGUID = '{420BB0C8-F16D-11D6-8AF1-00C0268E293C}';
+
+  IID_Interface1: TGUID = '{B1D35309-02E2-11D7-8AF1-00C0268E293C}';
+type
+
+// *********************************************************************//
+// Déclaration Forward des types définis dans la bibliothèque de types    
+// *********************************************************************//
+  Interface1 = interface;
+  Interface1Disp = dispinterface;
+
+// *********************************************************************//
+// Interface   : Interface1
+// Indicateurs : (4432) Hidden Dual OleAutomation Dispatchable
+// GUID        : {B1D35309-02E2-11D7-8AF1-00C0268E293C}
+// *********************************************************************//
+  Interface1 = interface(IDispatch)
+    ['{B1D35309-02E2-11D7-8AF1-00C0268E293C}']
+  end;
+
+// *********************************************************************//
+// DispIntf :  Interface1Disp
+// Flags :     (4432) Hidden Dual OleAutomation Dispatchable
+// GUID :      {B1D35309-02E2-11D7-8AF1-00C0268E293C}
+// *********************************************************************//
+  Interface1Disp = dispinterface
+    ['{B1D35309-02E2-11D7-8AF1-00C0268E293C}']
+  end;
+
+implementation
+
+uses ComObj;
+
+end.

@@ -1,0 +1,73 @@
+BtnEtat:
+
+   ---> sur tous les formulaires d'appel :
+
+         if (FPrint = nil) then FPrint:=TFPrint.Create(self);
+         FPrint.show;
+
+
+
+ E2_Trame :   FPrint.SelectionEtat := 1;
+***********
+
+ E2_Tiers :   FPrint.SelectionEtat:=2;
+**********
+
+ E2_ChargeARepartir_Isa : chargesARepartir.ondeactivate := nil; 
+***********************  FPrint.SelectionEtat := 3;
+
+ ChargeAPayer_Isa :  ChargesAPayer.ondeactivate := nil;  
+******************   FPrint.SelectionEtat := 4;
+
+ ChargeCA_Isa :  ChargeCA.ondeactivate := nil;  
+**************   FPrint.SelectionEtat := 6;
+
+ E2_ChargeCA :  RepriseChargeCA.ondeactivate := nil;  
+*************   FPrint.SelectionEtat := 7;
+
+ RepriseChargeAPayer2 :  FPrint.SelectionEtat := 8;
+**********************
+
+ DepenseEntreprise : DepensesEntreprise.ondeactivate := nil;  
+******************   FPrint.SelectionEtat := 9;
+
+ Provision_Isa :  Provisions_Isa.ondeactivate := nil;  
+***************   FPrint.SelectionEtat := 10;
+
+ RepriseChargeAPayer_Isa : RepriseChargeAPayer_Isa.ondeactivate := nil; 
+*************************   FPrint.SelectionEtat := 11;
+
+ E2_Emprunts_Isa2:   Emprunt_Isa.ondeactivate := nil;  
+******************   FPrint.SelectionEtat := 13;
+
+ E2_Stocks_Isa :   stocks.ondeactivate := nil;
+***************   FPrint.SelectionEtat := 14;
+
+
+  deactivate remis au deactivate de FPrint...
+*******************************************************
+
+      ajouté ds UQReport:
+*******************************************************
+
+procedure TFPrint.RBtnAutreUnClick(Sender: TObject);
+begin
+  if existeautre then
+  begin
+    cbxtous.AllowGrayed := true;
+    SpdBtnInitTous.transparent := false;
+    afficherautre := true;
+    enregistreraffichautrechemin;
+    lireautrechemin;
+  end
+  else
+  begin
+    rbtnautreun.checked := false;
+    if existetous then
+    begin
+      desactiver;    *****************  <---
+      rbtnlogun.checked := true;
+      reactiver;     *****************  <---
+    end;
+  end;
+end;
